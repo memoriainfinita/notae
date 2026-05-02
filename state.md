@@ -57,6 +57,9 @@ Ver sección Defaults validados.
 - [nut-follows-string-width] Nut extends `stringWidth/2` on each side to cover outer strings at any thickness. Confirmed 2026-05.
 - [label-position] `stringLabelPosition` and `pianoNoteLabelPosition` redistribute padding — total diagram size stays constant. Confirmed 2026-05.
 - [transparent-poc] `backgroundColor`/`borderColor` accept `'transparent'` (valid SVG). POC uses checkbox to handle this since `<input type="color">` doesn't support it. Confirmed 2026-05.
+- [banjo-string-order] Drone (5ª cuerda) va en index 0 (izquierda). frets[] usa valores absolutos. frets[i]===stringOffset[i] = al aire, sin dot. Confirmed 2026-05.
+- [fret-label-padleft] Fret label con baseFret siempre en `padLeft` — no relativo a x1 de la línea de traste, para que quede fuera del grid aunque haya cuerdas con offset. Confirmed 2026-05.
+- [peg-indicator] Círculo abierto centrado en el slot justo encima de donde empieza la cuerda offset: `fretY(relOff) - fretSpacing/2`. Confirmed 2026-05.
 
 ---
 
@@ -92,7 +95,7 @@ Ver sección Defaults validados.
 - Escala Am blues en piano (2 octavas) añadida al POC
 - `project.md` archivado en `docs/project-archived.md` e ignorado por git
 - `git init` + `.gitignore` (node_modules, poc/dist, dist, *.js.map, project archivado)
-- Primer commit pendiente — incluir docs/ y state.md
+- Primer commit realizado — docs/ y state.md incluidos
 
 ### 2026-05-02 — Sesión de filtros, colores y ajustes visuales
 - `filterStyle: 'clean' | 'shadow' | 'glow'` — filtros SVG en fretboard y piano
@@ -119,6 +122,18 @@ Ver sección Defaults validados.
 - POC: transparent checkbox for `backgroundColor`/`borderColor`
 - POC: reorganized layout (compact, fewer sections)
 - POC: F# harmonic minor 4-octave example with per-key colors and finger numbers
+
+### 2026-05-02 — Sandbox POC + Banjo renderer
+
+- `poc-sandbox/` creado — sandbox independiente para nuevos instrumentos
+- `build.js` actualizado con segundo entry point para `poc-sandbox/`
+- `FretboardChord.stringOffset?: number[]` añadido — fret donde empieza cada cuerda
+- `renderFretboard` actualizado: nut segmentado, líneas de traste recortadas, peg indicator, sin dot en posición abierta del offset
+- Peg indicator: círculo abierto centrado en el slot justo encima de donde empieza la cuerda
+- Fret label con baseFret: posición fija a la izquierda del grid completo (`padLeft`)
+- Banjo en open G (G D G B D): acordes G, C, D7, C(V) con baseFret, escala G major (7 trastes)
+- Acordes musicalmente correctos validados
+- Patterns confirmados: `[banjo-string-order]` drone a la izquierda (index 0), frets absolutos, frets[i]===offset[i] = al aire
 
 ### 2026-05-02 — Architecture and new features
 - `renderGuitar` + `renderUkulele` → **`renderFretboard` genérico** (cualquier número de cuerdas)
@@ -187,6 +202,8 @@ Ver sección Defaults validados.
 ## TODO
 
 - [x] Decidir nombre del paquete npm → **notae**
+- [x] Sandbox POC creado con banjo validado
+- [ ] Mover banjo al POC principal cuando esté listo
 - [ ] Revisar API surface antes de publicar
 - [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)

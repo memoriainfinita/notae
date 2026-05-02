@@ -92,9 +92,11 @@ function renderVertical(
   inner += `<text x="${gridCenterX}" y="${s.chordNameY + p}" text-anchor="middle" font-family="${s.fontFamily}" font-size="${s.chordNameSize}" font-weight="bold" fill="${s.chordNameColor}">${chord.name}</text>`
 
   // Indicators
+  const strOffsets = chord.stringOffset ?? []
   for (let i = 0; i < numStrings; i++) {
     const sf = singleFret(i)
     if (sf === null) continue
+    if ((strOffsets[i] ?? 0) > 0) continue  // peg marker drawn with string line
     const x = stringX(i)
     const cy = padTop + indicatorH / 2
     if (sf === -1) {
@@ -106,26 +108,57 @@ function renderVertical(
     }
   }
 
+  // Helper: x extent of fret line f — only spans strings present at that depth
+  const fretLineX = (f: number): [number, number] => {
+    let minX = Infinity, maxX = -Infinity
+    for (let i = 0; i < numStrings; i++) {
+      const off = strOffsets[i] ?? 0
+      const relOff = off > 0 ? off - baseFret : 0
+      if (f >= relOff) { const x = stringX(i); if (x < minX) minX = x; if (x > maxX) maxX = x }
+    }
+    return [minX, maxX]
+  }
+
   // Base fret label
   if (baseFret !== 1) {
-    inner += `<line x1="${padLeft-0.5}" y1="${fretY(0)}" x2="${padLeft+gridW+0.5}" y2="${fretY(0)}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
+    const [x1, x2] = fretLineX(0)
+    inner += `<line x1="${x1-0.5}" y1="${fretY(0)}" x2="${x2+0.5}" y2="${fretY(0)}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
     inner += `<text x="${padLeft-s.dotRadius-4}" y="${fretY(0)+s.fretSpacing/2}" text-anchor="end" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fretLabelSize}" fill="${s.fretLabelColor}">${baseFret}</text>`
   }
 
   // Fret lines
   for (let f = 1; f <= numFrets; f++) {
-    inner += `<line x1="${padLeft-0.5}" y1="${fretY(f)}" x2="${padLeft+gridW+0.5}" y2="${fretY(f)}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
+    const [x1, x2] = fretLineX(f)
+    inner += `<line x1="${x1-0.5}" y1="${fretY(f)}" x2="${x2+0.5}" y2="${fretY(f)}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
   }
 
   // String lines
   for (let i = 0; i < numStrings; i++) {
     const x = stringX(i)
-    inner += `<line x1="${x}" y1="${fretY(0)-0.5}" x2="${x}" y2="${fretY(numFrets)+0.5}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+    const off = strOffsets[i] ?? 0
+    if (off > 0 && off >= baseFret) {
+      const relOff = off - baseFret
+      inner += `<line x1="${x}" y1="${fretY(relOff)}" x2="${x}" y2="${fretY(numFrets)+0.5}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+      inner += `<circle cx="${x}" cy="${fretY(relOff) - s.fretSpacing / 2}" r="${s.indicatorSize}" fill="none" stroke="${s.indicatorColor}" stroke-width="${s.indicatorStrokeWidth}"/>`
+    } else {
+      inner += `<line x1="${x}" y1="${fretY(0)-0.5}" x2="${x}" y2="${fretY(numFrets)+0.5}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+    }
   }
 
-  // Nut
+  // Nut — segmented to skip offset strings
   if (baseFret === 1) {
-    inner += `<rect x="${padLeft-s.stringWidth/2}" y="${padTop+indicatorH}" width="${gridW+s.stringWidth}" height="${nutH}" fill="${s.nutColor}"/>`
+    let runStart: number | null = null
+    for (let i = 0; i <= numStrings; i++) {
+      const hasOffset = i < numStrings && (strOffsets[i] ?? 0) > 0
+      if (!hasOffset && i < numStrings) {
+        if (runStart === null) runStart = i
+      } else if (runStart !== null) {
+        const x1 = Math.min(stringX(runStart), stringX(i - 1)) - s.stringWidth / 2
+        const x2 = Math.max(stringX(runStart), stringX(i - 1)) + s.stringWidth / 2
+        inner += `<rect x="${x1}" y="${padTop+indicatorH}" width="${x2-x1}" height="${nutH}" fill="${s.nutColor}"/>`
+        runStart = null
+      }
+    }
   }
 
   // String labels
@@ -165,8 +198,10 @@ function renderVertical(
 
   // Dots
   for (let i = 0; i < numStrings; i++) {
+    const off = strOffsets[i] ?? 0
     for (const fret of fretArrays[i]) {
       if (fret <= 0) continue
+      if (off > 0 && fret === off) continue  // open at peg — no dot needed
       const relativeFret = fret - baseFret + 1
       if (relativeFret < 1 || relativeFret > numFrets) continue
       const cx = stringX(i)
@@ -218,9 +253,11 @@ function renderHorizontal(
   inner += `<text x="${totalW / 2}" y="${s.chordNameY + p}" text-anchor="middle" font-family="${s.fontFamily}" font-size="${s.chordNameSize}" font-weight="bold" fill="${s.chordNameColor}">${chord.name}</text>`
 
   // Indicators (left of nut)
+  const strOffsetsH = chord.stringOffset ?? []
   for (let i = 0; i < numStrings; i++) {
     const sf = singleFret(i)
     if (sf === null) continue
+    if ((strOffsetsH[i] ?? 0) > 0) continue
     const y = stringY(i)
     const cx = padLeft + indicatorW / 2
     if (sf === -1) {
@@ -232,26 +269,57 @@ function renderHorizontal(
     }
   }
 
+  // Helper: y extent of vertical fret line f — only spans strings present at that depth
+  const fretLineY = (f: number): [number, number] => {
+    let minY = Infinity, maxY = -Infinity
+    for (let i = 0; i < numStrings; i++) {
+      const off = strOffsetsH[i] ?? 0
+      const relOff = off > 0 ? off - baseFret : 0
+      if (f >= relOff) { const y = stringY(i); if (y < minY) minY = y; if (y > maxY) maxY = y }
+    }
+    return [minY, maxY]
+  }
+
   // Base fret label (no nut case)
   if (baseFret !== 1) {
-    inner += `<line x1="${fretX(0)}" y1="${padTop-0.5}" x2="${fretX(0)}" y2="${padTop+gridH+0.5}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
-    inner += `<text x="${fretX(0)+s.fretSpacing/2}" y="${padTop+gridH+s.dotRadius+s.fretLabelSize+4}" text-anchor="middle" font-family="${s.fontFamily}" font-size="${s.fretLabelSize}" fill="${s.fretLabelColor}">${baseFret}</text>`
+    const [y1, y2] = fretLineY(0)
+    inner += `<line x1="${fretX(0)}" y1="${y1-0.5}" x2="${fretX(0)}" y2="${y2+0.5}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
+    inner += `<text x="${fretX(0)+s.fretSpacing/2}" y="${y2+s.dotRadius+s.fretLabelSize+4}" text-anchor="middle" font-family="${s.fontFamily}" font-size="${s.fretLabelSize}" fill="${s.fretLabelColor}">${baseFret}</text>`
   }
 
   // Fret lines (vertical)
   for (let f = 1; f <= numFrets; f++) {
-    inner += `<line x1="${fretX(f)}" y1="${padTop-0.5}" x2="${fretX(f)}" y2="${padTop+gridH+0.5}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
+    const [y1, y2] = fretLineY(f)
+    inner += `<line x1="${fretX(f)}" y1="${y1-0.5}" x2="${fretX(f)}" y2="${y2+0.5}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
   }
 
   // String lines (horizontal)
   for (let i = 0; i < numStrings; i++) {
     const y = stringY(i)
-    inner += `<line x1="${fretX(0)-0.5}" y1="${y}" x2="${fretX(numFrets)+0.5}" y2="${y}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+    const off = strOffsetsH[i] ?? 0
+    if (off > 0 && off >= baseFret) {
+      const relOff = off - baseFret
+      inner += `<line x1="${fretX(relOff)}" y1="${y}" x2="${fretX(numFrets)+0.5}" y2="${y}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+      inner += `<circle cx="${fretX(relOff) - s.indicatorSize - 2}" cy="${y}" r="${s.indicatorSize}" fill="none" stroke="${s.indicatorColor}" stroke-width="${s.indicatorStrokeWidth}"/>`
+    } else {
+      inner += `<line x1="${fretX(0)-0.5}" y1="${y}" x2="${fretX(numFrets)+0.5}" y2="${y}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
+    }
   }
 
-  // Nut (vertical rect, drawn after strings so it renders on top)
+  // Nut — segmented to skip offset strings
   if (baseFret === 1) {
-    inner += `<rect x="${padLeft+indicatorW}" y="${padTop-s.stringWidth/2}" width="${nutW}" height="${gridH+s.stringWidth}" fill="${s.nutColor}"/>`
+    let runStart: number | null = null
+    for (let i = 0; i <= numStrings; i++) {
+      const hasOffset = i < numStrings && (strOffsetsH[i] ?? 0) > 0
+      if (!hasOffset && i < numStrings) {
+        if (runStart === null) runStart = i
+      } else if (runStart !== null) {
+        const y1 = Math.min(stringY(runStart), stringY(i - 1)) - s.stringWidth / 2
+        const y2 = Math.max(stringY(runStart), stringY(i - 1)) + s.stringWidth / 2
+        inner += `<rect x="${padLeft+indicatorW}" y="${y1}" width="${nutW}" height="${y2-y1}" fill="${s.nutColor}"/>`
+        runStart = null
+      }
+    }
   }
 
   // String labels
@@ -289,8 +357,10 @@ function renderHorizontal(
 
   // Dots
   for (let i = 0; i < numStrings; i++) {
+    const offH = strOffsetsH[i] ?? 0
     for (const fret of fretArrays[i]) {
       if (fret <= 0) continue
+      if (offH > 0 && fret === offH) continue  // open at peg — no dot needed
       const relativeFret = fret - baseFret + 1
       if (relativeFret < 1 || relativeFret > numFrets) continue
       const cy = stringY(i)

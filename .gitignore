@@ -1,5 +1,6 @@
 node_modules/
 poc/dist/
+poc-sandbox/dist/
 dist/
 *.js.map
 docs/project-archived.md
