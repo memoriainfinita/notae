@@ -218,6 +218,13 @@ Ver sección Defaults validados.
 - [x] renderBowed implementado y validado
 - [ ] renderHarmonica — pendiente
 - [ ] Mover banjo y bowed al POC principal cuando estén listos
+- [ ] renderVibraphone — alias visual de renderPiano, defaults metálicos, proporciones propias
+- [ ] renderHexGrid — renderer genérico de rejilla hexagonal isomórfica
+  - Arquitectura: renderer puro (dibuja celdas) + generadores de layout separados
+  - `HexGrid { cols, rows, cells[][], orientation: 'flat-top'|'pointy-top' }`
+  - `HexCell { col, row, note?, label?, color?, active? }`
+  - Generadores: `wickiHayden()`, `bosanquetWilson(edo)`, `harmonicTable()` → HexGrid
+  - Objetivo: un renderer, layouts infinitos
 - [ ] Revisar API surface antes de publicar
 - [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
