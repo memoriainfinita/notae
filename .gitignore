@@ -1,0 +1,6 @@
+node_modules/
+poc/dist/
+dist/
+*.js.map
+docs/project-archived.md
+docs/superpowers/
