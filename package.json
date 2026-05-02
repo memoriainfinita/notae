@@ -1,0 +1,14 @@
+{
+  "name": "notation-lib",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node build.js",
+    "build": "node build.js --once"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "typescript": "^5.4.0"
+  }
+}

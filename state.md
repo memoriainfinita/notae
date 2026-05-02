@@ -1,0 +1,201 @@
+# Notation Lib — State
+
+## System
+
+- **Stack:** TypeScript vanilla, esbuild, zero runtime deps
+- **Entry points:** `src/index.ts` (public entry), `src/fretboard.ts`, `src/piano.ts`, `src/types.ts`, `src/utils.ts`
+- **POC:** `poc/index.html` + `poc/poc.ts` — open with `file://`, build with `npm run dev`
+- **Build:** `node build.js` (watch) / `node build.js --once` (one-shot)
+- **Package name:** `notae`
+- **UMT path:** `C:\Users\mykl\OneDrive\Scriptorium\DOCS\CODING GIT\UNIVERSAL MUSIC LIBRARY\universal-music-theory-library`
+
+---
+
+## API surface actual
+
+### Tipos de chord
+```ts
+FretboardChord {
+  name, frets: (number|number[])[], fingers?,
+  colors?: (string|null)[],   // per-string dot color override
+  baseFret?, barres?, tuning?, root?
+}
+PianoChord {
+  name, keys[], fingers?,
+  colors?: (string|null)[],   // per-key dot color override
+  range?, root?
+}
+```
+
+### Funciones exportadas
+```ts
+renderFretboard(chord: FretboardChord, style?: StyleOptions): string
+renderPiano(chord: PianoChord, style?: StyleOptions): string
+```
+
+### StyleOptions completo (todos los valores configurables por el usuario)
+Ver sección Defaults validados.
+
+---
+
+## Patterns
+
+- [string-numbering] En barres: `startString/endString` 1-indexed desde low E. Confirmed 2026-05.
+- [piano-scaling] Todo en fracciones de wW/wH, sin Math.round. `pianoBlackKeyShift` es fracción de wW. Confirmed 2026-05.
+- [barre-clip] El renderer recorta barres si cuerdas exteriores son mudas (-1). No es responsabilidad del caller. Confirmed 2026-05.
+- [svg-text-center] Usar `dy="0.35em"` para centrar texto en círculos SVG. Confirmed 2026-05.
+- [nut-zindex] El nut se dibuja DESPUÉS de las cuerdas (SVG paint order). Confirmed 2026-05.
+- [nut-height-fixed] `nutH = s.nutWidth` siempre — garantiza altura consistente entre diagramas. Confirmed 2026-05.
+- [fret-lines] Extensión ±0.5px en líneas horizontales + strings ±0.5px vertical. Confirmed 2026-05.
+- [svg-border-outward] Border crece hacia fuera: `viewBox="-bw -bw totalW+2bw totalH+2bw"`. Confirmed 2026-05.
+- [tuning-api] `chord.tuning` es musical (no visual) — sirve para labels Y cálculo de notas. Confirmed 2026-05.
+- [consistent-sizes] Padding siempre reserva espacio para fret label (vertical: padLeft asimétrico; horizontal: fretLabelH siempre). Confirmed 2026-05.
+- [scale-frets] `frets: (number|number[])[]` — array para múltiples notas por cuerda (escalas). Confirmed 2026-05.
+- [horizontal-strings] En orientación horizontal, string 0 (low) va abajo para diestros. Confirmed 2026-05.
+- [chord-name-centered] En vertical con padding asimétrico, chord name se centra sobre el GRID (`padLeft + gridW/2`), no sobre totalW. Confirmed 2026-05.
+- [filter-piano] Filters apply only to dots group (not keys). Chord name and note labels also inside filter group. Keys always unfiltered. Confirmed 2026-05.
+- [nut-follows-string-width] Nut extends `stringWidth/2` on each side to cover outer strings at any thickness. Confirmed 2026-05.
+- [label-position] `stringLabelPosition` and `pianoNoteLabelPosition` redistribute padding — total diagram size stays constant. Confirmed 2026-05.
+- [transparent-poc] `backgroundColor`/`borderColor` accept `'transparent'` (valid SVG). POC uses checkbox to handle this since `<input type="color">` doesn't support it. Confirmed 2026-05.
+
+---
+
+## Preferences
+
+- Estilo visual de referencia: musicca.com — limpio, minimalista, dots verdes, sin sombras
+- Color por defecto: `#5aaa5a` para dots, barre y teclas activas de piano
+- Nut a ras de las cuerdas (sin sobresalir lateralmente)
+- `pianoBlackKeyShift: 0.22` (fracción validada visualmente)
+- Labels de cuerda en mayúsculas (E no e)
+- Panel de tweaks ocultable — solo es una herramienta POC. Los usuarios configuran con valores reales en StyleOptions.
+
+---
+
+## History
+
+### 2026-05-01 — POC completo
+- Tres renderers: `renderGuitar`, `renderUkulele`, `renderPiano`
+- POC con panel de tweaks en vivo + botón "Copy tweaks"
+- Defaults validados
+
+### 2026-05-01 — Sesión de refinamiento visual y API
+- Nombre: **notae**
+- `chord.tuning` reemplaza `stringLabels`
+- Box API: backgroundColor, border, radius, padding, chordNameY
+- Border crece hacia afuera, radius correcto
+- Panel de tweaks ocultable
+
+### 2026-05-02 — Sesión final de ajustes y git
+- `chordNameGapP` — gap independiente para piano
+- `nutColor` — color del nut configurable (antes hardcoded #333)
+- `numFrets` — slider en tweaks panel (rango 4–15)
+- Escala Am blues en piano (2 octavas) añadida al POC
+- `project.md` archivado en `docs/project-archived.md` e ignorado por git
+- `git init` + `.gitignore` (node_modules, poc/dist, dist, *.js.map, project archivado)
+- Primer commit pendiente — incluir docs/ y state.md
+
+### 2026-05-02 — Sesión de filtros, colores y ajustes visuales
+- `filterStyle: 'clean' | 'shadow' | 'glow'` — filtros SVG en fretboard y piano
+- `glowColor`, `glowBlur`, `glowOpacity` — control completo del glow
+- `shadowX`, `shadowY`, `shadowBlur`, `shadowOpacity` — control completo de la sombra
+- `colors?: (string|null)[]` en `FretboardChord` — color por dot individual
+- `chordNameGap` y `chordNameGapH` — distancia chord name→diagrama, separados por orientación
+- `padTop` derivado de `chordNameY + chordNameGap` en los tres renderers
+- Defaults finales validados por el usuario (ver sección Defaults)
+- Revisión svguitar y chords-db: arquitectura notae confirmada como superior en features
+- Decisión: notae = SVG puro, UMT añadirá lógica de voicing → genera FretboardChord/PianoChord
+
+### 2026-05-02 — Full StyleOptions audit and POC polish
+- All hardcoded colors exposed: `chordNameColor`, `fretLabelColor`, `nutColor`, `pianoWhiteKeyStrokeColor`, `pianoBlackKeyStrokeColor`, `pianoBlackKeyLabelColor`
+- Piano geometry exposed: `pianoBlackKeyWidthRatio`, `pianoBlackKeyHeightRatio`, `pianoWhiteKeyRadius`, `pianoBlackKeyRadius`, `pianoWhiteDotOffset`, `pianoBlackDotOffset`, `pianoKeyStrokeWidth`
+- Fretboard geometry exposed: `stringWidth`, `fretWidth`, `indicatorZoneSize`
+- Piano note labels: `pianoNoteLabelSize`, `pianoNoteLabelOffset`, `pianoNoteLabelPosition: 'top'|'bottom'`, `pianoBlackKeyLabelColor`
+- `stringLabelPosition: 'top'|'bottom'` — vertical and horizontal fretboard
+- `colors?: (string|null)[]` added to `PianoChord` (parallel to keys)
+- Fixed piano filter: only dots + chord name + note labels get filter; keys unfiltered
+- Fixed nut width to extend `stringWidth/2` on each side
+- Fixed horizontal fretboard left padding (20→16, now symmetric)
+- Fixed piano bottom padding (10→16, matches fretboard)
+- POC: transparent checkbox for `backgroundColor`/`borderColor`
+- POC: reorganized layout (compact, fewer sections)
+- POC: F# harmonic minor 4-octave example with per-key colors and finger numbers
+
+### 2026-05-02 — Architecture and new features
+- `renderGuitar` + `renderUkulele` → **`renderFretboard` genérico** (cualquier número de cuerdas)
+- `frets: (number|number[])[]` — soporta escalas con múltiples notas por cuerda
+- `orientation: 'vertical' | 'horizontal'` — ambas orientaciones validadas
+- `numFrets` configurable — permite mástiles completos (ej: 12 trastes)
+- `root` en chord types — habilita `showDegrees` (R, 3, b3, 5, b7…)
+- Grados en cuerdas al aire: se muestran en labels de abajo (vertical) o derecha (horizontal)
+- `showPianoNoteLabels` — notas activas bajo el teclado
+- `pianoWhiteKeyColor` — color de teclas blancas configurable
+- `showDegrees` — aplica a piano y fretboard
+- Escalas: A minor blues en posición 5 y mástil completo hasta traste 12
+- Consistencia de tamaños: todos los diagramas del mismo instrumento tienen mismas dimensiones
+- `fretLabelGap: 20` — margen derecho del grid validado
+- `src/index.ts` — punto de entrada público de la librería
+- Arquitectura revisada: POC y librería completamente separados
+
+---
+
+## Defaults validados
+
+```json
+{
+  "fontFamily": "Arial, sans-serif",
+  "chordNameSize": 17, "chordNameY": 30,
+  "chordNameGap": 11, "chordNameGapH": 32, "chordNameGapP": 17,
+  "chordNameColor": "#000000",
+  "fingerNumberSize": 11, "pianoFingerNumberSize": 11,
+  "fretLabelSize": 11, "fretLabelGap": 20, "fretLabelColor": "#555555",
+  "dotRadius": 9, "stringSpacing": 19, "fretSpacing": 23,
+  "numFrets": 5, "nutWidth": 4, "nutColor": "#333333",
+  "stringWidth": 1, "fretWidth": 1,
+  "dotColor": "#5aaa5a", "dotTextColor": "#ffffff",
+  "stringColor": "#aaaaaa", "fretColor": "#cccccc",
+  "barreColor": "#5aaa5a",
+  "indicatorSize": 4, "indicatorStrokeWidth": 1.5,
+  "indicatorColor": "#555555", "indicatorZoneSize": 18,
+  "activeKeyColor": "#5aaa5a",
+  "pianoWhiteKeyW": 28, "pianoWhiteKeyH": 137,
+  "pianoWhiteKeyColor": "#ffffff", "pianoBlackKeyColor": "#222222",
+  "pianoWhiteKeyStrokeColor": "#bbbbbb", "pianoBlackKeyStrokeColor": "#222222",
+  "pianoKeyStrokeWidth": 1,
+  "pianoBlackKeyShift": 0.22,
+  "pianoBlackKeyWidthRatio": 0.58, "pianoBlackKeyHeightRatio": 0.62,
+  "pianoWhiteKeyRadius": 3, "pianoBlackKeyRadius": 2,
+  "pianoWhiteDotOffset": 5, "pianoBlackDotOffset": 4,
+  "pianoDotRadius": 7,
+  "pianoNoteLabelSize": 11, "pianoNoteLabelOffset": 6,
+  "pianoNoteLabelPosition": "bottom",
+  "pianoBlackKeyLabelColor": "#555555",
+  "backgroundColor": "transparent", "borderColor": "transparent",
+  "borderWidth": 0, "borderRadius": 0, "diagramPadding": 0,
+  "showPianoNoteLabels": true, "showDegrees": false,
+  "showFingerNumbers": true, "showStringLabels": true,
+  "stringLabelMode": "tuning", "stringLabelPosition": "bottom",
+  "stringLabelSize": 11, "stringLabelColor": "#999999",
+  "leftHanded": false, "orientation": "vertical",
+  "filterStyle": "clean",
+  "glowColor": "#5aaa5a", "glowBlur": 2.5, "glowOpacity": 0.8,
+  "shadowX": 2, "shadowY": 3, "shadowBlur": 2, "shadowOpacity": 0.25
+}
+```
+
+---
+
+## TODO
+
+- [x] Decidir nombre del paquete npm → **notae**
+- [ ] Revisar API surface antes de publicar
+- [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
+- [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
+- [ ] UMT añadirá lógica de voicing → genera FretboardChord/PianoChord → notae renderiza. Diseñar interfaz cuando UMT esté listo.
+- [ ] Setup npm package (`package.json` público, exports, tipos)
+
+### Instrumentos a explorar
+- [ ] `renderWind` — digitación de vientos (flauta, clarinete, saxo, trompeta). Referencia: bretpimentel.com. Hueco real en npm.
+- [ ] Banjo de 5 cuerdas — requiere `stringOffset?: number[]` (5ª cuerda empieza en traste 5)
+- [ ] Violín/viola/cello — posiciones en mástil sin trastes, paradigma diferente
+- [ ] Armónica — layout horizontal de agujeros, soplar/aspirar
+- [ ] SVGuitar (npm) — revisar como referencia/competidor
