@@ -157,6 +157,7 @@ export type FretboardChord = {
   barres?: Array<{ fret: number; startString: number; endString: number }>
   tuning?: string[]     // low→high, e.g. ['E','A','D','G','B','E']
   root?: string         // e.g. 'C', 'F#' — enables degree labels
+  stringOffset?: number[]  // fret where each string begins (0 = normal, starts at nut)
 }
 
 export type PianoChord = {
