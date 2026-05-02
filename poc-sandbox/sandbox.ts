@@ -1,4 +1,5 @@
 import { renderFretboard } from '../src/fretboard'
+import { renderBowed } from '../src/bowed'
 import { StyleOptions, DEFAULT_STYLE } from '../src/types'
 
 // ── Banjo chords (open G tuning) ──────────────────────────────────────────────
@@ -58,6 +59,57 @@ const BANJO = {
   },
 }
 
+// ── Bowed string examples ─────────────────────────────────────────────────────
+
+const BOWED = {
+  violinG: {
+    // G major: open G(root), open D(5th), 1st finger B(3rd) on A string
+    name: 'G',
+    strings: [0, 0, 1, null],
+    fingers: [null, null, 1, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'G',
+  },
+  violinD3: {
+    // D major 3rd position: fingers across G D A strings
+    name: 'D',
+    strings: [3, 2, 1, null],
+    fingers: [3, 2, 1, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 3,
+    root: 'D',
+  },
+  celloC: {
+    // C major cello: open C(root), open G(5th), 1st finger E(3rd) on D string
+    name: 'C',
+    strings: [0, 0, 1, null],
+    fingers: [null, null, 1, null],
+    tuning: ['C', 'G', 'D', 'A'],
+    position: 1,
+    root: 'C',
+  },
+  violinA: {
+    // A major chord: D string 4th finger=A, A string open=A, E string open=E
+    name: 'A',
+    strings: [null, 4, 0, 0],
+    fingers: [null, 4, null, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'A',
+  },
+  violinScale: {
+    // G major scale 1st position, slots = semitones from open string
+    // G: G(0) A(2) B(4) C(5) | D: D(0) E(2) F#(4) G(5) | A: A(0) B(2) C(3) D(5) | E: E(0) F#(2) G(3) A(5)
+    name: 'G major',
+    strings: [[0,2,4,5], [0,2,4,5], [0,2,3,5], [0,2,3,5]],
+    numSlots: 5,
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'G',
+  },
+}
+
 // ── Style state ───────────────────────────────────────────────────────────────
 
 const style: StyleOptions = {}
@@ -77,6 +129,12 @@ function render() {
   d('banjo-d7')!.innerHTML     = renderFretboard(BANJO.d7,        s)
   d('banjo-highG')!.innerHTML  = renderFretboard(BANJO.cHighPos,  s)
   d('banjo-scale')!.innerHTML  = renderFretboard(BANJO.gScale, { ...s, numFrets: 7 })
+
+  d('bowed-violinG')!.innerHTML     = renderBowed(BOWED.violinG,     s)
+  d('bowed-violinD3')!.innerHTML    = renderBowed(BOWED.violinD3,    s)
+  d('bowed-celloC')!.innerHTML      = renderBowed(BOWED.celloC,      s)
+  d('bowed-violinA')!.innerHTML     = renderBowed(BOWED.violinA,     s)
+  d('bowed-violinScale')!.innerHTML = renderBowed(BOWED.violinScale,  s)
 }
 
 // ── Tweaks wiring ─────────────────────────────────────────────────────────────

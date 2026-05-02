@@ -160,6 +160,17 @@ export type FretboardChord = {
   stringOffset?: number[]  // fret where each string begins (0 = normal, starts at nut)
 }
 
+export type BowedChord = {
+  name: string
+  strings: (number | number[] | null)[]  // per string: 0=open, 1-N=finger slot, null=not played
+  fingers?: (number | null)[]            // one finger number per string (shown only for single-note strings)
+  colors?: (string | null)[]
+  position?: number                       // hand position (1=nut shown, >1=position marker + roman numeral)
+  numSlots?: number                       // default 4
+  tuning?: string[]
+  root?: string
+}
+
 export type PianoChord = {
   name: string
   keys: string[]

@@ -123,6 +123,18 @@ Ver sección Defaults validados.
 - POC: reorganized layout (compact, fewer sections)
 - POC: F# harmonic minor 4-octave example with per-key colors and finger numbers
 
+### 2026-05-02 — renderBowed implementado y validado
+
+- `BowedChord` añadido a `types.ts`
+- `src/bowed.ts` — renderer para cuerdas frotadas (violín, viola, cello)
+- Paradigma: 4 cuerdas verticales, ticks laterales (no líneas completas), dots ON las líneas
+- Posición 1 = nut; posición > 1 = línea de traste + número a la izquierda
+- Slots = distancias en semitonos desde cuerda al aire
+- Soporta: `stringLabelMode`, `stringLabelPosition`, `showDegrees`, `showFingerNumbers`
+- Escala G mayor con semitonos reales validada (numSlots=5, G-A-B-C=[0,2,4,5])
+- renderWind descartado por ahora — bretpimentel.com demasiado específico, queda como TODO
+- Exportado desde `src/index.ts`
+
 ### 2026-05-02 — Sandbox POC + Banjo renderer
 
 - `poc-sandbox/` creado — sandbox independiente para nuevos instrumentos
@@ -203,7 +215,9 @@ Ver sección Defaults validados.
 
 - [x] Decidir nombre del paquete npm → **notae**
 - [x] Sandbox POC creado con banjo validado
-- [ ] Mover banjo al POC principal cuando esté listo
+- [x] renderBowed implementado y validado
+- [ ] renderHarmonica — pendiente
+- [ ] Mover banjo y bowed al POC principal cuando estén listos
 - [ ] Revisar API surface antes de publicar
 - [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
@@ -211,7 +225,7 @@ Ver sección Defaults validados.
 - [ ] Setup npm package (`package.json` público, exports, tipos)
 
 ### Instrumentos a explorar
-- [ ] `renderWind` — digitación de vientos (flauta, clarinete, saxo, trompeta). Referencia: bretpimentel.com. Hueco real en npm.
+- [ ] `renderWind` — descartado por ahora. bretpimentel.com es referencia difícil de superar. Retomar cuando haya caso de uso concreto.
 - [ ] Banjo de 5 cuerdas — requiere `stringOffset?: number[]` (5ª cuerda empieza en traste 5)
 - [ ] Violín/viola/cello — posiciones en mástil sin trastes, paradigma diferente
 - [ ] Armónica — layout horizontal de agujeros, soplar/aspirar
