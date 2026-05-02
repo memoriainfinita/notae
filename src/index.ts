@@ -1,5 +1,6 @@
 export { renderFretboard } from './fretboard'
 export { renderPiano } from './piano'
+export { renderBowed } from './bowed'
 export { DEFAULT_STYLE } from './types'
-export type { FretboardChord, PianoChord, StyleOptions } from './types'
+export type { FretboardChord, PianoChord, BowedChord, StyleOptions } from './types'
 export { noteAtFret, degreeLabel, semitone, CHROMATIC, NOTE_MAP } from './utils'
