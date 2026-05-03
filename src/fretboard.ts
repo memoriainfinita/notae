@@ -251,7 +251,7 @@ function renderHorizontal(
   const padLeft = (labelsAtTop ? labelW : 0) + 16 + p
   const padRight = (labelsAtTop ? 0 : labelW) + 16 + p
   const padTop = s.chordNameY + s.chordNameGapH + p
-  const fretLabelH = s.dotRadius + s.fretLabelSize + 8  // always reserved
+  const fretLabelH = s.dotRadius + s.fretLabelSize + s.fretLabelGapH  // always reserved
   const padBottom = 16 + fretLabelH + p
   const gridW = numFrets * s.fretSpacing
   const gridH = (numStrings - 1) * s.stringSpacing

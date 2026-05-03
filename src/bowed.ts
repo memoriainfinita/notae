@@ -34,10 +34,10 @@ function renderBowedH(chord: BowedChord, s: Required<StyleOptions>): string {
   const indicatorW = s.indicatorZoneSize
   const nutW = showNut ? s.nutWidth : 0
 
-  const padLeft  = p + indicatorW + (!showNut ? s.fretLabelSize + 6 : 0)
-  const padRight = s.dotRadius + labelW + p
+  const padLeft  = p + 16 + indicatorW + (!showNut ? s.fretLabelSize + 6 : 0)
+  const padRight = s.dotRadius + labelW + 12 + p
   const padTop    = s.chordNameY + s.chordNameGapH + p
-  const padBottom = 16 + p
+  const padBottom = 16 + s.dotRadius + p
 
   const gridW = numSlots * s.fretSpacing
   const gridH = (numStrings - 1) * s.stringSpacing
@@ -70,7 +70,7 @@ function renderBowedH(chord: BowedChord, s: Required<StyleOptions>): string {
   // Indicators (left, per string)
   for (let i = 0; i < numStrings; i++) {
     const cy = stringY(i)
-    const cx = p + indicatorW / 2
+    const cx = p + 16 + indicatorW / 2
     if (chord.strings[i] === null) {
       const hs = s.indicatorSize
       inner += `<line x1="${cx-hs}" y1="${cy-hs}" x2="${cx+hs}" y2="${cy+hs}" stroke="${s.indicatorColor}" stroke-width="${s.indicatorStrokeWidth}" stroke-linecap="round"/>`
@@ -164,7 +164,7 @@ export function renderBowed(chord: BowedChord, style?: StyleOptions): string {
   const padLeft = s.fretLabelSize + s.dotRadius + 10 + p
   const padRight = s.dotRadius + s.fretLabelGap + p
   const padTop = s.chordNameY + s.chordNameGap + (labelsAtTop ? labelH : 0) + p
-  const padBottom = 16 + (labelsAtTop ? 0 : labelH) + p
+  const padBottom = 16 + (labelsAtTop ? 0 : labelH + s.dotRadius + 2) + p
 
   const gridW = (numStrings - 1) * s.stringSpacing
   const gridH = numSlots * s.fretSpacing

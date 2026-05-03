@@ -394,6 +394,7 @@ function bindTweaks(): void {
   bindSlider('pianoFingerNumberSize', 'pianoFingerNumberSize', 7, 16)
   bindSlider('fretLabelSize', 'fretLabelSize', 7, 16)
   bindSlider('fretLabelGap', 'fretLabelGap', 4, 40)
+  bindSlider('fretLabelGapH', 'fretLabelGapH', 0, 40)
   bindSlider('stringLabelSize', 'stringLabelSize', 6, 14)
   bindColor('stringLabelColor', 'stringLabelColor')
   bindSlider('pianoWhiteKeyW', 'pianoWhiteKeyW', 18, 48)
