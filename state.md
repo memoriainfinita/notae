@@ -158,6 +158,14 @@ Ver sección Defaults validados.
 - JSDoc completo en notae: tres renderers (`@param`, `@returns`, `@example`), tipos `FretboardChord`/`PianoChord`/`BowedChord`, `StyleOptions` con unidades y comentarios en props no obvias
 - Decisión: no base de datos de acordes — para piano UMT genera notas directamente; para fretboard, voicing algorítmico futuro en UMT
 
+### 2026-05-03 — UMT scale integration + piano range fixes
+
+- `renderUmtScale`: nueva función en POC — `parseScaleSymbol` → `renderPiano`, 1 octava
+- Nueva sección "UMT → Piano (scale)" en `poc/index.html` con input interactivo
+- Fix chord range: de snap a octave boundaries (C…B) a usar `notes[0].name` / `notes[last].name` directamente
+- Fix black key boundaries: helper `umtRange` — si nota límite es negra, snap a blanca adyacente (−1 para from, +1 para to)
+- Fix piano note labels: usar nombre original del key string (no `NOTE_NAMES[semi]`) — respeta `Bb` vs `A#` según lo que llega
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
@@ -266,6 +274,7 @@ Ver sección Defaults validados.
 
 ### Pendiente en UMT (repo separado)
 - [x] Bundle migrado a `dist/umt.js` (2026-05-03). CDN en `poc/index.html` actualizado.
+- [x] `parseChordSymbol` / `parseScaleSymbol` en `parser.ts`: respetar accidental explícito del usuario. Arreglado 2026-05-03 — commit `b32d643`. `A#maj7` ya devuelve root `A#` no `Bb`.
 
 ### Instrumentos a explorar
 - [ ] `renderWind` — descartado por ahora. bretpimentel.com es referencia difícil de superar. Retomar cuando haya caso de uso concreto.

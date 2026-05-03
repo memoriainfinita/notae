@@ -169,7 +169,7 @@ export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
         ? (black ? labelYBase - s.pianoNoteLabelOffset : labelYBase)
         : (black ? labelYBase : labelYBase + s.pianoNoteLabelOffset)
       const labelColor = black ? s.pianoBlackKeyLabelColor : s.stringLabelColor
-      const noteName = NOTE_NAMES[semi]
+      const noteName = key.replace(/\d+$/, '').replace(/^[a-g]/, c => c.toUpperCase())
       noteLabels += `<text x="${cx}" y="${labelY}" text-anchor="middle" font-family="${s.fontFamily}" font-size="${s.pianoNoteLabelSize}" fill="${labelColor}">${noteName}</text>`
     }
   }
