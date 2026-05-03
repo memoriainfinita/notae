@@ -1,5 +1,6 @@
 import { renderFretboard } from '../src/fretboard'
 import { renderPiano } from '../src/piano'
+import { renderBowed } from '../src/bowed'
 import { StyleOptions, DEFAULT_STYLE } from '../src/types'
 
 const CHORDS = {
@@ -120,6 +121,54 @@ const CHORDS = {
     root: 'A',
   },
 
+  // Banjo — open G tuning (G D G B D), drone (5th string) at index 0
+  banjoG: {
+    name: 'G',
+    frets: [5, 0, 0, 0, 0],
+    fingers: [0, 0, 0, 0, 0],
+    tuning: ['G', 'D', 'G', 'B', 'D'],
+    stringOffset: [5, 0, 0, 0, 0],
+    root: 'G',
+  },
+  banjoC: {
+    name: 'C',
+    frets: [5, 2, 0, 1, 2],
+    fingers: [0, 2, 0, 1, 3],
+    tuning: ['G', 'D', 'G', 'B', 'D'],
+    stringOffset: [5, 0, 0, 0, 0],
+    root: 'C',
+  },
+  banjoD7: {
+    name: 'D7',
+    frets: [5, 0, 2, 1, 0],
+    fingers: [0, 0, 2, 1, 0],
+    tuning: ['G', 'D', 'G', 'B', 'D'],
+    stringOffset: [5, 0, 0, 0, 0],
+    root: 'D',
+  },
+  banjoCHighPos: {
+    name: 'C (V)',
+    frets: [5, 5, 5, 5, 5],
+    fingers: [0, 1, 2, 3, 4],
+    baseFret: 4,
+    tuning: ['G', 'D', 'G', 'B', 'D'],
+    stringOffset: [5, 0, 0, 0, 0],
+    root: 'C',
+  },
+  banjoGScale: {
+    name: 'G major',
+    frets: [
+      [5, 7],
+      [0, 2, 4, 5],
+      [0, 2, 4, 5],
+      [0, 1, 3, 5],
+      [0, 2, 4],
+    ],
+    tuning: ['G', 'D', 'G', 'B', 'D'],
+    stringOffset: [5, 0, 0, 0, 0],
+    root: 'G',
+  },
+
   // Piano scale — A minor blues over 2 octaves
   pianoAmBlues: {
     name: 'Am blues',
@@ -152,6 +201,48 @@ const CHORDS = {
     ],
     root: 'F#',
     range: { from: 'F2', to: 'F6' },
+  },
+
+  // Bowed strings
+  bowedViolinG: {
+    name: 'G',
+    strings: [0, 0, 1, null],
+    fingers: [null, null, 1, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'G',
+  },
+  bowedViolinD3: {
+    name: 'D',
+    strings: [3, 2, 1, null],
+    fingers: [3, 2, 1, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 3,
+    root: 'D',
+  },
+  bowedCelloC: {
+    name: 'C',
+    strings: [0, 0, 1, null],
+    fingers: [null, null, 1, null],
+    tuning: ['C', 'G', 'D', 'A'],
+    position: 1,
+    root: 'C',
+  },
+  bowedViolinA: {
+    name: 'A',
+    strings: [null, 4, 0, 0],
+    fingers: [null, 4, null, null],
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'A',
+  },
+  bowedViolinScale: {
+    name: 'G major',
+    strings: [[0,2,4,5], [0,2,4,5], [0,2,3,5], [0,2,3,5]],
+    numSlots: 5,
+    tuning: ['G', 'D', 'A', 'E'],
+    position: 1,
+    root: 'G',
   },
 
   // Piano
@@ -187,6 +278,16 @@ function renderAll(): void {
   document.getElementById('guitar-open-h')!.innerHTML  = renderFretboard(CHORDS.guitarOpen, h)
   document.getElementById('guitar-barre-h')!.innerHTML = renderFretboard(CHORDS.guitarBarre, h)
   document.getElementById('guitar-dm7-h')!.innerHTML   = renderFretboard(CHORDS.guitarDm7, h)
+  document.getElementById('banjo-g')!.innerHTML      = renderFretboard(CHORDS.banjoG,         currentStyle)
+  document.getElementById('banjo-c')!.innerHTML      = renderFretboard(CHORDS.banjoC,         currentStyle)
+  document.getElementById('banjo-d7')!.innerHTML     = renderFretboard(CHORDS.banjoD7,        currentStyle)
+  document.getElementById('banjo-highG')!.innerHTML  = renderFretboard(CHORDS.banjoCHighPos,  currentStyle)
+  document.getElementById('banjo-scale')!.innerHTML  = renderFretboard(CHORDS.banjoGScale, { ...currentStyle, numFrets: 7 })
+  document.getElementById('bowed-violinG')!.innerHTML     = renderBowed(CHORDS.bowedViolinG,     currentStyle)
+  document.getElementById('bowed-violinD3')!.innerHTML    = renderBowed(CHORDS.bowedViolinD3,    currentStyle)
+  document.getElementById('bowed-celloC')!.innerHTML      = renderBowed(CHORDS.bowedCelloC,      currentStyle)
+  document.getElementById('bowed-violinA')!.innerHTML     = renderBowed(CHORDS.bowedViolinA,     currentStyle)
+  document.getElementById('bowed-violinScale')!.innerHTML = renderBowed(CHORDS.bowedViolinScale,  currentStyle)
   document.getElementById('scale-amblues-pos5')!.innerHTML   = renderFretboard(CHORDS.scaleAmBluesPos5, { ...currentStyle, numFrets: 4 })
   document.getElementById('scale-amblues-full')!.innerHTML   = renderFretboard(CHORDS.scaleAmBluesFull, { ...currentStyle, numFrets: 12 })
   document.getElementById('scale-amblues-pos5-h')!.innerHTML = renderFretboard(CHORDS.scaleAmBluesPos5, { ...currentStyle, numFrets: 4, orientation: 'horizontal' })
