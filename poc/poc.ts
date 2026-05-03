@@ -490,21 +490,43 @@ function bindTweaks(): void {
   })
 }
 
+const BLACK_SEMI = new Set([1, 3, 6, 8, 10])
+function isBlack(note: any): boolean {
+  return BLACK_SEMI.has(((57 + (note.stepsFromBase as number)) % 12 + 12) % 12)
+}
+function umtRange(notes: any[]): { from: string; to: string } {
+  const first = notes[0]
+  const last  = notes[notes.length - 1]
+  return {
+    from: isBlack(first) ? first.transpose(-1).name : first.name,
+    to:   isBlack(last)  ? last.transpose(1).name   : last.name,
+  }
+}
+
 function renderUmtChord(symbol: string): void {
   const el = document.getElementById('umt-piano')!
   if (!symbol.trim()) { el.innerHTML = ''; return }
   try {
     const chord = UMT.parseChordSymbol(symbol.trim())
     const notes = chord.getNotes()
-    // note.name already includes octave (e.g. "C4", "Bb3") — use directly
     const keys = notes.map((n: any) => n.name)
     const rootName = notes[0]?.name.replace(/\d+$/, '') ?? ''
-    // auto-detect range: snap to octave boundaries (C…B) from actual note positions
-    // piano_abs = 57 + stepsFromBase (piano.ts internal scale, verified: C4=48, B4=59)
-    const steps = notes.map((n: any) => n.stepsFromBase as number)
-    const fromOctave = Math.floor((57 + Math.min(...steps)) / 12)
-    const toOctave   = Math.floor((57 + Math.max(...steps)) / 12)
-    const range = { from: `C${fromOctave}`, to: `B${toOctave}` }
+    const range = umtRange(notes)
+    el.innerHTML = renderPiano({ name: symbol.trim(), keys, root: rootName, range }, currentStyle)
+  } catch {
+    el.innerHTML = '<span style="color:#c44;font-size:11px">?</span>'
+  }
+}
+
+function renderUmtScale(symbol: string): void {
+  const el = document.getElementById('umt-scale-piano')!
+  if (!symbol.trim()) { el.innerHTML = ''; return }
+  try {
+    const scale = UMT.parseScaleSymbol(symbol.trim())
+    const notes = scale.getNotes()
+    const keys = notes.map((n: any) => n.name)
+    const rootName = notes[0]?.name.replace(/\d+$/, '') ?? ''
+    const range = umtRange(notes)
     el.innerHTML = renderPiano({ name: symbol.trim(), keys, root: rootName, range }, currentStyle)
   } catch {
     el.innerHTML = '<span style="color:#c44;font-size:11px">?</span>'
@@ -518,4 +540,9 @@ document.addEventListener('DOMContentLoaded', () => {
   umtInput.value = 'Cmaj7'
   renderUmtChord('Cmaj7')
   umtInput.addEventListener('input', () => renderUmtChord(umtInput.value))
+
+  const umtScaleInput = document.getElementById('umt-scale-input') as HTMLInputElement
+  umtScaleInput.value = 'C major'
+  renderUmtScale('C major')
+  umtScaleInput.addEventListener('input', () => renderUmtScale(umtScaleInput.value))
 })
