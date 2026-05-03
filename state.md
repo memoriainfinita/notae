@@ -135,6 +135,15 @@ Ver sección Defaults validados.
 - renderWind descartado por ahora — bretpimentel.com demasiado específico, queda como TODO
 - Exportado desde `src/index.ts`
 
+### 2026-05-03 — Banjo y bowed movidos al POC principal
+
+- BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
+- `renderBowed` importado en poc principal
+- Nuevas secciones Banjo y Bowed en el HTML
+- Build limpio, sandbox conservado
+- Investigación renderHexGrid: layouts Wicki-Hayden, Harmonic Table, Bosanquet-Wilson documentados — fuera de scope por ahora
+- renderHarmonica: sin librerías equivalentes, modelo de datos propio — TODO futuro con nota
+
 ### 2026-05-02 — Sandbox POC + Banjo renderer
 
 - `poc-sandbox/` creado — sandbox independiente para nuevos instrumentos
@@ -216,8 +225,8 @@ Ver sección Defaults validados.
 - [x] Decidir nombre del paquete npm → **notae**
 - [x] Sandbox POC creado con banjo validado
 - [x] renderBowed implementado y validado
-- [ ] renderHarmonica — pendiente
-- [ ] Mover banjo y bowed al POC principal cuando estén listos
+- [ ] renderHarmonica — pendiente. No hay librerías equivalentes. Modelo de datos propio: agujeros numerados, blow/draw, bends. Retomar cuando haya caso de uso concreto.
+- [x] Mover banjo y bowed al POC principal cuando estén listos
 - [ ] renderVibraphone — alias visual de renderPiano, defaults metálicos, proporciones propias
 - [ ] renderHexGrid — renderer genérico de rejilla hexagonal isomórfica
   - Arquitectura: renderer puro (dibuja celdas) + generadores de layout separados
