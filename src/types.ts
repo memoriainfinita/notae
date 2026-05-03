@@ -87,8 +87,10 @@ export type StyleOptions = {
   stringLabelSize?: number
   stringLabelColor?: string
   pianoBlackKeyLabelColor?: string
-  /** Space between the right edge of the fret grid and the baseFret label (px). */
+  /** Space between the right edge of the fret grid and the baseFret label (px). Vertical orientation. */
   fretLabelGap?: number
+  /** Gap between the bottom string and the fret label in horizontal orientation (px). Controls bottom padding reserve. */
+  fretLabelGapH?: number
   leftHanded?: boolean
   orientation?: 'vertical' | 'horizontal'
   /** `'clean'` = no filter, `'shadow'` = drop shadow, `'glow'` = color glow on dots. */
@@ -165,6 +167,7 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   stringLabelColor: '#999999',
   pianoBlackKeyLabelColor: '#555555',
   fretLabelGap: 20,
+  fretLabelGapH: 8,
   leftHanded: false,
   orientation: 'vertical',
   filterStyle: 'clean',

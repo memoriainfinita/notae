@@ -166,6 +166,16 @@ Ver sección Defaults validados.
 - Fix black key boundaries: helper `umtRange` — si nota límite es negra, snap a blanca adyacente (−1 para from, +1 para to)
 - Fix piano note labels: usar nombre original del key string (no `NOTE_NAMES[semi]`) — respeta `Bb` vs `A#` según lo que llega
 
+### 2026-05-03 — Fixes márgenes bowed + fretLabelGapH expuesto
+
+- Fix bowed vertical `padBottom`: añadido `+ dotRadius + 2` cuando labels abajo → 18px bajo label (igual que fretboard)
+- Fix bowed horizontal `padRight`: añadido `+12` → 25px desde grid a borde, igual que fretboard
+- Fix bowed horizontal `padLeft`: añadido `+16` base margin → indicadores alineados con fretboard horizontal
+- Fix bowed horizontal `padBottom`: `16 + dotRadius` → 16px bajo cuerda inferior
+- `fretLabelGapH?: number` (default 8) añadido a `StyleOptions` y `DEFAULT_STYLE` — controla el gap entre cuerda inferior y fret label en modo horizontal (determina el padding reservado siempre en banjo/fretboard horizontal)
+- Slider `fretLabelGapH` añadido al tweaks panel
+- Auditoría POC/librería: todo limpio — lógica de rendering exclusivamente en `src/*.ts`
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
