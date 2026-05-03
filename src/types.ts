@@ -1,16 +1,28 @@
+/**
+ * Visual style overrides for any renderer. All size/spacing/offset values are in pixels
+ * unless explicitly noted as a ratio or fraction. All fields are optional — omit to use
+ * the built-in defaults (see `DEFAULT_STYLE`).
+ */
 export type StyleOptions = {
   fontFamily?: string
   chordNameSize?: number
+  /** Vertical distance from the top of the SVG to the chord name baseline (px). */
   chordNameY?: number
+  /** Gap between chord name and the fretboard grid in vertical orientation (px). */
   chordNameGap?: number
+  /** Gap between chord name and the fretboard grid in horizontal orientation (px). */
   chordNameGapH?: number
+  /** Gap between chord name and the piano keyboard (px). */
   chordNameGapP?: number
   fingerNumberSize?: number
   pianoFingerNumberSize?: number
   fretLabelSize?: number
   dotRadius?: number
+  /** Distance between string center lines (px). */
   stringSpacing?: number
+  /** Distance between fret lines (px). */
   fretSpacing?: number
+  /** Number of frets to display. */
   numFrets?: number
   nutWidth?: number
   chordNameColor?: string
@@ -21,15 +33,23 @@ export type StyleOptions = {
   stringColor?: string
   fretColor?: string
   barreColor?: string
+  /** Fill color for active piano keys. */
   activeKeyColor?: string
+  /** Width of one white key (px). All piano dimensions scale from this. */
   pianoWhiteKeyW?: number
   pianoWhiteKeyH?: number
   pianoWhiteKeyStrokeColor?: string
   pianoBlackKeyStrokeColor?: string
   pianoWhiteKeyColor?: string
   pianoBlackKeyColor?: string
+  /**
+   * Horizontal offset of black keys as a fraction of white key width.
+   * Positive values shift right. Typical range: -0.2 to +0.3. Default: 0.22.
+   */
   pianoBlackKeyShift?: number
+  /** Black key width as a fraction of white key width (e.g. 0.58 = 58%). */
   pianoBlackKeyWidthRatio?: number
+  /** Black key height as a fraction of white key height (e.g. 0.62 = 62%). */
   pianoBlackKeyHeightRatio?: number
   pianoWhiteKeyRadius?: number
   pianoBlackKeyRadius?: number
@@ -40,29 +60,38 @@ export type StyleOptions = {
   pianoNoteLabelOffset?: number
   stringWidth?: number
   fretWidth?: number
+  /** Radius of the open/muted string indicator circle (px). */
   indicatorSize?: number
   indicatorStrokeWidth?: number
   indicatorColor?: string
+  /** Height of the zone above the nut reserved for open/muted indicators (px). */
   indicatorZoneSize?: number
   pianoKeyStrokeWidth?: number
+  /** SVG background fill. Accepts any CSS color or `'transparent'`. */
   backgroundColor?: string
+  /** SVG border color. Accepts any CSS color or `'transparent'`. */
   borderColor?: string
   borderWidth?: number
   borderRadius?: number
+  /** Inner padding between the SVG border and the diagram content (px). */
   diagramPadding?: number
   showPianoNoteLabels?: boolean
   pianoNoteLabelPosition?: 'top' | 'bottom'
+  /** Show scale degrees (R, 3, b7…) instead of finger numbers. Requires `chord.root`. */
   showDegrees?: boolean
   showFingerNumbers?: boolean
   showStringLabels?: boolean
+  /** `'tuning'` shows the open-string note from `chord.tuning`; `'notes'` shows the fretted note. */
   stringLabelMode?: 'tuning' | 'notes'
   stringLabelPosition?: 'top' | 'bottom'
   stringLabelSize?: number
   stringLabelColor?: string
   pianoBlackKeyLabelColor?: string
+  /** Space between the right edge of the fret grid and the baseFret label (px). */
   fretLabelGap?: number
   leftHanded?: boolean
   orientation?: 'vertical' | 'horizontal'
+  /** `'clean'` = no filter, `'shadow'` = drop shadow, `'glow'` = color glow on dots. */
   filterStyle?: 'clean' | 'shadow' | 'glow'
   glowColor?: string
   glowBlur?: number
@@ -148,16 +177,52 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   shadowOpacity: 0.25,
 }
 
+/**
+ * A chord or scale diagram for any fretted instrument.
+ *
+ * @example
+ * // G major on guitar
+ * const chord: FretboardChord = {
+ *   name: 'G',
+ *   frets: [3, 2, 0, 0, 0, 3],   // low E → high E; -1 = muted (×), 0 = open (○)
+ *   fingers: [2, 1, 0, 0, 0, 3],  // 0 = no finger shown
+ *   tuning: ['E','A','D','G','B','E'],
+ * }
+ * renderFretboard(chord)
+ */
 export type FretboardChord = {
   name: string
-  frets: (number | number[])[]  // number = single fret/mute, number[] = multiple (scale)
+  /**
+   * One entry per string, ordered low→high (index 0 = lowest string).
+   * - `number`: single fret position. `-1` = muted (×). `0` = open (○).
+   * - `number[]`: multiple fret positions on one string (for scale diagrams).
+   */
+  frets: (number | number[])[]
+  /** Finger numbers parallel to `frets`. `0` = no number shown. */
   fingers?: number[]
-  colors?: (string | null)[]    // per-string dot color override, null = use default
+  /** Per-string dot color override, parallel to `frets`. `null` = use `dotColor` default. */
+  colors?: (string | null)[]
+  /** Absolute fret number of the first displayed fret (shown as a label). Default: 1. */
   baseFret?: number
+  /**
+   * Barre definitions. `startString` and `endString` are 1-indexed from the lowest string
+   * (e.g. `startString: 1, endString: 6` = full barre across all 6 strings).
+   */
   barres?: Array<{ fret: number; startString: number; endString: number }>
-  tuning?: string[]     // low→high, e.g. ['E','A','D','G','B','E']
-  root?: string         // e.g. 'C', 'F#' — enables degree labels
-  stringOffset?: number[]  // fret where each string begins (0 = normal, starts at nut)
+  /** Open-string note names, low→high (e.g. `['E','A','D','G','B','E']`). Used for string labels and degree calculation. */
+  tuning?: string[]
+  /** Root note name (e.g. `'C'`, `'F#'`). Required for `showDegrees`. */
+  root?: string
+  /**
+   * Fret at which each string starts (for instruments with partial strings, e.g. 5-string banjo).
+   * Index 0 = lowest string. `0` or omit = string starts at the nut.
+   * A string where `frets[i] === stringOffset[i]` is shown as open (no dot).
+   *
+   * @example
+   * // 5-string banjo: drone string (index 0) starts at fret 5
+   * stringOffset: [5, 0, 0, 0, 0]
+   */
+  stringOffset?: number[]
 }
 
 export type BowedChord = {
@@ -171,11 +236,38 @@ export type BowedChord = {
   root?: string
 }
 
+/**
+ * A chord or scale diagram for piano/keyboard.
+ *
+ * @example
+ * // Cmaj7
+ * const chord: PianoChord = {
+ *   name: 'Cmaj7',
+ *   keys: ['C4', 'E4', 'G4', 'B4'],  // scientific pitch: note name + octave number
+ *   fingers: [1, 2, 3, 4],
+ * }
+ * renderPiano(chord)
+ */
 export type PianoChord = {
   name: string
+  /**
+   * Active keys in scientific pitch notation: note name followed by octave number.
+   * Examples: `'C4'` (middle C), `'Bb3'`, `'F#5'`.
+   * Default display range is C3–B4; set `range` to show other octaves.
+   */
   keys: string[]
-  fingers?: number[]          // parallel to keys, 0 = no number
-  colors?: (string | null)[]  // parallel to keys, null = use default
+  /** Finger numbers parallel to `keys`. `0` = no number shown. */
+  fingers?: number[]
+  /** Per-key dot color override, parallel to `keys`. `null` = use `activeKeyColor` default. */
+  colors?: (string | null)[]
+  /**
+   * Visible keyboard range in scientific pitch notation. Defaults to `{ from: 'C3', to: 'B4' }`.
+   * Set this if any key in `keys` falls outside that range.
+   *
+   * @example
+   * range: { from: 'A2', to: 'C6' }
+   */
   range?: { from: string; to: string }
-  root?: string               // e.g. 'C', 'F#' — enables degree labels
+  /** Root note name without octave (e.g. `'C'`, `'F#'`). Required for `showDegrees`. */
+  root?: string
 }

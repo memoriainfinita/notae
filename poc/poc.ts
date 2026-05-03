@@ -3,6 +3,8 @@ import { renderPiano } from '../src/piano'
 import { renderBowed } from '../src/bowed'
 import { StyleOptions, DEFAULT_STYLE } from '../src/types'
 
+declare const UMT: any
+
 const CHORDS = {
   // Guitar — standard tuning
   guitarOpen: {
@@ -283,11 +285,19 @@ function renderAll(): void {
   document.getElementById('banjo-d7')!.innerHTML     = renderFretboard(CHORDS.banjoD7,        currentStyle)
   document.getElementById('banjo-highG')!.innerHTML  = renderFretboard(CHORDS.banjoCHighPos,  currentStyle)
   document.getElementById('banjo-scale')!.innerHTML  = renderFretboard(CHORDS.banjoGScale, { ...currentStyle, numFrets: 7 })
+  const bh = { ...currentStyle, orientation: 'horizontal' as const }
+  document.getElementById('banjo-g-h')!.innerHTML    = renderFretboard(CHORDS.banjoG,  bh)
+  document.getElementById('banjo-c-h')!.innerHTML    = renderFretboard(CHORDS.banjoC,  bh)
+  document.getElementById('banjo-d7-h')!.innerHTML   = renderFretboard(CHORDS.banjoD7, bh)
   document.getElementById('bowed-violinG')!.innerHTML     = renderBowed(CHORDS.bowedViolinG,     currentStyle)
   document.getElementById('bowed-violinD3')!.innerHTML    = renderBowed(CHORDS.bowedViolinD3,    currentStyle)
   document.getElementById('bowed-celloC')!.innerHTML      = renderBowed(CHORDS.bowedCelloC,      currentStyle)
   document.getElementById('bowed-violinA')!.innerHTML     = renderBowed(CHORDS.bowedViolinA,     currentStyle)
   document.getElementById('bowed-violinScale')!.innerHTML = renderBowed(CHORDS.bowedViolinScale,  currentStyle)
+  const bowH = { ...currentStyle, orientation: 'horizontal' as const }
+  document.getElementById('bowed-violinG-h')!.innerHTML     = renderBowed(CHORDS.bowedViolinG,     bowH)
+  document.getElementById('bowed-violinD3-h')!.innerHTML    = renderBowed(CHORDS.bowedViolinD3,    bowH)
+  document.getElementById('bowed-violinScale-h')!.innerHTML = renderBowed(CHORDS.bowedViolinScale, bowH)
   document.getElementById('scale-amblues-pos5')!.innerHTML   = renderFretboard(CHORDS.scaleAmBluesPos5, { ...currentStyle, numFrets: 4 })
   document.getElementById('scale-amblues-full')!.innerHTML   = renderFretboard(CHORDS.scaleAmBluesFull, { ...currentStyle, numFrets: 12 })
   document.getElementById('scale-amblues-pos5-h')!.innerHTML = renderFretboard(CHORDS.scaleAmBluesPos5, { ...currentStyle, numFrets: 4, orientation: 'horizontal' })
@@ -456,6 +466,13 @@ function bindTweaks(): void {
   bindSlider('shadowY', 'shadowY', -8, 8)
   bindSlider('shadowBlur', 'shadowBlur', 0, 10)
   bindSlider('shadowOpacity', 'shadowOpacity', 0.05, 1, 0.05)
+  const orientationSelect = panel.querySelector<HTMLSelectElement>('#tweak-orientation')!
+  orientationSelect.value = currentStyle.orientation ?? 'vertical'
+  orientationSelect.addEventListener('change', () => {
+    currentStyle.orientation = orientationSelect.value as StyleOptions['orientation']
+    renderAll()
+  })
+
   const filterSelect = panel.querySelector<HTMLSelectElement>('#tweak-filterStyle')!
   filterSelect.value = currentStyle.filterStyle ?? 'clean'
   filterSelect.addEventListener('change', () => {
@@ -473,7 +490,32 @@ function bindTweaks(): void {
   })
 }
 
+function renderUmtChord(symbol: string): void {
+  const el = document.getElementById('umt-piano')!
+  if (!symbol.trim()) { el.innerHTML = ''; return }
+  try {
+    const chord = UMT.parseChordSymbol(symbol.trim())
+    const notes = chord.getNotes()
+    // note.name already includes octave (e.g. "C4", "Bb3") — use directly
+    const keys = notes.map((n: any) => n.name)
+    const rootName = notes[0]?.name.replace(/\d+$/, '') ?? ''
+    // auto-detect range: snap to octave boundaries (C…B) from actual note positions
+    // piano_abs = 57 + stepsFromBase (piano.ts internal scale, verified: C4=48, B4=59)
+    const steps = notes.map((n: any) => n.stepsFromBase as number)
+    const fromOctave = Math.floor((57 + Math.min(...steps)) / 12)
+    const toOctave   = Math.floor((57 + Math.max(...steps)) / 12)
+    const range = { from: `C${fromOctave}`, to: `B${toOctave}` }
+    el.innerHTML = renderPiano({ name: symbol.trim(), keys, root: rootName, range }, currentStyle)
+  } catch {
+    el.innerHTML = '<span style="color:#c44;font-size:11px">?</span>'
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   bindTweaks()
   renderAll()
+  const umtInput = document.getElementById('umt-input') as HTMLInputElement
+  umtInput.value = 'Cmaj7'
+  renderUmtChord('Cmaj7')
+  umtInput.addEventListener('input', () => renderUmtChord(umtInput.value))
 })

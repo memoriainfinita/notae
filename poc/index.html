@@ -176,6 +176,12 @@
       <div class="diagram-wrap" id="banjo-highG"></div>
       <div class="diagram-wrap" id="banjo-scale"></div>
     </div>
+    <div class="sub-label">Horizontal</div>
+    <div class="diagrams">
+      <div class="diagram-wrap" id="banjo-g-h"></div>
+      <div class="diagram-wrap" id="banjo-c-h"></div>
+      <div class="diagram-wrap" id="banjo-d7-h"></div>
+    </div>
   </div>
 
   <div class="section">
@@ -186,6 +192,12 @@
       <div class="diagram-wrap" id="bowed-celloC"></div>
       <div class="diagram-wrap" id="bowed-violinA"></div>
       <div class="diagram-wrap" id="bowed-violinScale"></div>
+    </div>
+    <div class="sub-label">Horizontal</div>
+    <div class="diagrams">
+      <div class="diagram-wrap" id="bowed-violinG-h"></div>
+      <div class="diagram-wrap" id="bowed-violinD3-h"></div>
+      <div class="diagram-wrap" id="bowed-violinScale-h"></div>
     </div>
   </div>
 
@@ -199,58 +211,76 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-label">UMT &rarr; Piano</div>
+    <div style="margin-bottom:10px">
+      <input type="text" id="umt-input" placeholder="Cmaj9, Am7, F#m11..."
+             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:220px">
+    </div>
+    <div class="diagrams">
+      <div class="diagram-wrap" id="umt-piano"></div>
+    </div>
+  </div>
+
   <button id="tweaks-toggle" title="Toggle tweaks">&#9664; Tweaks</button>
 
   <!-- Tweaks panel -->
   <aside id="tweaks-panel">
     <h2>Tweaks</h2>
 
-    <!-- Typography -->
-    <div class="tweak-section-label">Typography</div>
+    <!-- General -->
+    <div class="tweak-section-label">General</div>
     <div class="tweak-text">
       <label>fontFamily</label>
       <input type="text" id="tweak-fontFamily">
     </div>
-    <div class="slider-grid" style="margin-top:4px">
+    <select id="tweak-orientation" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-top:6px">
+      <option value="vertical">orientation: vertical</option>
+      <option value="horizontal">orientation: horizontal</option>
+    </select>
+    <div class="tweak-toggle" style="margin-top:6px">
+      <input type="checkbox" id="tweak-leftHanded">
+      <label for="tweak-leftHanded">leftHanded</label>
+    </div>
+    <div class="tweak-toggle">
+      <input type="checkbox" id="tweak-showDegrees">
+      <label for="tweak-showDegrees">showDegrees</label>
+    </div>
+    <div class="tweak-toggle">
+      <input type="checkbox" id="tweak-showFingerNumbers">
+      <label for="tweak-showFingerNumbers">showFingerNumbers</label>
+    </div>
+
+    <hr class="section-sep">
+
+    <!-- Chord name -->
+    <div class="tweak-section-label">Chord name</div>
+    <div class="slider-grid">
       <div class="tweak-row">
-        <div class="tweak-row-label">chordName <span id="tweak-chordNameSize-val">14</span></div>
+        <div class="tweak-row-label">size <span id="tweak-chordNameSize-val">14</span></div>
         <input type="range" id="tweak-chordNameSize">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">chordNameY <span id="tweak-chordNameY-val">26</span></div>
+        <div class="tweak-row-label">Y <span id="tweak-chordNameY-val">26</span></div>
         <input type="range" id="tweak-chordNameY">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">chordNameGap <span id="tweak-chordNameGap-val">14</span></div>
+        <div class="tweak-row-label">gap (vert) <span id="tweak-chordNameGap-val">14</span></div>
         <input type="range" id="tweak-chordNameGap">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">chordNameGapH <span id="tweak-chordNameGapH-val">32</span></div>
+        <div class="tweak-row-label">gap (horiz) <span id="tweak-chordNameGapH-val">32</span></div>
         <input type="range" id="tweak-chordNameGapH">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">chordNameGapP <span id="tweak-chordNameGapP-val">11</span></div>
+        <div class="tweak-row-label">gap (piano) <span id="tweak-chordNameGapP-val">11</span></div>
         <input type="range" id="tweak-chordNameGapP">
       </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">fingerNum <span id="tweak-fingerNumberSize-val">10</span></div>
-        <input type="range" id="tweak-fingerNumberSize">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">pianoNum <span id="tweak-pianoFingerNumberSize-val">9</span></div>
-        <input type="range" id="tweak-pianoFingerNumberSize">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">fretLabel <span id="tweak-fretLabelSize-val">11</span></div>
-        <input type="range" id="tweak-fretLabelSize">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">fretLabelGap <span id="tweak-fretLabelGap-val">20</span></div>
-        <input type="range" id="tweak-fretLabelGap">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">stringLabel <span id="tweak-stringLabelSize-val">9</span></div>
-        <input type="range" id="tweak-stringLabelSize">
+    </div>
+    <div class="color-grid" style="margin-top:4px">
+      <div class="color-item">
+        <input type="color" id="tweak-chordNameColor">
+        <span>color</span>
       </div>
     </div>
 
@@ -272,12 +302,12 @@
         <input type="range" id="tweak-fretSpacing">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">nutWidth <span id="tweak-nutWidth-val">4</span></div>
-        <input type="range" id="tweak-nutWidth">
-      </div>
-      <div class="tweak-row">
         <div class="tweak-row-label">numFrets <span id="tweak-numFrets-val">5</span></div>
         <input type="range" id="tweak-numFrets">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">nutWidth <span id="tweak-nutWidth-val">4</span></div>
+        <input type="range" id="tweak-nutWidth">
       </div>
       <div class="tweak-row">
         <div class="tweak-row-label">stringWidth <span id="tweak-stringWidth-val">1</span></div>
@@ -296,10 +326,78 @@
         <input type="range" id="tweak-indicatorSize">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">indicator stroke <span id="tweak-indicatorStrokeWidth-val">1.5</span></div>
+        <div class="tweak-row-label">ind. stroke <span id="tweak-indicatorStrokeWidth-val">1.5</span></div>
         <input type="range" id="tweak-indicatorStrokeWidth">
       </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">fretLabel <span id="tweak-fretLabelSize-val">11</span></div>
+        <input type="range" id="tweak-fretLabelSize">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">fretLabelGap <span id="tweak-fretLabelGap-val">20</span></div>
+        <input type="range" id="tweak-fretLabelGap">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">fingerNum <span id="tweak-fingerNumberSize-val">10</span></div>
+        <input type="range" id="tweak-fingerNumberSize">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">stringLabel <span id="tweak-stringLabelSize-val">9</span></div>
+        <input type="range" id="tweak-stringLabelSize">
+      </div>
     </div>
+    <div class="color-grid" style="margin-top:4px">
+      <div class="color-item">
+        <input type="color" id="tweak-dotColor">
+        <span>dot</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-dotTextColor">
+        <span>dot text</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-barreColor">
+        <span>barre</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-nutColor">
+        <span>nut</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-stringColor">
+        <span>string</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-fretColor">
+        <span>fret</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-indicatorColor">
+        <span>○ / ×</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-fretLabelColor">
+        <span>fretLabel</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-stringLabelColor">
+        <span>strLabel</span>
+      </div>
+    </div>
+    <div class="tweak-toggle" style="margin-top:6px">
+      <input type="checkbox" id="tweak-showStringLabels">
+      <label for="tweak-showStringLabels">showStringLabels</label>
+    </div>
+    <div class="tweak-toggle">
+      <input type="checkbox" id="tweak-stringLabelMode">
+      <label for="tweak-stringLabelMode">labels: notes (vs tuning)</label>
+    </div>
+    <div class="tweak-toggle">
+      <input type="checkbox" id="tweak-stringLabelPosition">
+      <label for="tweak-stringLabelPosition">labels: top (vs bottom)</label>
+    </div>
+
+    <hr class="section-sep">
 
     <!-- Piano -->
     <div class="tweak-section-label">Piano</div>
@@ -313,16 +411,16 @@
         <input type="range" id="tweak-pianoWhiteKeyH">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">blackShift <span id="tweak-pianoBlackKeyShift-val">0</span></div>
-        <input type="range" id="tweak-pianoBlackKeyShift">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">blackKeyW <span id="tweak-pianoBlackKeyWidthRatio-val">0.58</span></div>
+        <div class="tweak-row-label">blackW ratio <span id="tweak-pianoBlackKeyWidthRatio-val">0.58</span></div>
         <input type="range" id="tweak-pianoBlackKeyWidthRatio">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">blackKeyH <span id="tweak-pianoBlackKeyHeightRatio-val">0.62</span></div>
+        <div class="tweak-row-label">blackH ratio <span id="tweak-pianoBlackKeyHeightRatio-val">0.62</span></div>
         <input type="range" id="tweak-pianoBlackKeyHeightRatio">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">blackShift <span id="tweak-pianoBlackKeyShift-val">0</span></div>
+        <input type="range" id="tweak-pianoBlackKeyShift">
       </div>
       <div class="tweak-row">
         <div class="tweak-row-label">whiteRadius <span id="tweak-pianoWhiteKeyRadius-val">3</span></div>
@@ -333,20 +431,20 @@
         <input type="range" id="tweak-pianoBlackKeyRadius">
       </div>
       <div class="tweak-row">
-        <div class="tweak-row-label">whiteDotOff <span id="tweak-pianoWhiteDotOffset-val">5</span></div>
-        <input type="range" id="tweak-pianoWhiteDotOffset">
-      </div>
-      <div class="tweak-row">
-        <div class="tweak-row-label">blackDotOff <span id="tweak-pianoBlackDotOffset-val">4</span></div>
-        <input type="range" id="tweak-pianoBlackDotOffset">
-      </div>
-      <div class="tweak-row">
         <div class="tweak-row-label">keyStroke <span id="tweak-pianoKeyStrokeWidth-val">1</span></div>
         <input type="range" id="tweak-pianoKeyStrokeWidth">
       </div>
       <div class="tweak-row">
         <div class="tweak-row-label">dotRadius <span id="tweak-pianoDotRadius-val">8</span></div>
         <input type="range" id="tweak-pianoDotRadius">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">whiteDotOff <span id="tweak-pianoWhiteDotOffset-val">5</span></div>
+        <input type="range" id="tweak-pianoWhiteDotOffset">
+      </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">blackDotOff <span id="tweak-pianoBlackDotOffset-val">4</span></div>
+        <input type="range" id="tweak-pianoBlackDotOffset">
       </div>
       <div class="tweak-row">
         <div class="tweak-row-label">noteLabelSize <span id="tweak-pianoNoteLabelSize-val">11</span></div>
@@ -356,6 +454,44 @@
         <div class="tweak-row-label">labelOffset <span id="tweak-pianoNoteLabelOffset-val">6</span></div>
         <input type="range" id="tweak-pianoNoteLabelOffset">
       </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">pianoNum <span id="tweak-pianoFingerNumberSize-val">9</span></div>
+        <input type="range" id="tweak-pianoFingerNumberSize">
+      </div>
+    </div>
+    <div class="color-grid" style="margin-top:4px">
+      <div class="color-item">
+        <input type="color" id="tweak-activeKeyColor">
+        <span>active</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-pianoWhiteKeyColor">
+        <span>white key</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-pianoBlackKeyColor">
+        <span>black key</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-pianoWhiteKeyStrokeColor">
+        <span>white stroke</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-pianoBlackKeyStrokeColor">
+        <span>black stroke</span>
+      </div>
+      <div class="color-item">
+        <input type="color" id="tweak-pianoBlackKeyLabelColor">
+        <span>black label</span>
+      </div>
+    </div>
+    <div class="tweak-toggle" style="margin-top:6px">
+      <input type="checkbox" id="tweak-showPianoNoteLabels">
+      <label for="tweak-showPianoNoteLabels">showPianoNoteLabels</label>
+    </div>
+    <div class="tweak-toggle">
+      <input type="checkbox" id="tweak-pianoNoteLabelPosition">
+      <label for="tweak-pianoNoteLabelPosition">labels: top (vs bottom)</label>
     </div>
 
     <hr class="section-sep">
@@ -391,120 +527,14 @@
 
     <hr class="section-sep">
 
-    <!-- Colors: fretboard -->
-    <div class="tweak-section-label">Colors — fretboard</div>
-    <div class="color-grid">
-      <div class="color-item">
-        <input type="color" id="tweak-dotColor">
-        <span>dot</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-dotTextColor">
-        <span>num</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-barreColor">
-        <span>barre</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-chordNameColor">
-        <span>name</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-fretLabelColor">
-        <span>fretLabel</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-nutColor">
-        <span>nut</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-indicatorColor">
-        <span>O / ×</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-stringColor">
-        <span>string</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-fretColor">
-        <span>fret</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-stringLabelColor">
-        <span>strLabel</span>
-      </div>
-    </div>
-
-    <!-- Colors: piano -->
-    <div class="tweak-section-label">Colors — piano</div>
-    <div class="color-grid">
-      <div class="color-item">
-        <input type="color" id="tweak-activeKeyColor">
-        <span>active</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-pianoBlackKeyLabelColor">
-        <span>black label</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-pianoWhiteKeyStrokeColor">
-        <span>white stroke</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-pianoBlackKeyStrokeColor">
-        <span>black stroke</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-pianoWhiteKeyColor">
-        <span>white key</span>
-      </div>
-      <div class="color-item">
-        <input type="color" id="tweak-pianoBlackKeyColor">
-        <span>black key</span>
-      </div>
-    </div>
-
-    <hr class="section-sep">
-
-    <!-- Toggles -->
-    <div class="tweak-section-label">Options</div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-showDegrees">
-      <label for="tweak-showDegrees">showDegrees</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-showPianoNoteLabels">
-      <label for="tweak-showPianoNoteLabels">showPianoNoteLabels</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-pianoNoteLabelPosition">
-      <label for="tweak-pianoNoteLabelPosition">piano labels: top (vs bottom)</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-showFingerNumbers">
-      <label for="tweak-showFingerNumbers">showFingerNumbers</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-showStringLabels">
-      <label for="tweak-showStringLabels">showStringLabels</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-stringLabelMode">
-      <label for="tweak-stringLabelMode">labels: notes (vs tuning)</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-stringLabelPosition">
-      <label for="tweak-stringLabelPosition">labels: top (vs bottom)</label>
-    </div>
-    <div class="tweak-toggle">
-      <input type="checkbox" id="tweak-leftHanded">
-      <label for="tweak-leftHanded">leftHanded</label>
-    </div>
-
-    <hr class="section-sep">
-    <div class="tweak-section-label">Filter style</div>
-    <div class="slider-grid" style="margin-bottom:4px">
+    <!-- Filter -->
+    <div class="tweak-section-label">Filter</div>
+    <select id="tweak-filterStyle" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-bottom:6px">
+      <option value="clean">clean</option>
+      <option value="shadow">shadow</option>
+      <option value="glow">glow</option>
+    </select>
+    <div class="slider-grid">
       <div class="tweak-row">
         <div class="tweak-row-label">glowBlur <span id="tweak-glowBlur-val">2.5</span></div>
         <input type="range" id="tweak-glowBlur">
@@ -530,21 +560,17 @@
         <input type="range" id="tweak-shadowOpacity">
       </div>
     </div>
-    <div class="color-grid" style="margin-bottom:4px">
+    <div class="color-grid" style="margin-top:4px">
       <div class="color-item">
         <input type="color" id="tweak-glowColor">
         <span>glow color</span>
       </div>
     </div>
-    <select id="tweak-filterStyle" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-top:2px">
-      <option value="clean">clean</option>
-      <option value="shadow">shadow</option>
-      <option value="glow">glow</option>
-    </select>
 
     <button id="copy-tweaks">Copy tweaks</button>
   </aside>
 
+  <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js"></script>
   <script src="dist/bundle.js"></script>
   <script>
     const toggle = document.getElementById('tweaks-toggle')

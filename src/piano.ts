@@ -34,6 +34,19 @@ function parseNote(str: string): number | null {
   return parseInt(m[2]) * 12 + semi
 }
 
+/**
+ * Renders a piano/keyboard chord or scale diagram as an SVG string.
+ *
+ * @param chord - Chord or scale data. Keys are in scientific pitch notation (`'C4'`, `'Bb3'`…). See `PianoChord`.
+ * @param style - Optional visual overrides. See `StyleOptions`.
+ * @returns A self-contained SVG string. Inject it directly into the DOM via `innerHTML`.
+ *
+ * @example
+ * document.getElementById('diagram').innerHTML = renderPiano({
+ *   name: 'Cmaj7',
+ *   keys: ['C4', 'E4', 'G4', 'B4'],
+ * })
+ */
 export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
   const s = { ...DEFAULT_STYLE, ...style }
 

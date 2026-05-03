@@ -1,6 +1,21 @@
 import { FretboardChord, StyleOptions, DEFAULT_STYLE } from './types'
 import { noteAtFret, degreeLabel, buildFilter } from './utils'
 
+/**
+ * Renders a fretboard chord or scale diagram as an SVG string.
+ * Works for any fretted instrument (guitar, ukulele, bass, banjo…).
+ *
+ * @param chord - Chord or scale data. See `FretboardChord`.
+ * @param style - Optional visual overrides. See `StyleOptions`.
+ * @returns A self-contained SVG string. Inject it directly into the DOM via `innerHTML`.
+ *
+ * @example
+ * document.getElementById('diagram').innerHTML = renderFretboard({
+ *   name: 'Am',
+ *   frets: [-1, 0, 2, 2, 1, 0],
+ *   tuning: ['E','A','D','G','B','E'],
+ * })
+ */
 export function renderFretboard(chord: FretboardChord, style?: StyleOptions): string {
   const s = { ...DEFAULT_STYLE, ...style }
   const numStrings = chord.frets.length
@@ -229,7 +244,7 @@ function renderHorizontal(
   tuning: string[], fretArrays: number[][], singleFret: (i: number) => number | null,
   labels: string[], p: number
 ): string {
-  const labelW = s.showStringLabels ? s.stringLabelSize + 8 : 0
+  const labelW = s.showStringLabels ? s.stringLabelSize + 6 : 0
   const labelsAtTop = s.stringLabelPosition === 'top'
   const indicatorW = s.indicatorZoneSize
   const nutW = s.nutWidth
@@ -300,7 +315,7 @@ function renderHorizontal(
     if (off > 0 && off >= baseFret) {
       const relOff = off - baseFret
       inner += `<line x1="${fretX(relOff)}" y1="${y}" x2="${fretX(numFrets)+0.5}" y2="${y}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
-      inner += `<circle cx="${fretX(relOff) - s.indicatorSize - 2}" cy="${y}" r="${s.indicatorSize}" fill="none" stroke="${s.indicatorColor}" stroke-width="${s.indicatorStrokeWidth}"/>`
+      inner += `<circle cx="${fretX(relOff) - s.fretSpacing / 2}" cy="${y}" r="${s.indicatorSize}" fill="none" stroke="${s.indicatorColor}" stroke-width="${s.indicatorStrokeWidth}"/>`
     } else {
       inner += `<line x1="${fretX(0)-0.5}" y1="${y}" x2="${fretX(numFrets)+0.5}" y2="${y}" stroke="${s.stringColor}" stroke-width="${s.stringWidth}"/>`
     }
