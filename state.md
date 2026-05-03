@@ -135,6 +135,29 @@ Ver sección Defaults validados.
 - renderWind descartado por ahora — bretpimentel.com demasiado específico, queda como TODO
 - Exportado desde `src/index.ts`
 
+### 2026-05-03 — Tweaks panel, bowed horizontal, consistencia renderers
+
+- `renderBowed` soporta `orientation: 'horizontal'` — nueva función `renderBowedH`
+- Banjo horizontal añadido al POC (3 acordes)
+- Bowed horizontal añadido al POC (violín G, pos.3, escala G)
+- Tweaks panel reorganizado: General → Chord name → Fretboard → Piano → Box → Filter
+- `orientation` expuesto como select en el panel de tweaks
+- `chordNameColor` movido de "Colors fretboard" a sección "Chord name"
+- Fix bowed horizontal: nut posicionado en `x = padLeft` (no centrado) — elimina hueco con cuerdas
+- Fix fretboard horizontal peg indicator: `fretX(relOff) - fretSpacing/2` (consistente con vertical)
+- Consistencia renderers: `stringLabelSize + 6` en todos (era `+8` en fretboard horizontal), `padBottom = 16` en todos (era `s.dotRadius + 10` en bowed vertical, `s.dotRadius` en bowed horizontal)
+- JSDoc completo en `note.ts` de UMT (name getter, getName, constructor _name) — incluye octava
+- CDN UMT actualizado a `dist/umt.js` en poc/index.html (UMT migrado de docs/ a dist/)
+
+### 2026-05-03 — UMT → Piano integration + documentación API
+
+- Integración UMT en POC: `parseChordSymbol(symbol)` → `getNotes()` → `renderPiano`
+- CDN: `https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js` (global `UMT`)
+- `note.name` en UMT ya incluye octava (ej. `"C4"`) — documentado en `Note.name` JSDoc
+- Auto-range: calculado desde `stepsFromBase` de cada nota (`piano_abs = 57 + steps`)
+- JSDoc completo en notae: tres renderers (`@param`, `@returns`, `@example`), tipos `FretboardChord`/`PianoChord`/`BowedChord`, `StyleOptions` con unidades y comentarios en props no obvias
+- Decisión: no base de datos de acordes — para piano UMT genera notas directamente; para fretboard, voicing algorítmico futuro en UMT
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
@@ -234,11 +257,15 @@ Ver sección Defaults validados.
   - `HexCell { col, row, note?, label?, color?, active? }`
   - Generadores: `wickiHayden()`, `bosanquetWilson(edo)`, `harmonicTable()` → HexGrid
   - Objetivo: un renderer, layouts infinitos
-- [ ] Revisar API surface antes de publicar
+- [x] Revisar API surface antes de publicar — JSDoc completo en types.ts y renderers
 - [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
-- [ ] UMT añadirá lógica de voicing → genera FretboardChord/PianoChord → notae renderiza. Diseñar interfaz cuando UMT esté listo.
+- [x] UMT → Piano: integración básica funcionando en POC (parseChordSymbol → renderPiano, auto-range)
+- [ ] UMT → Fretboard: voicing algorítmico en UMT dado tuning → FretboardChord. Diseñar cuando UMT esté listo.
 - [ ] Setup npm package (`package.json` público, exports, tipos)
+
+### Pendiente en UMT (repo separado)
+- [x] Bundle migrado a `dist/umt.js` (2026-05-03). CDN en `poc/index.html` actualizado.
 
 ### Instrumentos a explorar
 - [ ] `renderWind` — descartado por ahora. bretpimentel.com es referencia difícil de superar. Retomar cuando haya caso de uso concreto.
