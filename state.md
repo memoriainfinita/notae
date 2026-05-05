@@ -187,6 +187,12 @@ Ver sección Defaults validados.
 - Repo público creado: `github.com/memoriainfinita/notae`, push inicial hecho
 - Pendiente: activar GitHub Pages en Settings (source: docs/)
 
+### 2026-05-05 — CDN audit y limpieza build
+
+- Quitado `--sourcemap` de `build:lib` — el .map era ignorado por git, referencia inútil en notae.js
+- Borrado `dist/notae.js.map` local
+- Corregidas entradas contradictorias en state.md sobre copia docs/dist/
+
 ### 2026-05-05 — UMT → Fretboard integrado en POC
 
 - Nueva sección "UMT → Fretboard (chord)": `parseChordSymbol` → `getFretboardVoicings` → muestra hasta 4 voicings con select de afinación (guitar/dropD/openG/ukulele/bass)
@@ -218,7 +224,7 @@ Ver sección Defaults validados.
 - **Styling**: dark mode toggle (localStorage), CSS custom properties, responsive grid (`minmax(180px, 1fr)` default, `minmax(280px, 1fr)` for piano)
 - **JS**: `themeStyle()` returns color overrides for dark mode, debounced demo input, API preview code block, copy-to-clipboard CDN snippet, re-render on theme toggle
 - **README.md**: full API reference with all three renderers, chord types (FretboardChord/PianoChord/BowedChord), StyleOptions table, UMT integration examples, installation (CDN), build/test commands
-- **Library improvement**: `shadowColor` property added to StyleOptions (default `#000000`) + DEFAULT_STYLE + FilterOptions. Enables visible shadows in dark mode. build:lib copies `dist/notae.js` → `docs/dist/notae.js` automatically
+- **Library improvement**: `shadowColor` property added to StyleOptions (default `#000000`) + DEFAULT_STYLE + FilterOptions. Enables visible shadows in dark mode.
 - **Coverage**: all instruments in examples (guitar barre/colors/scale/baseFret, banjo drone/scale, bass 4-string, 7-string+shadow, piano chord/scale/colors+degrees, violin/cello scales+positions). All renderers and major StyleOptions features demonstrated on landing page
 - Commit: `14c1bbb`
 
@@ -231,7 +237,7 @@ Ver sección Defaults validados.
 - **Features**: live re-render on every tweak, dark mode support, API code preview with copy button, error handling
 - **Landing page**: "Open playground →" button now points to `playground.html` (was GitHub)
 - No precanned examples — all interaction driven by user input + tweaks
-- **Folder structure**: `docs/dist/notae.js` copied automatically by build:lib (for GitHub Pages). HTML references `dist/notae.js` locally. Ready to push when repo created.
+- **Folder structure**: `docs/` usa CDN en producción — no hay copia local de notae.js. HTML en docs/ carga desde jsDelivr.
 - Commits: `c998cab` (playground), `157ce10` + `a0ad930` (structure), reverted for final setup
 
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
