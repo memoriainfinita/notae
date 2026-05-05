@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>notae — SVG chord and scale diagrams</title>
+  <meta name="description" content="SVG chord and scale diagram renderer for fretboard, piano, and bowed instruments. Zero dependencies.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <span class="logo">notae</span>
+    <div class="nav-links">
+      <a href="#demo">Demo</a>
+      <a href="#showcase">Examples</a>
+      <a href="#install">Install</a>
+      <a href="#api">API</a>
+      <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
+      <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◑</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>notae</h1>
+    <p class="tagline">SVG chord and scale diagram renderer.<br>Zero dependencies. Works from a script tag.</p>
+    <div class="hero-pills">
+      <span class="pill">Fretboard</span>
+      <span class="pill">Piano</span>
+      <span class="pill">Bowed strings</span>
+    </div>
+    <div class="hero-badges">
+      <a href="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@main/dist/notae.js" class="badge" target="_blank" rel="noopener">CDN · jsDelivr</a>
+      <span class="badge badge-license">GPL-3.0</span>
+      <span class="badge">22 kb min</span>
+    </div>
+    <a href="https://github.com/memoriainfinita/notae" class="btn-primary" target="_blank" rel="noopener">Open playground →</a>
+  </section>
+
+  <section id="demo" class="section">
+    <div class="container">
+      <h2>Live demo</h2>
+      <p class="section-desc">Powered by <a href="https://github.com/memoriainfinita/UMT" target="_blank" rel="noopener">UMT</a>. Type a chord or scale symbol.</p>
+      <div class="demo-controls">
+        <input
+          type="text"
+          id="demo-input"
+          placeholder="Cmaj7, D dorian, F# blues, Am pentatonic..."
+          autocomplete="off"
+          aria-label="Chord or scale symbol"
+        >
+        <select id="demo-renderer" aria-label="Renderer type">
+          <option value="fretboard">Fretboard</option>
+          <option value="piano">Piano</option>
+        </select>
+        <select id="demo-tuning" aria-label="Fretboard tuning">
+          <option value="guitar">Guitar (standard)</option>
+          <option value="dropD">Guitar (drop D)</option>
+          <option value="openG">Guitar (open G)</option>
+          <option value="ukulele">Ukulele</option>
+          <option value="bass">Bass</option>
+        </select>
+      </div>
+      <div class="demo-output">
+        <div class="demo-diagram-wrap">
+          <div id="demo-diagram" aria-live="polite"></div>
+          <div id="demo-error" class="demo-error" hidden role="alert"></div>
+        </div>
+        <div class="demo-code-wrap">
+          <div class="code-header-sm">API preview</div>
+          <pre class="code-block-sm"><code id="demo-code">// Type a symbol above</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="showcase" class="section section-alt">
+    <div class="container">
+      <h2>Examples</h2>
+
+      <div class="showcase-group">
+        <h3>Fretboard</h3>
+        <div class="showcase-grid">
+          <figure class="showcase-item">
+            <div id="ex-fret-barre" class="diagram-cell" aria-label="F major barre chord diagram"></div>
+            <figcaption>Barre chord with finger numbers</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-colors" class="diagram-cell" aria-label="G major chord with colored dots"></div>
+            <figcaption>Per-dot colors: root · third · fifth</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-scale-h" class="diagram-cell" aria-label="Am pentatonic scale, horizontal"></div>
+            <figcaption>Scale position, horizontal layout</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-basefret" class="diagram-cell" aria-label="Dm7 chord at position 5"></div>
+            <figcaption>High position with baseFret</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-banjo" class="diagram-cell" aria-label="Banjo G chord, open G tuning"></div>
+            <figcaption>Banjo — drone string offset</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-bass" class="diagram-cell" aria-label="Bass E5 power chord"></div>
+            <figcaption>Bass — 4-string, any tuning</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-fret-7string" class="diagram-cell" aria-label="F major barre on 7-string guitar with shadow"></div>
+            <figcaption>7-string guitar with shadow filter</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="showcase-group">
+        <h3>Piano</h3>
+        <div class="showcase-grid showcase-grid--piano">
+          <figure class="showcase-item">
+            <div id="ex-piano-basic" class="diagram-cell" aria-label="Cmaj7 chord on piano"></div>
+            <figcaption>Chord with finger numbers</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-piano-scale" class="diagram-cell" aria-label="Am blues scale on piano, 2 octaves"></div>
+            <figcaption>Scale over 2 octaves with note labels</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-piano-colors" class="diagram-cell" aria-label="F# harmonic minor scale with colored keys"></div>
+            <figcaption>Per-key colors with degrees</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="showcase-group">
+        <h3>Bowed strings</h3>
+        <div class="showcase-grid">
+          <figure class="showcase-item">
+            <div id="ex-bowed-scale" class="diagram-cell" aria-label="G major scale on violin, 1st position"></div>
+            <figcaption>G major scale, violin — 1st position</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-bowed-pos-h" class="diagram-cell" aria-label="D chord on violin, horizontal, 3rd position"></div>
+            <figcaption>Position chord, horizontal layout</figcaption>
+          </figure>
+          <figure class="showcase-item">
+            <div id="ex-bowed-cello" class="diagram-cell" aria-label="C chord on cello, 1st position"></div>
+            <figcaption>Cello, 1st position</figcaption>
+          </figure>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="install" class="section">
+    <div class="container">
+      <h2>Install</h2>
+      <div class="install-block">
+        <div class="code-header">
+          <span>Browser — CDN (jsDelivr)</span>
+          <button id="copy-cdn" class="btn-copy" aria-label="Copy CDN snippet">Copy</button>
+        </div>
+        <pre class="code-block"><code id="cdn-code">&lt;script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@main/dist/notae.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  const svg = Notae.renderFretboard({
+    name: 'Cmaj7',
+    frets: [0, 3, 2, 0, 0, 0],
+    fingers: [0, 3, 2, 0, 0, 0],
+    tuning: ['E', 'A', 'D', 'G', 'B', 'E'],
+  });
+  document.getElementById('chord').innerHTML = svg;
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="api" class="section section-alt">
+    <div class="container">
+      <h2>API</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Function</th>
+            <th>Chord type</th>
+            <th>Returns</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Notae.renderFretboard(chord, style?)</code></td>
+            <td><code>FretboardChord</code></td>
+            <td>SVG string</td>
+          </tr>
+          <tr>
+            <td><code>Notae.renderPiano(chord, style?)</code></td>
+            <td><code>PianoChord</code></td>
+            <td>SVG string</td>
+          </tr>
+          <tr>
+            <td><code>Notae.renderBowed(chord, style?)</code></td>
+            <td><code>BowedChord</code></td>
+            <td>SVG string</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="api-note">
+        All renderers accept an optional <code>StyleOptions</code> object — colors, sizes, fonts, filter effects, orientation, and more.
+        Full type definitions and defaults at
+        <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">github.com/memoriainfinita/notae</a>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/memoriainfinita/UMT" target="_blank" rel="noopener">UMT</a>
+    </div>
+    <span class="footer-copy">GPL-3.0 · Zero dependencies · SVG diagrams for every instrument.</span>
+  </div>
+</footer>
+
+<script src="dist/notae.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js"></script>
+<script src="landing.js"></script>
+
+</body>
+</html>
