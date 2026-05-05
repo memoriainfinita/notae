@@ -212,6 +212,16 @@ Ver sección Defaults validados.
 - **Coverage**: all instruments in examples (guitar barre/colors/scale/baseFret, banjo drone/scale, bass 4-string, 7-string+shadow, piano chord/scale/colors+degrees, violin/cello scales+positions). All renderers and major StyleOptions features demonstrated on landing page
 - Commit: `14c1bbb`
 
+### 2026-05-05 — Interactive playground
+
+- **Playground page** (`docs/playground.html` + `docs/playground.js`): standalone editor with tweaks panel
+- **Layout**: 2 columns (controls left, output right) — responsive to 1 column on mobile
+- **Input**: chord/scale symbol, renderer selector (fretboard/piano), fretboard tuning selector
+- **Tweaks panel**: 5 tabs (General, Display, Colors, Box, Filter) with sliders, color pickers, checkboxes
+- **Features**: live re-render on every tweak, dark mode support, API code preview with copy button, error handling
+- **Landing page**: "Open playground →" button now points to `playground.html` (was GitHub)
+- No precanned examples — all interaction driven by user input + tweaks
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`

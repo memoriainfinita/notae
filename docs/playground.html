@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>notae — Playground</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .playground-header {
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-color, #e0e0e0);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .playground-header a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .playground-header a:hover {
+      color: #000;
+    }
+
+    [data-theme="dark"] .playground-header a {
+      color: #aaa;
+    }
+
+    [data-theme="dark"] .playground-header a:hover {
+      color: #e0e0e0;
+    }
+
+    .playground-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1024px) {
+      .playground-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .controls-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    [data-theme="dark"] .input-group label {
+      color: #999;
+    }
+
+    .input-group input[type="text"],
+    .input-group select {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    [data-theme="dark"] .input-group input[type="text"],
+    [data-theme="dark"] .input-group select {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .tweaks-panel {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fafafa;
+    }
+
+    [data-theme="dark"] .tweaks-panel {
+      background: #1a1a1a;
+      border-color: #333;
+    }
+
+    .tweaks-tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      background: #f5f5f5;
+    }
+
+    [data-theme="dark"] .tweaks-tabs {
+      background: #111;
+      border-color: #333;
+    }
+
+    .tweaks-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #666;
+      border-bottom: 2px solid transparent;
+    }
+
+    [data-theme="dark"] .tweaks-tab {
+      color: #999;
+    }
+
+    .tweaks-tab.active {
+      color: #000;
+      border-bottom-color: #5aaa5a;
+    }
+
+    [data-theme="dark"] .tweaks-tab.active {
+      color: #e0e0e0;
+      border-bottom-color: #5aaa5a;
+    }
+
+    .tweaks-content {
+      display: none;
+      padding: 16px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+
+    .tweaks-content.active {
+      display: block;
+    }
+
+    .tweak-item {
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tweak-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    [data-theme="dark"] .tweak-label {
+      color: #aaa;
+    }
+
+    .tweak-control {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .tweak-control input[type="range"] {
+      flex: 1;
+      height: 4px;
+      cursor: pointer;
+    }
+
+    .tweak-control input[type="number"] {
+      width: 50px;
+      padding: 4px 6px;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    [data-theme="dark"] .tweak-control input[type="number"] {
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    .tweak-control input[type="color"] {
+      width: 40px;
+      height: 28px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .tweak-control select {
+      padding: 4px 6px;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    [data-theme="dark"] .tweak-control select {
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    .output-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .diagram-wrap {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px;
+      background: #fff;
+      overflow-x: auto;
+      min-height: 300px;
+    }
+
+    [data-theme="dark"] .diagram-wrap {
+      background: #1a1a1a;
+      border-color: #333;
+    }
+
+    #diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .code-wrap {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f5f5f5;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .code-wrap {
+      background: #0d0d0d;
+      border-color: #333;
+    }
+
+    .code-header {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ddd;
+      font-size: 12px;
+      font-weight: 500;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    [data-theme="dark"] .code-header {
+      border-color: #333;
+      color: #999;
+    }
+
+    .btn-copy {
+      padding: 4px 8px;
+      font-size: 11px;
+      background: #5aaa5a;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-copy:hover {
+      background: #4a9a4a;
+    }
+
+    .code-block {
+      padding: 12px;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      color: #333;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    [data-theme="dark"] .code-block {
+      color: #e0e0e0;
+      background: #1a1a1a;
+    }
+
+    .error-msg {
+      padding: 12px;
+      background: #fee;
+      color: #c33;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    [data-theme="dark"] .error-msg {
+      background: #3a1a1a;
+      color: #f77;
+    }
+  </style>
+</head>
+<body>
+
+<div class="playground-header">
+  <a href="index.html">← Back to notae</a>
+</div>
+
+<div class="playground-container">
+  <div class="controls-section">
+    <div class="input-group">
+      <label>Chord or scale symbol</label>
+      <input
+        type="text"
+        id="symbol-input"
+        placeholder="Cmaj7, D dorian, F# blues, Am pentatonic..."
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Renderer</label>
+        <select id="renderer-select">
+          <option value="fretboard">Fretboard</option>
+          <option value="piano">Piano</option>
+          <option value="bowed">Bowed strings</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Fretboard tuning</label>
+        <select id="tuning-select">
+          <option value="guitar">Guitar (standard)</option>
+          <option value="dropD">Guitar (drop D)</option>
+          <option value="openG">Guitar (open G)</option>
+          <option value="ukulele">Ukulele</option>
+          <option value="bass">Bass</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tweaks-panel">
+      <div class="tweaks-tabs">
+        <button class="tweaks-tab active" data-tab="general">General</button>
+        <button class="tweaks-tab" data-tab="display">Display</button>
+        <button class="tweaks-tab" data-tab="colors">Colors</button>
+        <button class="tweaks-tab" data-tab="box">Box</button>
+        <button class="tweaks-tab" data-tab="filter">Filter</button>
+      </div>
+
+      <div id="tweaks-general" class="tweaks-content active">
+        <div class="tweak-item">
+          <label class="tweak-label">Font size (chord name)</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameSize" min="10" max="30" value="17">
+            <input type="number" id="chordNameSize-num" min="10" max="30" value="17">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Orientation</label>
+          <div class="tweak-control">
+            <select id="orientation">
+              <option value="vertical">Vertical</option>
+              <option value="horizontal">Horizontal</option>
+            </select>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Num frets</label>
+          <div class="tweak-control">
+            <input type="range" id="numFrets" min="4" max="15" value="5">
+            <input type="number" id="numFrets-num" min="4" max="15" value="5">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show finger numbers</label>
+          <div class="tweak-control">
+            <input type="checkbox" id="showFingerNumbers" checked>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show degrees (R 3 5)</label>
+          <div class="tweak-control">
+            <input type="checkbox" id="showDegrees">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Left handed</label>
+          <div class="tweak-control">
+            <input type="checkbox" id="leftHanded">
+          </div>
+        </div>
+      </div>
+
+      <div id="tweaks-display" class="tweaks-content">
+        <div class="tweak-item">
+          <label class="tweak-label">String spacing</label>
+          <div class="tweak-control">
+            <input type="range" id="stringSpacing" min="12" max="30" value="19">
+            <input type="number" id="stringSpacing-num" min="12" max="30" value="19">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret spacing</label>
+          <div class="tweak-control">
+            <input type="range" id="fretSpacing" min="15" max="35" value="23">
+            <input type="number" id="fretSpacing-num" min="15" max="35" value="23">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Dot radius</label>
+          <div class="tweak-control">
+            <input type="range" id="dotRadius" min="5" max="15" value="9">
+            <input type="number" id="dotRadius-num" min="5" max="15" value="9">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String width</label>
+          <div class="tweak-control">
+            <input type="range" id="stringWidth" min="0.5" max="3" step="0.5" value="1">
+            <input type="number" id="stringWidth-num" min="0.5" max="3" step="0.5" value="1">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Piano key width</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoWhiteKeyW" min="20" max="40" value="28">
+            <input type="number" id="pianoWhiteKeyW-num" min="20" max="40" value="28">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show string labels</label>
+          <div class="tweak-control">
+            <input type="checkbox" id="showStringLabels" checked>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show piano note labels</label>
+          <div class="tweak-control">
+            <input type="checkbox" id="showPianoNoteLabels" checked>
+          </div>
+        </div>
+      </div>
+
+      <div id="tweaks-colors" class="tweaks-content">
+        <div class="tweak-item">
+          <label class="tweak-label">Chord name color</label>
+          <div class="tweak-control">
+            <input type="color" id="chordNameColor" value="#000000">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Dot / active key color</label>
+          <div class="tweak-control">
+            <input type="color" id="dotColor" value="#5aaa5a">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String color</label>
+          <div class="tweak-control">
+            <input type="color" id="stringColor" value="#aaaaaa">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret color</label>
+          <div class="tweak-control">
+            <input type="color" id="fretColor" value="#cccccc">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Piano white key color</label>
+          <div class="tweak-control">
+            <input type="color" id="pianoWhiteKeyColor" value="#ffffff">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Nut color</label>
+          <div class="tweak-control">
+            <input type="color" id="nutColor" value="#333333">
+          </div>
+        </div>
+      </div>
+
+      <div id="tweaks-box" class="tweaks-content">
+        <div class="tweak-item">
+          <label class="tweak-label">Background color</label>
+          <div class="tweak-control">
+            <input type="text" id="backgroundColor" placeholder="transparent" value="transparent">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Border color</label>
+          <div class="tweak-control">
+            <input type="color" id="borderColor" value="#000000">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Border width</label>
+          <div class="tweak-control">
+            <input type="range" id="borderWidth" min="0" max="5" value="0">
+            <input type="number" id="borderWidth-num" min="0" max="5" value="0">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Border radius</label>
+          <div class="tweak-control">
+            <input type="range" id="borderRadius" min="0" max="20" value="0">
+            <input type="number" id="borderRadius-num" min="0" max="20" value="0">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Padding</label>
+          <div class="tweak-control">
+            <input type="range" id="diagramPadding" min="0" max="30" value="0">
+            <input type="number" id="diagramPadding-num" min="0" max="30" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div id="tweaks-filter" class="tweaks-content">
+        <div class="tweak-item">
+          <label class="tweak-label">Filter style</label>
+          <div class="tweak-control">
+            <select id="filterStyle">
+              <option value="clean">Clean</option>
+              <option value="shadow">Shadow</option>
+              <option value="glow">Glow</option>
+            </select>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Shadow color</label>
+          <div class="tweak-control">
+            <input type="color" id="shadowColor" value="#000000">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Shadow X</label>
+          <div class="tweak-control">
+            <input type="range" id="shadowX" min="-5" max="5" step="0.5" value="2">
+            <input type="number" id="shadowX-num" min="-5" max="5" step="0.5" value="2">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Shadow Y</label>
+          <div class="tweak-control">
+            <input type="range" id="shadowY" min="-5" max="5" step="0.5" value="3">
+            <input type="number" id="shadowY-num" min="-5" max="5" step="0.5" value="3">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Shadow blur</label>
+          <div class="tweak-control">
+            <input type="range" id="shadowBlur" min="0" max="10" step="0.5" value="2">
+            <input type="number" id="shadowBlur-num" min="0" max="10" step="0.5" value="2">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Glow color</label>
+          <div class="tweak-control">
+            <input type="color" id="glowColor" value="#5aaa5a">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Glow blur</label>
+          <div class="tweak-control">
+            <input type="range" id="glowBlur" min="0" max="10" step="0.5" value="2.5">
+            <input type="number" id="glowBlur-num" min="0" max="10" step="0.5" value="2.5">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="output-section">
+    <div class="diagram-wrap">
+      <div id="diagram" role="img" aria-label="Diagram output"></div>
+      <div id="error" class="error-msg" hidden role="alert"></div>
+    </div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span>API code</span>
+        <button id="copy-code" class="btn-copy">Copy</button>
+      </div>
+      <pre class="code-block" id="code">// Type a symbol above</pre>
+    </div>
+  </div>
+</div>
+
+<script src="dist/notae.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js"></script>
+<script src="playground.js"></script>
+
+</body>
+</html>
