@@ -309,6 +309,13 @@ Ver sección Defaults validados.
 
 ---
 
+## README para próxima sesión
+
+- **Listo para GitHub**: estructura ordenada, playground funcional, landing page lista
+- **Siguiente**: crear repo en GitHub, configurar GitHub Pages (`docs/` folder), push de master
+- **CDN**: cuando repo esté público, actualizar landing para usar jsDelivr CDN si se desea
+- **dist/**: ignorado localmente (build dev), pero `docs/dist/notae.js` está versionado para GitHub Pages
+
 ## TODO
 
 - [x] Decidir nombre del paquete npm → **notae**
