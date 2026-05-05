@@ -306,6 +306,20 @@ function renderAll(): void {
   document.getElementById('piano-fsharp-minor')!.innerHTML = renderPiano(CHORDS.pianoFsharpHarmonicMinor, currentStyle)
   document.getElementById('piano-white')!.innerHTML    = renderPiano(CHORDS.pianoWhite, currentStyle)
   document.getElementById('piano-black')!.innerHTML    = renderPiano(CHORDS.pianoBlack, currentStyle)
+
+  const umtPianoInput = document.getElementById('umt-input') as HTMLInputElement | null
+  if (umtPianoInput) renderUmtChord(umtPianoInput.value)
+
+  const umtScaleInput = document.getElementById('umt-scale-input') as HTMLInputElement | null
+  if (umtScaleInput) renderUmtScale(umtScaleInput.value)
+
+  const umtFbInput  = document.getElementById('umt-fretboard-input')  as HTMLInputElement | null
+  const umtFbTuning = document.getElementById('umt-fretboard-tuning') as HTMLSelectElement | null
+  if (umtFbInput && umtFbTuning) renderUmtFretboard(umtFbInput.value, umtFbTuning.value)
+
+  const umtFbScaleInput  = document.getElementById('umt-fretboard-scale-input')  as HTMLInputElement | null
+  const umtFbScaleTuning = document.getElementById('umt-fretboard-scale-tuning') as HTMLSelectElement | null
+  if (umtFbScaleInput && umtFbScaleTuning) renderUmtFretboardScale(umtFbScaleInput.value, umtFbScaleTuning.value)
 }
 
 function bindTweaks(): void {
@@ -519,6 +533,55 @@ function renderUmtChord(symbol: string): void {
   }
 }
 
+function getFretboardTuning(key: string): readonly number[] {
+  const map: Record<string, readonly number[]> = {
+    guitar:  UMT.GUITAR_STANDARD,
+    dropD:   UMT.GUITAR_DROPPED_D,
+    openG:   UMT.GUITAR_OPEN_G,
+    ukulele: UMT.UKULELE_STANDARD,
+    bass:    UMT.BASS_STANDARD,
+  }
+  return map[key] ?? UMT.GUITAR_STANDARD
+}
+
+function renderUmtFretboard(symbol: string, tuningKey: string): void {
+  const container = document.getElementById('umt-fretboard')!
+  if (!symbol.trim()) { container.innerHTML = ''; return }
+  try {
+    const chord = UMT.parseChordSymbol(symbol.trim())
+    const tuning = getFretboardTuning(tuningKey)
+    const voicings = UMT.getFretboardVoicings(chord, tuning)
+    if (voicings.length === 0) {
+      container.innerHTML = '<span style="color:#999;font-size:11px">no voicings found</span>'
+      return
+    }
+    container.innerHTML = voicings.slice(0, 4)
+      .map((v: any) => `<div class="diagram-wrap">${renderFretboard({ name: symbol.trim(), ...v }, currentStyle)}</div>`)
+      .join('')
+  } catch (e) {
+    container.innerHTML = `<span style="color:#c44;font-size:11px">${e}</span>`
+  }
+}
+
+function renderUmtFretboardScale(symbol: string, tuningKey: string): void {
+  const elFull  = document.getElementById('umt-fretboard-scale-full')!
+  const elBoxes = document.getElementById('umt-fretboard-scale-boxes')!
+  if (!symbol.trim()) { elFull.innerHTML = ''; elBoxes.innerHTML = ''; return }
+  try {
+    const scale  = UMT.parseScaleSymbol(symbol.trim())
+    const tuning = getFretboardTuning(tuningKey)
+    const full   = UMT.getFretboardScale(scale, tuning)
+    const boxes  = UMT.getFretboardScalePositions(scale, tuning)
+    elFull.innerHTML = `<div class="diagram-wrap">${renderFretboard({ name: symbol.trim(), ...full }, { ...currentStyle, numFrets: 12 })}</div>`
+    elBoxes.innerHTML = boxes.slice(0, 5)
+      .map((b: any) => `<div class="diagram-wrap">${renderFretboard({ name: symbol.trim(), ...b }, { ...currentStyle, numFrets: 4 })}</div>`)
+      .join('')
+  } catch (e) {
+    elFull.innerHTML = `<span style="color:#c44;font-size:11px">${e}</span>`
+    elBoxes.innerHTML = ''
+  }
+}
+
 function renderUmtScale(symbol: string): void {
   const el = document.getElementById('umt-scale-piano')!
   if (!symbol.trim()) { el.innerHTML = ''; return }
@@ -546,4 +609,18 @@ document.addEventListener('DOMContentLoaded', () => {
   umtScaleInput.value = 'C major'
   renderUmtScale('C major')
   umtScaleInput.addEventListener('input', () => renderUmtScale(umtScaleInput.value))
+
+  const umtFretboardInput  = document.getElementById('umt-fretboard-input')  as HTMLInputElement
+  const umtFretboardTuning = document.getElementById('umt-fretboard-tuning') as HTMLSelectElement
+  umtFretboardInput.value = 'Cmaj7'
+  renderUmtFretboard('Cmaj7', 'guitar')
+  umtFretboardInput.addEventListener('input',   () => renderUmtFretboard(umtFretboardInput.value, umtFretboardTuning.value))
+  umtFretboardTuning.addEventListener('change', () => renderUmtFretboard(umtFretboardInput.value, umtFretboardTuning.value))
+
+  const umtFretboardScaleInput  = document.getElementById('umt-fretboard-scale-input')  as HTMLInputElement
+  const umtFretboardScaleTuning = document.getElementById('umt-fretboard-scale-tuning') as HTMLSelectElement
+  umtFretboardScaleInput.value = 'C major'
+  renderUmtFretboardScale('C major', 'guitar')
+  umtFretboardScaleInput.addEventListener('input',   () => renderUmtFretboardScale(umtFretboardScaleInput.value, umtFretboardScaleTuning.value))
+  umtFretboardScaleTuning.addEventListener('change', () => renderUmtFretboardScale(umtFretboardScaleInput.value, umtFretboardScaleTuning.value))
 })

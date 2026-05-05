@@ -233,6 +233,41 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-label">UMT &rarr; Fretboard (chord)</div>
+    <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
+      <input type="text" id="umt-fretboard-input" placeholder="Cmaj7, Am7, F#m11..."
+             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:220px">
+      <select id="umt-fretboard-tuning" style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+        <option value="guitar">Guitar (standard)</option>
+        <option value="dropD">Guitar (drop D)</option>
+        <option value="openG">Guitar (open G)</option>
+        <option value="ukulele">Ukulele</option>
+        <option value="bass">Bass</option>
+      </select>
+    </div>
+    <div class="diagrams" id="umt-fretboard"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">UMT &rarr; Fretboard (scale)</div>
+    <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
+      <input type="text" id="umt-fretboard-scale-input" placeholder="C major, Bb dorian, F# harmonic minor..."
+             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:280px">
+      <select id="umt-fretboard-scale-tuning" style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+        <option value="guitar">Guitar (standard)</option>
+        <option value="dropD">Guitar (drop D)</option>
+        <option value="openG">Guitar (open G)</option>
+        <option value="ukulele">Ukulele</option>
+        <option value="bass">Bass</option>
+      </select>
+    </div>
+    <div class="sub-label">Full neck</div>
+    <div class="diagrams" id="umt-fretboard-scale-full"></div>
+    <div class="sub-label">Position boxes</div>
+    <div class="diagrams" id="umt-fretboard-scale-boxes"></div>
+  </div>
+
   <button id="tweaks-toggle" title="Toggle tweaks">&#9664; Tweaks</button>
 
   <!-- Tweaks panel -->

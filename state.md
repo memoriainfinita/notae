@@ -176,6 +176,14 @@ Ver sección Defaults validados.
 - Slider `fretLabelGapH` añadido al tweaks panel
 - Auditoría POC/librería: todo limpio — lógica de rendering exclusivamente en `src/*.ts`
 
+### 2026-05-05 — UMT → Fretboard integrado en POC
+
+- Nueva sección "UMT → Fretboard (chord)": `parseChordSymbol` → `getFretboardVoicings` → muestra hasta 4 voicings con select de afinación (guitar/dropD/openG/ukulele/bass)
+- Nueva sección "UMT → Fretboard (scale)": `parseScaleSymbol` → `getFretboardScale` (mástil completo, 12 trastes) + `getFretboardScalePositions` (hasta 5 position boxes de 4 trastes)
+- Todos los ejemplos UMT (piano chord, piano scale, fretboard chord, fretboard scale) añadidos a `renderAll()` — ahora reaccionan a tweaks
+- `getFretboardTuning()` lazy — evita evaluar presets UMT al cargar el módulo
+- CDN: `@main` con Shift+F5 necesario si UMT se actualiza (jsDelivr cache agresivo, max-age=1 año)
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
@@ -279,7 +287,7 @@ Ver sección Defaults validados.
 - [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
 - [x] UMT → Piano: integración básica funcionando en POC (parseChordSymbol → renderPiano, auto-range)
-- [ ] UMT → Fretboard: voicing algorítmico en UMT dado tuning → FretboardChord. Diseñar cuando UMT esté listo.
+- [x] UMT → Fretboard: voicing algorítmico implementado en UMT. `getFretboardVoicings(chord, tuning)` → array de posiciones ordenadas. También `getFretboardScale` y `getFretboardScalePositions`. Presets: `GUITAR_STANDARD`, `GUITAR_DROPPED_D`, `GUITAR_OPEN_G`, `UKULELE_STANDARD`, `BASS_STANDARD`. Output compatible con `FretboardChord` de notae: `renderFretboard({ name: chord.name, ...voicings[0] })`. UMT commit `9fa8316`. Integrado en POC 2026-05-05.
 - [ ] Setup npm package (`package.json` público, exports, tipos)
 
 ### Pendiente en UMT (repo separado)
