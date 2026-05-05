@@ -8,16 +8,17 @@ interface FilterOptions {
   shadowY?: number
   shadowBlur?: number
   shadowOpacity?: number
+  shadowColor?: string
 }
 
 export function buildFilter(style: string, opts: FilterOptions = {}): string {
   const {
     glowColor = '#5aaa5a', glowBlur = 2.5, glowOpacity = 0.8,
-    shadowX = 2, shadowY = 3, shadowBlur = 2, shadowOpacity = 0.25,
+    shadowX = 2, shadowY = 3, shadowBlur = 2, shadowOpacity = 0.25, shadowColor = '#000000',
   } = opts
   switch (style) {
     case 'shadow':
-      return `<filter id="notae-f"><feDropShadow dx="${shadowX}" dy="${shadowY}" stdDeviation="${shadowBlur}" flood-color="#000" flood-opacity="${shadowOpacity}"/></filter>`
+      return `<filter id="notae-f"><feDropShadow dx="${shadowX}" dy="${shadowY}" stdDeviation="${shadowBlur}" flood-color="${shadowColor}" flood-opacity="${shadowOpacity}"/></filter>`
     case 'glow':
       return `<filter id="notae-f" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur in="SourceGraphic" stdDeviation="${glowBlur}" result="blur"/><feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="color"/><feComposite in="color" in2="blur" operator="in" result="coloredGlow"/><feMerge><feMergeNode in="coloredGlow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`
     default: return ''

@@ -108,6 +108,7 @@ export type StyleOptions = {
   shadowY?: number
   shadowBlur?: number
   shadowOpacity?: number
+  shadowColor?: string
 }
 
 export const DEFAULT_STYLE: Required<StyleOptions> = {
@@ -187,6 +188,7 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   shadowY: 3,
   shadowBlur: 2,
   shadowOpacity: 0.25,
+  shadowColor: '#000000',
 }
 
 /**
