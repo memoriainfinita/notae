@@ -190,7 +190,7 @@ Ver sección Defaults validados.
 - `package.json`: nombre `notae`, sin `private`, descripción y keywords
 - `build:lib`: esbuild IIFE → `dist/notae.js` (22.8kb min), global `Notae`. Mismo patrón que UMT.
 - `build.js` (POC) sin cambios — salida en `poc/dist/`, independiente
-- Distribución: CDN (jsDelivr) igual que UMT. npm queda para decidir más adelante.
+- Distribución: GitHub + GitHub Pages + jsDelivr CDN. Mismo patrón que UMT. npm descartado.
 
 ### 2026-05-05 — API cleanup, StyleOptions audit, vitest
 
@@ -201,6 +201,16 @@ Ver sección Defaults validados.
 - POC limpio: `.input-row`, `.poc-input`, `.poc-select`, `.poc-error`, `.poc-empty`, `.tweak-select`
 - Vitest setup: 63 tests en `tests/unit/` — fretboard (29), piano (19), bowed (15)
 - Audit confirmado: ningún valor visual hardcodeado sin exponer queda en los renderers
+
+### 2026-05-05 — GitHub Pages landing page + README + shadowColor
+
+- **Landing page** (`docs/`): hero, UMT-powered live demo (chord/scale input), 7 fretboard examples (barre, colors, scale horizontal, baseFret, banjo, bass, 7-string+shadow) + 3 piano + 3 bowed examples
+- **Styling**: dark mode toggle (localStorage), CSS custom properties, responsive grid (`minmax(180px, 1fr)` default, `minmax(280px, 1fr)` for piano)
+- **JS**: `themeStyle()` returns color overrides for dark mode, debounced demo input, API preview code block, copy-to-clipboard CDN snippet, re-render on theme toggle
+- **README.md**: full API reference with all three renderers, chord types (FretboardChord/PianoChord/BowedChord), StyleOptions table, UMT integration examples, installation (CDN), build/test commands
+- **Library improvement**: `shadowColor` property added to StyleOptions (default `#000000`) + DEFAULT_STYLE + FilterOptions. Enables visible shadows in dark mode. build:lib copies `dist/notae.js` → `docs/dist/notae.js` automatically
+- **Coverage**: all instruments in examples (guitar barre/colors/scale/baseFret, banjo drone/scale, bass 4-string, 7-string+shadow, piano chord/scale/colors+degrees, violin/cello scales+positions). All renderers and major StyleOptions features demonstrated on landing page
+- Commit: `14c1bbb`
 
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
