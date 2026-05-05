@@ -4,15 +4,15 @@ const once = process.argv.includes('--once')
 
 const contexts = await Promise.all([
   esbuild.context({
-    entryPoints: ['poc/poc.ts'],
+    entryPoints: ['demo/demo.ts'],
     bundle: true,
-    outfile: 'poc/dist/bundle.js',
+    outfile: 'dist/demo.js',
     sourcemap: true,
   }),
   esbuild.context({
-    entryPoints: ['poc-sandbox/sandbox.ts'],
+    entryPoints: ['demo/sandbox.ts'],
     bundle: true,
-    outfile: 'poc-sandbox/dist/bundle.js',
+    outfile: 'dist/sandbox.js',
     sourcemap: true,
   }),
 ])
