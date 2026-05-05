@@ -221,8 +221,8 @@ Ver sección Defaults validados.
 - **Features**: live re-render on every tweak, dark mode support, API code preview with copy button, error handling
 - **Landing page**: "Open playground →" button now points to `playground.html` (was GitHub)
 - No precanned examples — all interaction driven by user input + tweaks
-- **Folder structure fix**: removed duplicate `docs/dist/` copy, HTML uses `../dist/notae.js` to reference root build. Single source of truth: root `dist/`.
-- Commits: `c998cab` (playground), `157ce10` (structure fix)
+- **Folder structure**: `docs/dist/notae.js` copied automatically by build:lib (for GitHub Pages). HTML references `dist/notae.js` locally. Ready to push when repo created.
+- Commits: `c998cab` (playground), `157ce10` + `a0ad930` (structure), reverted for final setup
 
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 

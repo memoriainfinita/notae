@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node build.js",
     "build": "node build.js --once",
-    "build:lib": "esbuild src/index.ts --bundle --minify --sourcemap --format=iife --global-name=Notae --outfile=dist/notae.js",
+    "build:lib": "esbuild src/index.ts --bundle --minify --sourcemap --format=iife --global-name=Notae --outfile=dist/notae.js && node -e \"const fs=require('fs');fs.mkdirSync('docs/dist',{recursive:true});fs.copyFileSync('dist/notae.js','docs/dist/notae.js');console.log('copied to docs/dist/notae.js')\"",
     "test": "vitest run"
   },
   "devDependencies": {
