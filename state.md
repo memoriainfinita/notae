@@ -177,6 +177,16 @@ Ver sección Defaults validados.
 - Slider `fretLabelGapH` añadido al tweaks panel
 - Auditoría POC/librería: todo limpio — lógica de rendering exclusivamente en `src/*.ts`
 
+### 2026-05-05 — Reorganización, fixes playground, push inicial
+
+- Estructura reorganizada: `poc/` + `poc-sandbox/` → `demo/` (flat), sin dist/ anidados
+- `dist/notae.js` trackeado (igual que UMT), `dist/demo.js` y `dist/sandbox.js` ignorados
+- `docs/` sin copia local de notae.js — usa CDN en producción
+- `build:lib` simplificado, sin paso de copia
+- Playground fixes: tuning select visible al init, borderColor incluido con borderWidth>0, dark mode toggle añadido
+- Repo público creado: `github.com/memoriainfinita/notae`, push inicial hecho
+- Pendiente: activar GitHub Pages en Settings (source: docs/)
+
 ### 2026-05-05 — UMT → Fretboard integrado en POC
 
 - Nueva sección "UMT → Fretboard (chord)": `parseChordSymbol` → `getFretboardVoicings` → muestra hasta 4 voicings con select de afinación (guitar/dropD/openG/ukulele/bass)
