@@ -309,42 +309,15 @@ Ver sección Defaults validados.
 
 ---
 
-## README para próxima sesión
-
-- **Listo para GitHub**: estructura ordenada, playground funcional, landing page lista
-- **Siguiente**: crear repo en GitHub, configurar GitHub Pages (`docs/` folder), push de master
-- **CDN**: cuando repo esté público, actualizar landing para usar jsDelivr CDN si se desea
-- **dist/**: ignorado localmente (build dev), pero `docs/dist/notae.js` está versionado para GitHub Pages
-
 ## TODO
 
-- [x] Decidir nombre del paquete npm → **notae**
-- [x] Sandbox POC creado con banjo validado
-- [x] renderBowed implementado y validado
-- [ ] renderHarmonica — pendiente. No hay librerías equivalentes. Modelo de datos propio: agujeros numerados, blow/draw, bends. Retomar cuando haya caso de uso concreto.
-- [x] Mover banjo y bowed al POC principal cuando estén listos
+- [ ] renderHarmonica — agujeros numerados, blow/draw, bends. Sin librerías de referencia. Retomar con caso de uso concreto.
 - [ ] renderVibraphone — alias visual de renderPiano, defaults metálicos, proporciones propias
 - [ ] renderHexGrid — renderer genérico de rejilla hexagonal isomórfica
   - Arquitectura: renderer puro (dibuja celdas) + generadores de layout separados
   - `HexGrid { cols, rows, cells[][], orientation: 'flat-top'|'pointy-top' }`
   - `HexCell { col, row, note?, label?, color?, active? }`
   - Generadores: `wickiHayden()`, `bosanquetWilson(edo)`, `harmonicTable()` → HexGrid
-  - Objetivo: un renderer, layouts infinitos
-- [x] Revisar API surface antes de publicar — JSDoc completo en types.ts y renderers
-- [x] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente → **No**. notae es zero deps; la conversión `notes.map(n => n.name)` es trivial y suficiente.
-- [x] Decidir relación con demo de UMT (reemplazar o complementar abcjs) → **Complementar**. abcjs = partitura; notae = diagramas de acordes. Sin solapamiento.
-- [x] UMT → Piano: integración básica funcionando en POC (parseChordSymbol → renderPiano, auto-range)
-- [x] UMT → Fretboard: voicing algorítmico implementado en UMT. `getFretboardVoicings(chord, tuning)` → array de posiciones ordenadas. También `getFretboardScale` y `getFretboardScalePositions`. Presets: `GUITAR_STANDARD`, `GUITAR_DROPPED_D`, `GUITAR_OPEN_G`, `UKULELE_STANDARD`, `BASS_STANDARD`. Output compatible con `FretboardChord` de notae: `renderFretboard({ name: chord.name, ...voicings[0] })`. UMT commit `9fa8316`. Integrado en POC 2026-05-05.
-- [x] Vitest setup — 63 tests en tests/unit/ (fretboard, piano, bowed)
-- [x] Setup build:lib — IIFE via esbuild → `dist/notae.js`, global `Notae`. Mismo patrón que UMT. CDN (jsDelivr) como canal de distribución.
-
-### Pendiente en UMT (repo separado)
-- [x] Bundle migrado a `dist/umt.js` (2026-05-03). CDN en `poc/index.html` actualizado.
-- [x] `parseChordSymbol` / `parseScaleSymbol` en `parser.ts`: respetar accidental explícito del usuario. Arreglado 2026-05-03 — commit `b32d643`. `A#maj7` ya devuelve root `A#` no `Bb`.
-
-### Instrumentos a explorar
-- [ ] `renderWind` — descartado por ahora. bretpimentel.com es referencia difícil de superar. Retomar cuando haya caso de uso concreto.
-- [ ] Banjo de 5 cuerdas — requiere `stringOffset?: number[]` (5ª cuerda empieza en traste 5)
-- [ ] Violín/viola/cello — posiciones en mástil sin trastes, paradigma diferente
+- [ ] renderWind — descartado por ahora. bretpimentel.com referencia difícil de superar.
 - [ ] Armónica — layout horizontal de agujeros, soplar/aspirar
 - [ ] SVGuitar (npm) — revisar como referencia/competidor

@@ -1,5 +1,8 @@
 node_modules/
-/dist/
+dist/demo.js
+dist/sandbox.js
+dist/*.d.ts
+dist/*.cjs
 *.js.map
 docs/project-archived.md
 docs/superpowers/
