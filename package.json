@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node build.js",
     "build": "node build.js --once",
-    "build:lib": "esbuild src/index.ts --bundle --minify --sourcemap --format=iife --global-name=Notae --outfile=dist/notae.js",
+    "build:lib": "esbuild src/index.ts --bundle --minify --format=iife --global-name=Notae --outfile=dist/notae.js",
     "test": "vitest run"
   },
   "devDependencies": {
