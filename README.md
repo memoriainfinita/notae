@@ -7,7 +7,7 @@
 SVG chord and scale diagram renderer for fretted, keyboard, and bowed instruments.
 Zero runtime dependencies. 23 kb compiled bundle.
 
-**[Live demo](https://memoriainfinita.github.io/notae/)** · **[Playground](https://memoriainfinita.github.io/notae/poc/)**
+**[Live demo](https://memoriainfinita.github.io/notae/)** · **[Playground](https://memoriainfinita.github.io/notae/playground.html)**
 
 ---
 
@@ -72,7 +72,7 @@ import { renderFretboard, renderPiano, renderBowed } from './src/index'
 ```bash
 npm install
 npm run build:lib   # src/index.ts → dist/notae.js (IIFE, global Notae)
-npm run dev         # watch mode for the POC
+npm run dev         # watch mode for the demo
 ```
 
 ---
