@@ -225,6 +225,22 @@ Ver sección Defaults validados.
 - Repo público creado: `github.com/memoriainfinita/notae`, push inicial hecho
 - Pendiente: activar GitHub Pages en Settings (source: docs/)
 
+### 2026-05-06 — Auditoría post mala sesión, CDN, state.md
+
+- CDN URL corregida de `@main` a `@master` — jsDelivr no encontraba el repo, todo fallaba en cascada
+- `—` eliminado de todos los HTML en docs/
+- state.md: path personal eliminado, skip-worktree activo (cambios locales no se pushean)
+- `.gitignore` limpio: `dist/demo.js`, `dist/sandbox.js` ya estaban correctos
+- History de state.md reordenado — mala sesión había desplazado entradas 05-02/05-03 al final
+- System section actualizada: `poc/` → `demo/`
+- API surface: añadido `renderBowed` a funciones exportadas
+- Defaults: añadidos `stringLabelGap`, `pianoNoteLabelGap`, `bowedTickSize`, `fretLabelGapH`, `shadowColor`
+- README: StyleOptions completado con las mismas 5 propiedades; eliminado import ESM interno
+- `build:lib`: quitado `--sourcemap` (el .map era ignorado por git)
+- GitHub Pages activado y funcionando: `https://memoriainfinita.github.io/notae/`
+- Banjo no añadido al demo interactivo — UMT no tiene preset BANJO_OPEN_G
+- TODO pendiente: añadir BANJO_OPEN_G a UMT para habilitar banjo en landing/playground
+
 ### 2026-05-05 — CDN fix, gitignore cleanup
 
 - CDN URL corregida de `@main` a `@master` en docs/index.html, docs/playground.html, README.md
