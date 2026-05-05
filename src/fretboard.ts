@@ -83,7 +83,7 @@ function renderVertical(
   tuning: string[], fretArrays: number[][], singleFret: (i: number) => number | null,
   labels: string[], p: number
 ): string {
-  const labelH = s.showStringLabels ? s.stringLabelSize + 6 : 0
+  const labelH = s.showStringLabels ? s.stringLabelSize + s.stringLabelGap + 2 : 0
   const labelsAtTop = s.stringLabelPosition === 'top'
   const padLeft = s.fretLabelSize + s.dotRadius + 10 + p
   const padRight = s.dotRadius + s.fretLabelGap + p
@@ -180,7 +180,7 @@ function renderVertical(
   if (s.showStringLabels) {
     const labelY = labelsAtTop
       ? s.chordNameY + s.chordNameGap + p + s.stringLabelSize
-      : fretY(numFrets) + 4 + s.stringLabelSize
+      : fretY(numFrets) + s.stringLabelGap + s.stringLabelSize
     for (let i = 0; i < numStrings; i++) {
       const sf = singleFret(i)
       let label: string
@@ -244,7 +244,7 @@ function renderHorizontal(
   tuning: string[], fretArrays: number[][], singleFret: (i: number) => number | null,
   labels: string[], p: number
 ): string {
-  const labelW = s.showStringLabels ? s.stringLabelSize + 6 : 0
+  const labelW = s.showStringLabels ? s.stringLabelSize + s.stringLabelGap + 2 : 0
   const labelsAtTop = s.stringLabelPosition === 'top'
   const indicatorW = s.indicatorZoneSize
   const nutW = s.nutWidth
@@ -339,7 +339,7 @@ function renderHorizontal(
 
   // String labels
   if (s.showStringLabels) {
-    const labelX = labelsAtTop ? p + labelW - 4 : fretX(numFrets) + 8
+    const labelX = labelsAtTop ? p + labelW - 4 : fretX(numFrets) + s.stringLabelGap
     const anchor = labelsAtTop ? 'end' : 'start'
     for (let i = 0; i < numStrings; i++) {
       const sf = singleFret(i)

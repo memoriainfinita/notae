@@ -78,7 +78,7 @@ export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
   const p = s.diagramPadding
   const labelsAtTop = s.pianoNoteLabelPosition === 'top'
   const padLeft = 10 + p
-  const noteLabelH = s.showPianoNoteLabels ? s.pianoNoteLabelSize + 6 + s.pianoNoteLabelOffset : 0
+  const noteLabelH = s.showPianoNoteLabels ? s.pianoNoteLabelSize + s.pianoNoteLabelGap + 2 + s.pianoNoteLabelOffset : 0
   const padTop = s.chordNameY + s.chordNameGapP + (labelsAtTop ? noteLabelH : 0) + p
   const padBottom = 16 + p + (labelsAtTop ? 0 : noteLabelH)
   const totalW = padLeft * 2 + whiteCount * wW
@@ -157,7 +157,7 @@ export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
   if (s.showPianoNoteLabels) {
     const labelYBase = labelsAtTop
       ? s.chordNameY + s.chordNameGapP + p + s.pianoNoteLabelSize
-      : padTop + wH + 4 + s.pianoNoteLabelSize
+      : padTop + wH + s.pianoNoteLabelGap + s.pianoNoteLabelSize
     for (const key of chord.keys) {
       const abs = parseNote(key)
       if (abs === null) continue

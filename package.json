@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "node build.js",
-    "build": "node build.js --once"
+    "build": "node build.js --once",
+    "test": "vitest run"
   },
   "devDependencies": {
     "esbuild": "^0.20.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.5"
   }
 }
