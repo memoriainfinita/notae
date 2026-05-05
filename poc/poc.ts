@@ -410,6 +410,7 @@ function bindTweaks(): void {
   bindSlider('fretLabelGap', 'fretLabelGap', 4, 40)
   bindSlider('fretLabelGapH', 'fretLabelGapH', 0, 40)
   bindSlider('stringLabelSize', 'stringLabelSize', 6, 14)
+  bindSlider('stringLabelGap', 'stringLabelGap', 0, 16)
   bindColor('stringLabelColor', 'stringLabelColor')
   bindSlider('pianoWhiteKeyW', 'pianoWhiteKeyW', 18, 48)
   bindSlider('pianoWhiteKeyH', 'pianoWhiteKeyH', 48, 240)
@@ -424,6 +425,7 @@ function bindTweaks(): void {
   bindSlider('pianoDotRadius', 'pianoDotRadius', 3, 12)
   bindSlider('pianoNoteLabelSize', 'pianoNoteLabelSize', 6, 16)
   bindSlider('pianoNoteLabelOffset', 'pianoNoteLabelOffset', 0, 16)
+  bindSlider('pianoNoteLabelGap', 'pianoNoteLabelGap', 0, 16)
   bindColor('dotColor', 'dotColor')
   bindColor('dotTextColor', 'dotTextColor')
   bindColor('stringColor', 'stringColor')
@@ -529,7 +531,7 @@ function renderUmtChord(symbol: string): void {
     const range = umtRange(notes)
     el.innerHTML = renderPiano({ name: symbol.trim(), keys, root: rootName, range }, currentStyle)
   } catch {
-    el.innerHTML = '<span style="color:#c44;font-size:11px">?</span>'
+    el.innerHTML = '<span class="poc-error">?</span>'
   }
 }
 
@@ -552,14 +554,14 @@ function renderUmtFretboard(symbol: string, tuningKey: string): void {
     const tuning = getFretboardTuning(tuningKey)
     const voicings = UMT.getFretboardVoicings(chord, tuning)
     if (voicings.length === 0) {
-      container.innerHTML = '<span style="color:#999;font-size:11px">no voicings found</span>'
+      container.innerHTML = '<span class="poc-empty">no voicings found</span>'
       return
     }
     container.innerHTML = voicings.slice(0, 4)
       .map((v: any) => `<div class="diagram-wrap">${renderFretboard({ name: symbol.trim(), ...v }, currentStyle)}</div>`)
       .join('')
   } catch (e) {
-    container.innerHTML = `<span style="color:#c44;font-size:11px">${e}</span>`
+    container.innerHTML = `<span class="poc-error">${e}</span>`
   }
 }
 
@@ -577,7 +579,7 @@ function renderUmtFretboardScale(symbol: string, tuningKey: string): void {
       .map((b: any) => `<div class="diagram-wrap">${renderFretboard({ name: symbol.trim(), ...b }, { ...currentStyle, numFrets: 4 })}</div>`)
       .join('')
   } catch (e) {
-    elFull.innerHTML = `<span style="color:#c44;font-size:11px">${e}</span>`
+    elFull.innerHTML = `<span class="poc-error">${e}</span>`
     elBoxes.innerHTML = ''
   }
 }
@@ -593,7 +595,7 @@ function renderUmtScale(symbol: string): void {
     const range = umtRange(notes)
     el.innerHTML = renderPiano({ name: symbol.trim(), keys, root: rootName, range }, currentStyle)
   } catch {
-    el.innerHTML = '<span style="color:#c44;font-size:11px">?</span>'
+    el.innerHTML = '<span class="poc-error">?</span>'
   }
 }
 

@@ -128,6 +128,44 @@
       border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;
     }
     #copy-tweaks:hover { background: #333; }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .poc-input {
+      padding: 5px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      width: 220px;
+    }
+
+    .poc-input--wide { width: 280px; }
+
+    .poc-select {
+      padding: 5px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .poc-error { color: #c44; font-size: 11px; }
+    .poc-empty { color: #999; font-size: 11px; }
+
+    .tweak-select {
+      width: 100%;
+      padding: 4px;
+      font-size: 11px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    .tweak-color-grid { margin-top: 4px; }
+    .tweak-first { margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -213,9 +251,8 @@
 
   <div class="section">
     <div class="section-label">UMT &rarr; Piano (chord)</div>
-    <div style="margin-bottom:10px">
-      <input type="text" id="umt-input" placeholder="Cmaj9, Am7, F#m11..."
-             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:220px">
+    <div class="input-row">
+      <input type="text" class="poc-input" id="umt-input" placeholder="Cmaj9, Am7, F#m11...">
     </div>
     <div class="diagrams">
       <div class="diagram-wrap" id="umt-piano"></div>
@@ -224,9 +261,8 @@
 
   <div class="section">
     <div class="section-label">UMT &rarr; Piano (scale)</div>
-    <div style="margin-bottom:10px">
-      <input type="text" id="umt-scale-input" placeholder="C major, Bb dorian, F# harmonic minor..."
-             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:280px">
+    <div class="input-row">
+      <input type="text" class="poc-input poc-input--wide" id="umt-scale-input" placeholder="C major, Bb dorian, F# harmonic minor...">
     </div>
     <div class="diagrams">
       <div class="diagram-wrap" id="umt-scale-piano"></div>
@@ -235,10 +271,9 @@
 
   <div class="section">
     <div class="section-label">UMT &rarr; Fretboard (chord)</div>
-    <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
-      <input type="text" id="umt-fretboard-input" placeholder="Cmaj7, Am7, F#m11..."
-             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:220px">
-      <select id="umt-fretboard-tuning" style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+    <div class="input-row">
+      <input type="text" class="poc-input" id="umt-fretboard-input" placeholder="Cmaj7, Am7, F#m11...">
+      <select class="poc-select" id="umt-fretboard-tuning">
         <option value="guitar">Guitar (standard)</option>
         <option value="dropD">Guitar (drop D)</option>
         <option value="openG">Guitar (open G)</option>
@@ -251,10 +286,9 @@
 
   <div class="section">
     <div class="section-label">UMT &rarr; Fretboard (scale)</div>
-    <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
-      <input type="text" id="umt-fretboard-scale-input" placeholder="C major, Bb dorian, F# harmonic minor..."
-             style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;width:280px">
-      <select id="umt-fretboard-scale-tuning" style="padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+    <div class="input-row">
+      <input type="text" class="poc-input poc-input--wide" id="umt-fretboard-scale-input" placeholder="C major, Bb dorian, F# harmonic minor...">
+      <select class="poc-select" id="umt-fretboard-scale-tuning">
         <option value="guitar">Guitar (standard)</option>
         <option value="dropD">Guitar (drop D)</option>
         <option value="openG">Guitar (open G)</option>
@@ -280,11 +314,11 @@
       <label>fontFamily</label>
       <input type="text" id="tweak-fontFamily">
     </div>
-    <select id="tweak-orientation" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-top:6px">
+    <select id="tweak-orientation" class="tweak-select tweak-first">
       <option value="vertical">orientation: vertical</option>
       <option value="horizontal">orientation: horizontal</option>
     </select>
-    <div class="tweak-toggle" style="margin-top:6px">
+    <div class="tweak-toggle tweak-first">
       <input type="checkbox" id="tweak-leftHanded">
       <label for="tweak-leftHanded">leftHanded</label>
     </div>
@@ -323,7 +357,7 @@
         <input type="range" id="tweak-chordNameGapP">
       </div>
     </div>
-    <div class="color-grid" style="margin-top:4px">
+    <div class="color-grid tweak-color-grid">
       <div class="color-item">
         <input type="color" id="tweak-chordNameColor">
         <span>color</span>
@@ -395,8 +429,12 @@
         <div class="tweak-row-label">stringLabel <span id="tweak-stringLabelSize-val">9</span></div>
         <input type="range" id="tweak-stringLabelSize">
       </div>
+      <div class="tweak-row">
+        <div class="tweak-row-label">labelGap <span id="tweak-stringLabelGap-val">4</span></div>
+        <input type="range" id="tweak-stringLabelGap">
+      </div>
     </div>
-    <div class="color-grid" style="margin-top:4px">
+    <div class="color-grid tweak-color-grid">
       <div class="color-item">
         <input type="color" id="tweak-dotColor">
         <span>dot</span>
@@ -434,7 +472,7 @@
         <span>strLabel</span>
       </div>
     </div>
-    <div class="tweak-toggle" style="margin-top:6px">
+    <div class="tweak-toggle tweak-first">
       <input type="checkbox" id="tweak-showStringLabels">
       <label for="tweak-showStringLabels">showStringLabels</label>
     </div>
@@ -505,11 +543,15 @@
         <input type="range" id="tweak-pianoNoteLabelOffset">
       </div>
       <div class="tweak-row">
+        <div class="tweak-row-label">labelGap <span id="tweak-pianoNoteLabelGap-val">4</span></div>
+        <input type="range" id="tweak-pianoNoteLabelGap">
+      </div>
+      <div class="tweak-row">
         <div class="tweak-row-label">pianoNum <span id="tweak-pianoFingerNumberSize-val">9</span></div>
         <input type="range" id="tweak-pianoFingerNumberSize">
       </div>
     </div>
-    <div class="color-grid" style="margin-top:4px">
+    <div class="color-grid tweak-color-grid">
       <div class="color-item">
         <input type="color" id="tweak-activeKeyColor">
         <span>active</span>
@@ -535,7 +577,7 @@
         <span>black label</span>
       </div>
     </div>
-    <div class="tweak-toggle" style="margin-top:6px">
+    <div class="tweak-toggle tweak-first">
       <input type="checkbox" id="tweak-showPianoNoteLabels">
       <label for="tweak-showPianoNoteLabels">showPianoNoteLabels</label>
     </div>
@@ -562,7 +604,7 @@
         <input type="range" id="tweak-borderRadius">
       </div>
     </div>
-    <div class="color-grid" style="margin-top:4px">
+    <div class="color-grid tweak-color-grid">
       <div class="color-item">
         <input type="color" id="tweak-backgroundColor">
         <span>bg</span>
@@ -579,7 +621,7 @@
 
     <!-- Filter -->
     <div class="tweak-section-label">Filter</div>
-    <select id="tweak-filterStyle" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-bottom:6px">
+    <select id="tweak-filterStyle" class="tweak-select" style="margin-bottom:6px">
       <option value="clean">clean</option>
       <option value="shadow">shadow</option>
       <option value="glow">glow</option>
@@ -610,7 +652,7 @@
         <input type="range" id="tweak-shadowOpacity">
       </div>
     </div>
-    <div class="color-grid" style="margin-top:4px">
+    <div class="color-grid tweak-color-grid">
       <div class="color-item">
         <input type="color" id="tweak-glowColor">
         <span>glow color</span>

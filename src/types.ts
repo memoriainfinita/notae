@@ -87,6 +87,12 @@ export type StyleOptions = {
   stringLabelSize?: number
   stringLabelColor?: string
   pianoBlackKeyLabelColor?: string
+  /** Gap between the last fret/nut and the string label text (px). Bottom and top positions. */
+  stringLabelGap?: number
+  /** Gap between the bottom of the piano keys and the note label text (px). */
+  pianoNoteLabelGap?: number
+  /** Length of the slot tick marks on bowed instrument diagrams (px). */
+  bowedTickSize?: number
   /** Space between the right edge of the fret grid and the baseFret label (px). Vertical orientation. */
   fretLabelGap?: number
   /** Gap between the bottom string and the fret label in horizontal orientation (px). Controls bottom padding reserve. */
@@ -166,6 +172,9 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   stringLabelSize: 11,
   stringLabelColor: '#999999',
   pianoBlackKeyLabelColor: '#555555',
+  stringLabelGap: 4,
+  pianoNoteLabelGap: 4,
+  bowedTickSize: 5,
   fretLabelGap: 20,
   fretLabelGapH: 8,
   leftHanded: false,

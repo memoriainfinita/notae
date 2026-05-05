@@ -30,12 +30,12 @@ function renderBowedH(chord: BowedChord, s: Required<StyleOptions>): string {
     v === null ? [] : Array.isArray(v) ? v : [v]
   )
 
-  const labelW = s.showStringLabels && tuning.length > 0 ? s.stringLabelSize + 6 : 0
+  const labelW = s.showStringLabels && tuning.length > 0 ? s.stringLabelSize + s.stringLabelGap + 2 : 0
   const indicatorW = s.indicatorZoneSize
   const nutW = showNut ? s.nutWidth : 0
 
   const padLeft  = p + 16 + indicatorW + (!showNut ? s.fretLabelSize + 6 : 0)
-  const padRight = s.dotRadius + labelW + 12 + p
+  const padRight = s.dotRadius + labelW + 16 + p
   const padTop    = s.chordNameY + s.chordNameGapH + p
   const padBottom = 16 + s.dotRadius + p
 
@@ -55,7 +55,7 @@ function renderBowedH(chord: BowedChord, s: Required<StyleOptions>): string {
 
   // String labels (right of strings)
   if (s.showStringLabels && tuning.length > 0) {
-    const lx = gridLeft + gridW + s.dotRadius + 4
+    const lx = gridLeft + gridW + s.dotRadius + s.stringLabelGap
     for (let i = 0; i < numStrings; i++) {
       if (!tuning[i]) continue
       let label = tuning[i]
@@ -89,7 +89,7 @@ function renderBowedH(chord: BowedChord, s: Required<StyleOptions>): string {
   }
 
   // Slot ticks (top and bottom edges)
-  const tick = 5
+  const tick = s.bowedTickSize
   for (let slot = 1; slot <= numSlots; slot++) {
     const x = slotX(slot)
     inner += `<line x1="${x}" y1="${padTop - tick}" x2="${x}" y2="${padTop}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
@@ -157,7 +157,7 @@ export function renderBowed(chord: BowedChord, style?: StyleOptions): string {
     v === null ? [] : Array.isArray(v) ? v : [v]
   )
 
-  const labelH = s.showStringLabels && tuning.length > 0 ? s.stringLabelSize + 6 : 0
+  const labelH = s.showStringLabels && tuning.length > 0 ? s.stringLabelSize + s.stringLabelGap + 2 : 0
   const indicatorH = s.indicatorZoneSize
   const topBarH = showNut ? s.nutWidth : 0
 
@@ -184,7 +184,7 @@ export function renderBowed(chord: BowedChord, style?: StyleOptions): string {
   if (s.showStringLabels && tuning.length > 0) {
     const labelY = labelsAtTop
       ? s.chordNameY + s.chordNameGap + p + s.stringLabelSize
-      : gridTop + gridH + s.dotRadius + 6 + s.stringLabelSize
+      : gridTop + gridH + s.dotRadius + s.stringLabelGap + s.stringLabelSize
     for (let i = 0; i < numStrings; i++) {
       if (!tuning[i]) continue
       let label = tuning[i]
@@ -218,7 +218,7 @@ export function renderBowed(chord: BowedChord, style?: StyleOptions): string {
   }
 
   // Slot ticks — short marks at the edges only (no physical frets on bowed instruments)
-  const tick = 5
+  const tick = s.bowedTickSize
   for (let slot = 1; slot <= numSlots; slot++) {
     const y = slotY(slot)
     inner += `<line x1="${padLeft - tick}" y1="${y}" x2="${padLeft}" y2="${y}" stroke="${s.fretColor}" stroke-width="${s.fretWidth}"/>`
