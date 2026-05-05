@@ -1,7 +1,5 @@
 node_modules/
 /dist/
-poc/dist/
-poc-sandbox/dist/
 *.js.map
 docs/project-archived.md
 docs/superpowers/
