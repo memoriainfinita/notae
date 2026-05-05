@@ -3,6 +3,17 @@
   const saved = localStorage.getItem('notae-theme');
   if (saved) document.documentElement.setAttribute('data-theme', saved);
 
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('notae-theme', next);
+      render(symbolInput.value);
+    });
+  }
+
   // Elements
   const symbolInput = document.getElementById('symbol-input');
   const rendererSelect = document.getElementById('renderer-select');
@@ -115,8 +126,12 @@
     const diagramPadding = parseInt(document.getElementById('diagramPadding').value);
 
     if (backgroundColor !== 'transparent') opts.backgroundColor = backgroundColor;
-    if (borderColor !== '#000000') opts.borderColor = borderColor;
-    if (borderWidth !== 0) opts.borderWidth = borderWidth;
+    if (borderWidth !== 0) {
+      opts.borderWidth = borderWidth;
+      opts.borderColor = borderColor;
+    } else if (borderColor !== '#000000') {
+      opts.borderColor = borderColor;
+    }
     if (borderRadius !== 0) opts.borderRadius = borderRadius;
     if (diagramPadding !== 0) opts.diagramPadding = diagramPadding;
 
@@ -302,8 +317,8 @@
     });
   });
 
-  // Hide tuning select for non-fretboard by default
-  tuningSelect.style.display = 'none';
+  // Show tuning select only for fretboard renderer
+  tuningSelect.style.display = rendererSelect.value === 'fretboard' ? '' : 'none';
 
   // Initial render
   symbolInput.value = 'Cmaj7';
