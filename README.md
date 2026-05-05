@@ -1,6 +1,6 @@
 # notae
 
-[![jsDelivr](https://img.shields.io/badge/CDN-jsDelivr-orange)](https://cdn.jsdelivr.net/gh/memoriainfinita/notae@main/dist/notae.js)
+[![jsDelivr](https://img.shields.io/badge/CDN-jsDelivr-orange)](https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js)
 [![Live demo](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://memoriainfinita.github.io/notae/)
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
@@ -60,7 +60,7 @@ Notae.renderBowed({
 
 **Browser — CDN (jsDelivr)**
 ```html
-<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@main/dist/notae.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js"></script>
 ```
 
 **TypeScript / ESM**
@@ -285,7 +285,7 @@ notae pairs with [UMT](https://github.com/memoriainfinita/UMT) for music theory 
 UMT generates the note data; notae renders the diagram.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@main/dist/notae.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js"></script>
 <script>
   // Chord → piano
