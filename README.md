@@ -63,11 +63,6 @@ Notae.renderBowed({
 <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js"></script>
 ```
 
-**TypeScript / ESM**
-```typescript
-import { renderFretboard, renderPiano, renderBowed } from './src/index'
-```
-
 **Build from source**
 ```bash
 npm install
@@ -259,6 +254,12 @@ renderFretboard(chord, {
   showDegrees: false,         // requires chord.root
   showStringLabels: true,
   stringLabelMode: 'tuning',  // 'tuning' | 'notes'
+
+  // String / note labels
+  stringLabelGap: 4,          // gap between nut/fret and label text (px)
+  pianoNoteLabelGap: 4,       // gap between piano keys and note label text (px)
+  bowedTickSize: 5,           // length of slot tick marks on bowed diagrams (px)
+  fretLabelGapH: 8,           // bottom padding reserve for fret label in horizontal orientation (px)
 
   // Filter effects
   filterStyle: 'clean',       // 'clean' | 'shadow' | 'glow'
