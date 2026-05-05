@@ -1,5 +1,4 @@
 node_modules/
-state.md
 dist/demo.js
 dist/sandbox.js
 dist/*.d.ts
