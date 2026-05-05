@@ -58,6 +58,7 @@ Ver sección Defaults validados.
 - [label-position] `stringLabelPosition` and `pianoNoteLabelPosition` redistribute padding — total diagram size stays constant. Confirmed 2026-05.
 - [transparent-poc] `backgroundColor`/`borderColor` accept `'transparent'` (valid SVG). POC uses checkbox to handle this since `<input type="color">` doesn't support it. Confirmed 2026-05.
 - [banjo-string-order] Drone (5ª cuerda) va en index 0 (izquierda). frets[] usa valores absolutos. frets[i]===stringOffset[i] = al aire, sin dot. Confirmed 2026-05.
+- [umt-note-to-string] `PianoChord.keys` acepta strings, no objetos Note de UMT. Conversión: `notes.map(n => n.name)`. notae es zero deps — no acoplar al tipo Note. Confirmed 2026-05.
 - [fret-label-padleft] Fret label con baseFret siempre en `padLeft` — no relativo a x1 de la línea de traste, para que quede fuera del grid aunque haya cuerdas con offset. Confirmed 2026-05.
 - [peg-indicator] Círculo abierto centrado en el slot justo encima de donde empieza la cuerda offset: `fretY(relOff) - fretSpacing/2`. Confirmed 2026-05.
 
@@ -184,6 +185,13 @@ Ver sección Defaults validados.
 - `getFretboardTuning()` lazy — evita evaluar presets UMT al cargar el módulo
 - CDN: `@main` con Shift+F5 necesario si UMT se actualiza (jsDelivr cache agresivo, max-age=1 año)
 
+### 2026-05-05 — build:lib setup (IIFE, igual que UMT)
+
+- `package.json`: nombre `notae`, sin `private`, descripción y keywords
+- `build:lib`: esbuild IIFE → `dist/notae.js` (22.8kb min), global `Notae`. Mismo patrón que UMT.
+- `build.js` (POC) sin cambios — salida en `poc/dist/`, independiente
+- Distribución: CDN (jsDelivr) igual que UMT. npm queda para decidir más adelante.
+
 ### 2026-05-05 — API cleanup, StyleOptions audit, vitest
 
 - Eliminados utils internos de la API pública (`noteAtFret`, `degreeLabel`, `semitone`, `CHROMATIC`, `NOTE_MAP`)
@@ -294,12 +302,12 @@ Ver sección Defaults validados.
   - Generadores: `wickiHayden()`, `bosanquetWilson(edo)`, `harmonicTable()` → HexGrid
   - Objetivo: un renderer, layouts infinitos
 - [x] Revisar API surface antes de publicar — JSDoc completo en types.ts y renderers
-- [ ] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente
-- [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
+- [x] Evaluar si `PianoChord` debe aceptar objetos `Note` de UMT directamente → **No**. notae es zero deps; la conversión `notes.map(n => n.name)` es trivial y suficiente.
+- [x] Decidir relación con demo de UMT (reemplazar o complementar abcjs) → **Complementar**. abcjs = partitura; notae = diagramas de acordes. Sin solapamiento.
 - [x] UMT → Piano: integración básica funcionando en POC (parseChordSymbol → renderPiano, auto-range)
 - [x] UMT → Fretboard: voicing algorítmico implementado en UMT. `getFretboardVoicings(chord, tuning)` → array de posiciones ordenadas. También `getFretboardScale` y `getFretboardScalePositions`. Presets: `GUITAR_STANDARD`, `GUITAR_DROPPED_D`, `GUITAR_OPEN_G`, `UKULELE_STANDARD`, `BASS_STANDARD`. Output compatible con `FretboardChord` de notae: `renderFretboard({ name: chord.name, ...voicings[0] })`. UMT commit `9fa8316`. Integrado en POC 2026-05-05.
 - [x] Vitest setup — 63 tests en tests/unit/ (fretboard, piano, bowed)
-- [ ] Setup npm package (`package.json` público, exports, tipos)
+- [x] Setup build:lib — IIFE via esbuild → `dist/notae.js`, global `Notae`. Mismo patrón que UMT. CDN (jsDelivr) como canal de distribución.
 
 ### Pendiente en UMT (repo separado)
 - [x] Bundle migrado a `dist/umt.js` (2026-05-03). CDN en `poc/index.html` actualizado.

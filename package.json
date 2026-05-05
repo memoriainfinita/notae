@@ -1,11 +1,14 @@
 {
-  "name": "notation-lib",
+  "name": "notae",
   "version": "0.1.0",
-  "private": true,
+  "description": "SVG chord and scale diagram renderer for fretted, keyboard, and bowed instruments",
+  "license": "MIT",
+  "keywords": ["music", "chord", "diagram", "svg", "guitar", "piano", "notation"],
   "type": "module",
   "scripts": {
     "dev": "node build.js",
     "build": "node build.js --once",
+    "build:lib": "esbuild src/index.ts --bundle --minify --sourcemap --format=iife --global-name=Notae --outfile=dist/notae.js",
     "test": "vitest run"
   },
   "devDependencies": {
