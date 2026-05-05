@@ -7,7 +7,7 @@
 - **Demo:** `demo/index.html` + `demo/demo.ts` — build con `npm run dev`, abrir localmente después del build
 - **Build:** `node build.js` (watch) / `node build.js --once` (one-shot)
 - **Package name:** `notae`
-- **UMT path:** `C:\Users\mykl\OneDrive\Scriptorium\DOCS\CODING GIT\UNIVERSAL MUSIC LIBRARY\universal-music-theory-library`
+- **UMT repo:** `github.com/memoriainfinita/UMT`
 
 ---
 
