@@ -184,6 +184,16 @@ Ver sección Defaults validados.
 - `getFretboardTuning()` lazy — evita evaluar presets UMT al cargar el módulo
 - CDN: `@main` con Shift+F5 necesario si UMT se actualiza (jsDelivr cache agresivo, max-age=1 año)
 
+### 2026-05-05 — API cleanup, StyleOptions audit, vitest
+
+- Eliminados utils internos de la API pública (`noteAtFret`, `degreeLabel`, `semitone`, `CHROMATIC`, `NOTE_MAP`)
+- Expuestos `stringLabelGap` (default 4), `pianoNoteLabelGap` (default 4), `bowedTickSize` (default 5)
+- `stringLabelGap` aplicado consistentemente en fretboard H y bowed H (reemplaza hardcoded 8 y 4)
+- `bowed` horizontal `padRight` normalizado 12→16
+- POC limpio: `.input-row`, `.poc-input`, `.poc-select`, `.poc-error`, `.poc-empty`, `.tweak-select`
+- Vitest setup: 63 tests en `tests/unit/` — fretboard (29), piano (19), bowed (15)
+- Audit confirmado: ningún valor visual hardcodeado sin exponer queda en los renderers
+
 ### 2026-05-03 — Banjo y bowed movidos al POC principal
 
 - BANJO y BOWED integrados en `poc/poc.ts` y `poc/index.html`
@@ -288,6 +298,7 @@ Ver sección Defaults validados.
 - [ ] Decidir relación con demo de UMT (reemplazar o complementar abcjs)
 - [x] UMT → Piano: integración básica funcionando en POC (parseChordSymbol → renderPiano, auto-range)
 - [x] UMT → Fretboard: voicing algorítmico implementado en UMT. `getFretboardVoicings(chord, tuning)` → array de posiciones ordenadas. También `getFretboardScale` y `getFretboardScalePositions`. Presets: `GUITAR_STANDARD`, `GUITAR_DROPPED_D`, `GUITAR_OPEN_G`, `UKULELE_STANDARD`, `BASS_STANDARD`. Output compatible con `FretboardChord` de notae: `renderFretboard({ name: chord.name, ...voicings[0] })`. UMT commit `9fa8316`. Integrado en POC 2026-05-05.
+- [x] Vitest setup — 63 tests en tests/unit/ (fretboard, piano, bowed)
 - [ ] Setup npm package (`package.json` público, exports, tipos)
 
 ### Pendiente en UMT (repo separado)
