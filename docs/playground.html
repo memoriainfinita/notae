@@ -33,6 +33,50 @@
       color: var(--text-muted, #bbb);
     }
 
+    .tuning-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tuning-row select { flex: 1; }
+    .position-inline {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .position-inline input[type="range"] {
+      width: 60px;
+      height: 4px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: #ddd;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    [data-theme="dark"] .position-inline input[type="range"] { background: #444; }
+    .position-inline input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #5aaa5a;
+      cursor: pointer;
+      border: none;
+    }
+    .position-inline input[type="range"]::-moz-range-thumb {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #5aaa5a;
+      cursor: pointer;
+      border: none;
+    }
+    .position-inline span {
+      font-size: 11px;
+      color: #888;
+      min-width: 28px;
+      white-space: nowrap;
+    }
     .string-tuner {
       display: flex;
       flex-wrap: wrap;
@@ -118,11 +162,12 @@
 
     .input-group input[type="text"],
     .input-group select {
-      padding: 5px 10px;
+      padding: 4px 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 13px;
       font-family: inherit;
+      box-sizing: border-box;
     }
 
     [data-theme="dark"] .input-group input[type="text"],
@@ -411,6 +456,7 @@
 <header>
   <nav>
     <a href="index.html" class="logo">notae</a>
+    <span style="font-size:13px;color:#aaa;font-weight:400">Playground</span>
     <div class="nav-links">
       <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
       <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◑</button>
@@ -449,14 +495,15 @@
           <option value="bowed">Bowed strings</option>
         </select>
       </div>
-      <div class="input-group" id="position-group" style="display:none">
-        <label>Chord position (fret)</label>
-        <input type="range" id="chord-position" min="1" max="12" value="1" style="margin-top:2px">
-        <span id="chord-position-label" style="font-size:11px;color:#888">Open (fret 1)</span>
-      </div>
       <div class="input-group">
         <label>Tuning</label>
-        <select id="tuning-select"></select>
+        <div class="tuning-row">
+          <select id="tuning-select"></select>
+          <div id="position-group" class="position-inline" style="display:none">
+            <input type="range" id="chord-position" min="1" max="12" value="1">
+            <span id="chord-position-label">1</span>
+          </div>
+        </div>
         <input type="text" id="custom-tuning-input" placeholder="e.g. G3 D4 A4 E5  (max 12 strings)" autocomplete="off" style="display:none;margin-top:4px;">
         <div id="string-tuner" class="string-tuner"></div>
         <div id="custom-tuning-presets" class="example-chips" style="display:none;margin-top:4px;">
