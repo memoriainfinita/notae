@@ -109,7 +109,8 @@
     const midi = base + acc + (parseInt(m[3]) + 1) * 12;
     return midi - 69;
   }
-  var MAX_STRINGS = 8;
+  var MAX_STRINGS = 12;
+  var MAX_STRINGS_VOICING = 8;
 
   function parseCustomTuning(str) {
     const notes = str.trim().split(/\s+/).slice(0, MAX_STRINGS);
@@ -326,6 +327,10 @@
           diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
           codeEl.textContent = fmtCode('renderBowed', chordData, codeOpts);
         } else {
+          if (tuning.length > MAX_STRINGS_VOICING) {
+            showError('Chord voicings are not available for more than ' + MAX_STRINGS_VOICING + ' strings. Try a scale instead: C major, D dorian...');
+            return;
+          }
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
             showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
@@ -354,6 +359,10 @@
           diagramEl.innerHTML = Notae.renderFretboard(scaleData, opts);
           codeEl.textContent = fmtCode('renderFretboard', scaleData, codeOpts);
         } else {
+          if (tuning.length > MAX_STRINGS_VOICING) {
+            showError('Chord voicings are not available for more than ' + MAX_STRINGS_VOICING + ' strings. Try a scale instead: C major, D dorian...');
+            return;
+          }
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
             showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
