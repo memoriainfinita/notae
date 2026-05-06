@@ -216,9 +216,11 @@
       } else {
         // Fretboard
         const tuning = getFretboardTuning(tuningKey);
+        const banjoOffset = tuningKey === 'banjo' ? [5, 0, 0, 0, 0] : null;
         if (isScale) {
           const full = UMT.getFretboardScale(parsed, tuning);
           const scaleData = Object.assign({ name: symbol.trim() }, full);
+          if (banjoOffset) scaleData.stringOffset = banjoOffset;
           opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderFretboard(scaleData, opts);
           codeEl.textContent = fmtCode('renderFretboard', scaleData, opts);
@@ -229,6 +231,7 @@
             return;
           }
           const chordData = Object.assign({ name: symbol.trim() }, voicings[0]);
+          if (banjoOffset) chordData.stringOffset = banjoOffset;
           diagramEl.innerHTML = Notae.renderFretboard(chordData, opts);
           codeEl.textContent = fmtCode('renderFretboard', chordData, opts);
         }
