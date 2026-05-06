@@ -85,9 +85,11 @@ nav {
 }
 .logo:visited {
   color: #5aaa5a;
+  text-decoration: none;
 }
 [data-theme="dark"] .logo:visited {
   color: #6aba6a;
+  text-decoration: none;
 }
 
 .nav-links {
