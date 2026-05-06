@@ -80,11 +80,14 @@ nav {
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -0.5px;
-  color: var(--text);
+  color: var(--accent);
   text-decoration: none;
 }
 .logo:visited {
-  color: var(--text);
+  color: #5aaa5a;
+}
+[data-theme="dark"] .logo:visited {
+  color: #6aba6a;
 }
 
 .nav-links {
