@@ -247,9 +247,11 @@
         // Fretboard
         const tuning = getFretboardTuning(tuningKey);
         const banjoOffset = tuningKey === 'banjo' ? [5, 0, 0, 0, 0] : null;
+        const numStrings = tuning.length;
         if (isScale) {
           const full = UMT.getFretboardScale(parsed, tuning);
           const scaleData = Object.assign({ name: symbol.trim() }, full);
+          scaleData.frets = scaleData.frets.slice(0, numStrings);
           if (banjoOffset) scaleData.stringOffset = banjoOffset;
           opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderFretboard(scaleData, opts);
@@ -261,6 +263,7 @@
             return;
           }
           const chordData = Object.assign({ name: symbol.trim() }, voicings[0]);
+          chordData.frets = chordData.frets.slice(0, numStrings);
           if (banjoOffset) chordData.stringOffset = banjoOffset;
           diagramEl.innerHTML = Notae.renderFretboard(chordData, opts);
           codeEl.textContent = fmtCode('renderFretboard', chordData, opts);
@@ -301,8 +304,30 @@
     render(this.value);
   });
 
+  const FRETBOARD_OPTIONS = [
+    { value: 'guitar', label: 'Guitar (standard)' },
+    { value: 'dropD',  label: 'Guitar (drop D)' },
+    { value: 'openG',  label: 'Guitar (open G)' },
+    { value: 'ukulele', label: 'Ukulele' },
+    { value: 'bass',   label: 'Bass' },
+    { value: 'banjo',  label: 'Banjo (open G)' },
+  ];
+  const BOWED_OPTIONS = [
+    { value: 'violin', label: 'Violin' },
+    { value: 'viola',  label: 'Viola' },
+    { value: 'cello',  label: 'Cello' },
+  ];
+
+  function updateTuningOptions(renderer) {
+    const opts = renderer === 'bowed' ? BOWED_OPTIONS : FRETBOARD_OPTIONS;
+    tuningSelect.innerHTML = opts.map(function (o) {
+      return '<option value="' + o.value + '">' + o.label + '</option>';
+    }).join('');
+    tuningSelect.style.display = renderer === 'piano' ? 'none' : '';
+  }
+
   rendererSelect.addEventListener('change', function () {
-    tuningSelect.style.display = (this.value === 'fretboard' || this.value === 'bowed') ? '' : 'none';
+    updateTuningOptions(this.value);
     render(symbolInput.value);
   });
 
@@ -351,8 +376,7 @@
     });
   });
 
-  // Show tuning select for fretboard and bowed renderers
-  tuningSelect.style.display = (rendererSelect.value === 'fretboard' || rendererSelect.value === 'bowed') ? '' : 'none';
+  updateTuningOptions(rendererSelect.value);
 
   // Initial render
   symbolInput.value = 'Cmaj7';
