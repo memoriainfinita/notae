@@ -23,7 +23,13 @@
   const errorEl = document.getElementById('error');
   const copyCodeBtn = document.getElementById('copy-code');
 
-  // Tuning map
+  // Tuning map (UMT keys or local arrays; semitones from A4=0)
+  const BOWED_TUNINGS = {
+    violin: { tuning: [-14, -7, 0, 7],  labels: ['G', 'D', 'A', 'E'] },
+    viola:  { tuning: [-21, -14, -7, 0], labels: ['C', 'G', 'D', 'A'] },
+    cello:  { tuning: [-33, -26, -19, -12], labels: ['C', 'G', 'D', 'A'] },
+  };
+
   const TUNING_MAP = {
     guitar: 'GUITAR_STANDARD',
     dropD: 'GUITAR_DROPPED_D',
@@ -35,6 +41,10 @@
 
   function getFretboardTuning(key) {
     return UMT[TUNING_MAP[key]] ?? UMT.GUITAR_STANDARD;
+  }
+
+  function isBowedTuning(key) {
+    return key in BOWED_TUNINGS;
   }
 
   // UMT piano range helper
@@ -209,10 +219,30 @@
         const chordData = { name: symbol.trim(), keys: keys, root: rootName, range: range };
         diagramEl.innerHTML = Notae.renderPiano(chordData, opts);
         codeEl.textContent = fmtCode('renderPiano', chordData, opts);
-      } else if (renderer === 'bowed') {
-        // For bowed, just show error for now — more complex
-        showError('Bowed renderer requires strings array. Use fretboard or piano.');
-        return;
+      } else if (renderer === 'bowed' || isBowedTuning(tuningKey)) {
+        // Bowed: use bowed tuning selected in the dropdown (or violin if renderer forced)
+        const bowedKey = isBowedTuning(tuningKey) ? tuningKey : 'violin';
+        const { tuning, labels } = BOWED_TUNINGS[bowedKey];
+        function fretsToStrings(frets) {
+          return frets.map(function (f) { return f === -1 ? null : f; });
+        }
+        if (isScale) {
+          const full = UMT.getFretboardScale(parsed, tuning);
+          const chordData = { name: symbol.trim(), strings: fretsToStrings(full.frets), tuning: labels, root: rootName };
+          opts.numFrets = 12;
+          diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
+          codeEl.textContent = fmtCode('renderBowed', chordData, opts);
+        } else {
+          const voicings = UMT.getFretboardVoicings(parsed, tuning);
+          if (!voicings || voicings.length === 0) {
+            showError('No voicings found for "' + symbol.trim() + '".');
+            return;
+          }
+          const v = voicings[0];
+          const chordData = { name: symbol.trim(), strings: fretsToStrings(v.frets), tuning: labels, root: rootName, position: v.baseFret > 1 ? v.baseFret : undefined };
+          diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
+          codeEl.textContent = fmtCode('renderBowed', chordData, opts);
+        }
       } else {
         // Fretboard
         const tuning = getFretboardTuning(tuningKey);
@@ -272,7 +302,7 @@
   });
 
   rendererSelect.addEventListener('change', function () {
-    tuningSelect.style.display = this.value === 'fretboard' ? '' : 'none';
+    tuningSelect.style.display = (this.value === 'fretboard' || this.value === 'bowed') ? '' : 'none';
     render(symbolInput.value);
   });
 
@@ -321,8 +351,8 @@
     });
   });
 
-  // Show tuning select only for fretboard renderer
-  tuningSelect.style.display = rendererSelect.value === 'fretboard' ? '' : 'none';
+  // Show tuning select for fretboard and bowed renderers
+  tuningSelect.style.display = (rendererSelect.value === 'fretboard' || rendererSelect.value === 'bowed') ? '' : 'none';
 
   // Initial render
   symbolInput.value = 'Cmaj7';
