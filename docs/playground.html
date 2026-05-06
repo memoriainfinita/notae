@@ -6,10 +6,27 @@
   <title>notae -Playground</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .playground-tagline {
-      font-size: 13px;
-      color: var(--text-muted, #888);
-      margin: 0;
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .example-chip {
+      font-size: 11px;
+      padding: 2px 8px;
+      border: 1px solid var(--border-color, #ddd);
+      border-radius: 12px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-muted, #666);
+      font-family: 'Courier New', monospace;
+      transition: background 0.15s, color 0.15s;
+    }
+    .example-chip:hover {
+      background: var(--accent, #5aaa5a);
+      color: #fff;
+      border-color: var(--accent, #5aaa5a);
     }
 
     .playground-container {
@@ -301,7 +318,6 @@
   <nav>
     <a href="index.html" class="logo">notae</a>
     <div class="nav-links">
-      <a href="index.html">← Landing</a>
       <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
       <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◑</button>
     </div>
@@ -311,13 +327,23 @@
 <div class="playground-container">
   <div class="controls-section">
     <div class="input-group">
-      <label>Symbol <span class="playground-tagline">— chord: Cmaj7 · Am7 · G · F#m11 &nbsp;|&nbsp; scale: C major · D dorian · F# blues · Bb harmonic minor</span></label>
+      <label>Symbol</label>
       <input
         type="text"
         id="symbol-input"
         placeholder="Cmaj7, C major, D dorian, F# blues..."
         autocomplete="off"
       >
+      <div class="example-chips">
+        <button class="example-chip" data-symbol="Cmaj7">Cmaj7</button>
+        <button class="example-chip" data-symbol="Am7">Am7</button>
+        <button class="example-chip" data-symbol="G">G</button>
+        <button class="example-chip" data-symbol="F#m11">F#m11</button>
+        <button class="example-chip" data-symbol="C major">C major</button>
+        <button class="example-chip" data-symbol="D dorian">D dorian</button>
+        <button class="example-chip" data-symbol="F# blues">F# blues</button>
+        <button class="example-chip" data-symbol="Bb harmonic minor">Bb harmonic minor</button>
+      </div>
     </div>
 
     <div class="input-row">
@@ -828,6 +854,16 @@
     </div>
   </div>
 </div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/memoriainfinita/UMT" target="_blank" rel="noopener">UMT</a>
+    </div>
+    <span class="footer-copy">GPL-3.0 · Zero dependencies · SVG diagrams for every instrument.</span>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@main/dist/umt.js"></script>
