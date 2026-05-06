@@ -184,6 +184,43 @@
       flex: 1;
       height: 4px;
       cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background: #ddd;
+      border-radius: 2px;
+      outline: none;
+    }
+    [data-theme="dark"] .tweak-control input[type="range"] {
+      background: #444;
+    }
+    .tweak-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #5aaa5a;
+      cursor: pointer;
+      border: none;
+    }
+    .tweak-control input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #5aaa5a;
+      cursor: pointer;
+      border: none;
+    }
+    .tweak-control input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 2px;
+    }
+    .tweak-control input[type="range"]::-moz-range-track {
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+    }
+    [data-theme="dark"] .tweak-control input[type="range"]::-moz-range-track {
+      background: #444;
     }
 
     .tweak-control input[type="number"] {

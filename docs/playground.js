@@ -282,7 +282,7 @@
         } else {
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
-            showError('No chord voicings for "' + symbol.trim() + '" on this tuning. Try a scale (e.g. C major, D dorian).');
+            showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
             return;
           }
           const v = voicings[0];
@@ -315,7 +315,7 @@
         } else {
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
-            showError('No chord voicings for "' + symbol.trim() + '" on this tuning. Try a scale (e.g. C major, D dorian).');
+            showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
             return;
           }
           const chordData = Object.assign({ name: symbol.trim() }, voicings[0]);
