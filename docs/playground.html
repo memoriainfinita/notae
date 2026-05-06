@@ -151,8 +151,8 @@
 
     .tweaks-content.active.tweaks-colors-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 16px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px 12px;
       align-items: start;
     }
 
@@ -367,12 +367,14 @@
         <select id="tuning-select"></select>
         <input type="text" id="custom-tuning-input" placeholder="e.g. G3 D4 A4 E5" autocomplete="off" style="display:none;margin-top:4px;">
         <div id="custom-tuning-presets" class="example-chips" style="display:none;margin-top:4px;">
+          <button class="example-chip" data-tuning="D3">Monochord (1)</button>
+          <button class="example-chip" data-tuning="G3 D4">Cigar box (2)</button>
           <button class="example-chip" data-tuning="G3 D4 G4">Cigar box (3)</button>
-          <button class="example-chip" data-tuning="D3 A3 D4">Dulcimer (3)</button>
-          <button class="example-chip" data-tuning="G3 C4 E4">Tres (3)</button>
           <button class="example-chip" data-tuning="G2 D3 A3 E4">Mandola (4)</button>
-          <button class="example-chip" data-tuning="C3 G3 D4 A4 E5">Mandocello (5)</button>
-          <button class="example-chip" data-tuning="B1 E2 A2 D3 G3 B3 E4">7-string guitar</button>
+          <button class="example-chip" data-tuning="G2 D3 G3 B3 D4">Open G banjo (5)</button>
+          <button class="example-chip" data-tuning="E2 A2 D3 G3 B3 E4">Guitar (6)</button>
+          <button class="example-chip" data-tuning="B1 E2 A2 D3 G3 B3 E4">7-string (7)</button>
+          <button class="example-chip" data-tuning="F#1 B1 E2 A2 D3 G3 B3 E4">8-string (8)</button>
         </div>
       </div>
     </div>

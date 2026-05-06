@@ -199,7 +199,7 @@
     if (vf('glowOpacity') !== 0.8) opts.glowOpacity = vf('glowOpacity');
 
     // Merge theme overrides
-    return Object.assign(opts, themeStyle());
+    return opts;
   }
 
   function showError(msg) {
@@ -245,7 +245,8 @@
       }
 
       const rootName = parsed.getNotes()[0]?.name.replace(/\d+$/, '') ?? '';
-      const opts = Object.assign({}, styleOpts);
+      const opts = Object.assign({}, styleOpts, themeStyle());
+      const codeOpts = styleOpts;
 
       if (renderer === 'piano') {
         const notes = parsed.getNotes();
@@ -253,7 +254,7 @@
         const range = umtRange(notes);
         const chordData = { name: symbol.trim(), keys: keys, root: rootName, range: range };
         diagramEl.innerHTML = Notae.renderPiano(chordData, opts);
-        codeEl.textContent = fmtCode('renderPiano', chordData, opts);
+        codeEl.textContent = fmtCode('renderPiano', chordData, codeOpts);
       } else if (renderer === 'bowed' || isBowedTuning(tuningKey)) {
         // Bowed: use bowed tuning selected in the dropdown (or violin if renderer forced)
         const bowedKey = isBowedTuning(tuningKey) ? tuningKey : 'violin';
@@ -277,17 +278,17 @@
           const chordData = { name: symbol.trim(), strings: fretsToStrings(full.frets), tuning: labels, root: rootName };
           opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
-          codeEl.textContent = fmtCode('renderBowed', chordData, opts);
+          codeEl.textContent = fmtCode('renderBowed', chordData, codeOpts);
         } else {
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
-            showError('No voicings found for "' + symbol.trim() + '".');
+            showError('No chord voicings for "' + symbol.trim() + '" on this tuning. Try a scale (e.g. C major, D dorian).');
             return;
           }
           const v = voicings[0];
           const chordData = { name: symbol.trim(), strings: fretsToStrings(v.frets), tuning: labels, root: rootName, position: v.baseFret > 1 ? v.baseFret : undefined };
           diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
-          codeEl.textContent = fmtCode('renderBowed', chordData, opts);
+          codeEl.textContent = fmtCode('renderBowed', chordData, codeOpts);
         }
       } else {
         // Fretboard
@@ -310,18 +311,18 @@
           if (banjoOffset) scaleData.stringOffset = banjoOffset;
           opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderFretboard(scaleData, opts);
-          codeEl.textContent = fmtCode('renderFretboard', scaleData, opts);
+          codeEl.textContent = fmtCode('renderFretboard', scaleData, codeOpts);
         } else {
           const voicings = UMT.getFretboardVoicings(parsed, tuning);
           if (!voicings || voicings.length === 0) {
-            showError('No voicings found for "' + symbol.trim() + '".');
+            showError('No chord voicings for "' + symbol.trim() + '" on this tuning. Try a scale (e.g. C major, D dorian).');
             return;
           }
           const chordData = Object.assign({ name: symbol.trim() }, voicings[0]);
           chordData.frets = chordData.frets.slice(0, numStrings);
           if (banjoOffset) chordData.stringOffset = banjoOffset;
           diagramEl.innerHTML = Notae.renderFretboard(chordData, opts);
-          codeEl.textContent = fmtCode('renderFretboard', chordData, opts);
+          codeEl.textContent = fmtCode('renderFretboard', chordData, codeOpts);
         }
       }
 
