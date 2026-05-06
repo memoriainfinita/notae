@@ -283,9 +283,9 @@
 
     const renderer = rendererSelect.value;
     const tuningKey = tuningSelect.value;
-    const styleOpts = getStyleOptions();
 
     try {
+      const styleOpts = getStyleOptions();
       let parsed = null;
       let isScale = false;
 
@@ -367,7 +367,12 @@
 
       clearError();
     } catch (e) {
-      showError('Could not parse "' + symbol.trim() + '". Try: Cmaj7, Am7, G · C major, D dorian, F# blues, Bb harmonic minor');
+      console.error('render error:', e);
+      if (e && e.message && !e.message.includes('parse')) {
+        showError(e.message);
+      } else {
+        showError('Could not parse "' + symbol.trim() + '". Try: Cmaj7, Am7, G · C major, D dorian, F# blues, Bb harmonic minor');
+      }
     }
   }
 
