@@ -503,7 +503,7 @@
   document.querySelectorAll('.example-chip[data-symbol]').forEach(function (chip) {
     chip.addEventListener('click', function () {
       symbolInput.value = this.dataset.symbol;
-      render(this.dataset.symbol);
+      symbolInput.dispatchEvent(new Event('input'));
     });
   });
 
@@ -511,7 +511,7 @@
   document.querySelectorAll('.example-chip[data-tuning]').forEach(function (chip) {
     chip.addEventListener('click', function () {
       customTuningInput.value = this.dataset.tuning;
-      render(symbolInput.value);
+      customTuningInput.dispatchEvent(new Event('input'));
     });
   });
 
