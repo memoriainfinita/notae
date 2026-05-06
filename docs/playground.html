@@ -295,8 +295,9 @@
       font-size: 11px;
       font-family: 'Courier New', monospace;
       color: #333;
-      overflow-x: auto;
+      overflow: auto;
       white-space: pre;
+      max-height: 180px;
     }
 
     [data-theme="dark"] .code-block {
@@ -357,20 +358,14 @@
     <div class="tweaks-panel">
       <div class="tweaks-tabs">
         <button class="tweaks-tab active" data-tab="general">General</button>
-        <button class="tweaks-tab" data-tab="display">Display</button>
+        <button class="tweaks-tab" data-tab="fretboard">Fretboard</button>
+        <button class="tweaks-tab" data-tab="piano">Piano</button>
         <button class="tweaks-tab" data-tab="colors">Colors</button>
         <button class="tweaks-tab" data-tab="box">Box</button>
         <button class="tweaks-tab" data-tab="filter">Filter</button>
       </div>
 
       <div id="tweaks-general" class="tweaks-content active">
-        <div class="tweak-item">
-          <label class="tweak-label">Font size (chord name)</label>
-          <div class="tweak-control">
-            <input type="range" id="chordNameSize" min="10" max="30" value="17">
-            <input type="number" id="chordNameSize-num" min="10" max="30" value="17">
-          </div>
-        </div>
         <div class="tweak-item">
           <label class="tweak-label">Orientation</label>
           <div class="tweak-control">
@@ -381,6 +376,56 @@
           </div>
         </div>
         <div class="tweak-item">
+          <label class="tweak-label">Chord name size</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameSize" min="10" max="30" value="17">
+            <input type="number" id="chordNameSize-num" min="10" max="30" value="17">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Chord name Y</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameY" min="15" max="45" value="30">
+            <input type="number" id="chordNameY-num" min="15" max="45" value="30">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Chord name gap (vertical)</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameGap" min="0" max="30" value="11">
+            <input type="number" id="chordNameGap-num" min="0" max="30" value="11">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Chord name gap (horizontal)</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameGapH" min="0" max="50" value="32">
+            <input type="number" id="chordNameGapH-num" min="0" max="50" value="32">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Chord name gap (piano)</label>
+          <div class="tweak-control">
+            <input type="range" id="chordNameGapP" min="0" max="30" value="17">
+            <input type="number" id="chordNameGapP-num" min="0" max="30" value="17">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show finger numbers</label>
+          <div class="tweak-control"><input type="checkbox" id="showFingerNumbers" checked></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show degrees (R 3 5)</label>
+          <div class="tweak-control"><input type="checkbox" id="showDegrees"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Left handed</label>
+          <div class="tweak-control"><input type="checkbox" id="leftHanded"></div>
+        </div>
+      </div>
+
+      <div id="tweaks-fretboard" class="tweaks-content">
+        <div class="tweak-item">
           <label class="tweak-label">Num frets</label>
           <div class="tweak-control">
             <input type="range" id="numFrets" min="4" max="15" value="5">
@@ -388,38 +433,17 @@
           </div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Show finger numbers</label>
-          <div class="tweak-control">
-            <input type="checkbox" id="showFingerNumbers" checked>
-          </div>
-        </div>
-        <div class="tweak-item">
-          <label class="tweak-label">Show degrees (R 3 5)</label>
-          <div class="tweak-control">
-            <input type="checkbox" id="showDegrees">
-          </div>
-        </div>
-        <div class="tweak-item">
-          <label class="tweak-label">Left handed</label>
-          <div class="tweak-control">
-            <input type="checkbox" id="leftHanded">
-          </div>
-        </div>
-      </div>
-
-      <div id="tweaks-display" class="tweaks-content">
-        <div class="tweak-item">
           <label class="tweak-label">String spacing</label>
           <div class="tweak-control">
-            <input type="range" id="stringSpacing" min="12" max="30" value="19">
-            <input type="number" id="stringSpacing-num" min="12" max="30" value="19">
+            <input type="range" id="stringSpacing" min="12" max="32" value="19">
+            <input type="number" id="stringSpacing-num" min="12" max="32" value="19">
           </div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Fret spacing</label>
           <div class="tweak-control">
-            <input type="range" id="fretSpacing" min="15" max="35" value="23">
-            <input type="number" id="fretSpacing-num" min="15" max="35" value="23">
+            <input type="range" id="fretSpacing" min="15" max="40" value="23">
+            <input type="number" id="fretSpacing-num" min="15" max="40" value="23">
           </div>
         </div>
         <div class="tweak-item">
@@ -432,82 +456,295 @@
         <div class="tweak-item">
           <label class="tweak-label">String width</label>
           <div class="tweak-control">
-            <input type="range" id="stringWidth" min="0.5" max="3" step="0.5" value="1">
-            <input type="number" id="stringWidth-num" min="0.5" max="3" step="0.5" value="1">
+            <input type="range" id="stringWidth" min="0.5" max="4" step="0.5" value="1">
+            <input type="number" id="stringWidth-num" min="0.5" max="4" step="0.5" value="1">
           </div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Piano key width</label>
+          <label class="tweak-label">Fret width</label>
           <div class="tweak-control">
-            <input type="range" id="pianoWhiteKeyW" min="20" max="40" value="28">
-            <input type="number" id="pianoWhiteKeyW-num" min="20" max="40" value="28">
+            <input type="range" id="fretWidth" min="0.5" max="4" step="0.5" value="1">
+            <input type="number" id="fretWidth-num" min="0.5" max="4" step="0.5" value="1">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Nut width</label>
+          <div class="tweak-control">
+            <input type="range" id="nutWidth" min="1" max="10" value="4">
+            <input type="number" id="nutWidth-num" min="1" max="10" value="4">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Indicator size</label>
+          <div class="tweak-control">
+            <input type="range" id="indicatorSize" min="2" max="10" value="4">
+            <input type="number" id="indicatorSize-num" min="2" max="10" value="4">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Indicator zone size</label>
+          <div class="tweak-control">
+            <input type="range" id="indicatorZoneSize" min="10" max="30" value="18">
+            <input type="number" id="indicatorZoneSize-num" min="10" max="30" value="18">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret label size</label>
+          <div class="tweak-control">
+            <input type="range" id="fretLabelSize" min="8" max="16" value="11">
+            <input type="number" id="fretLabelSize-num" min="8" max="16" value="11">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret label gap (vertical)</label>
+          <div class="tweak-control">
+            <input type="range" id="fretLabelGap" min="8" max="32" value="20">
+            <input type="number" id="fretLabelGap-num" min="8" max="32" value="20">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret label gap (horizontal)</label>
+          <div class="tweak-control">
+            <input type="range" id="fretLabelGapH" min="4" max="20" value="8">
+            <input type="number" id="fretLabelGapH-num" min="4" max="20" value="8">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String label size</label>
+          <div class="tweak-control">
+            <input type="range" id="stringLabelSize" min="8" max="16" value="11">
+            <input type="number" id="stringLabelSize-num" min="8" max="16" value="11">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String label gap</label>
+          <div class="tweak-control">
+            <input type="range" id="stringLabelGap" min="0" max="12" value="4">
+            <input type="number" id="stringLabelGap-num" min="0" max="12" value="4">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String label mode</label>
+          <div class="tweak-control">
+            <select id="stringLabelMode">
+              <option value="tuning">Tuning</option>
+              <option value="notes">Notes</option>
+            </select>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String label position</label>
+          <div class="tweak-control">
+            <select id="stringLabelPosition">
+              <option value="bottom">Bottom</option>
+              <option value="top">Top</option>
+            </select>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Bowed tick size</label>
+          <div class="tweak-control">
+            <input type="range" id="bowedTickSize" min="2" max="12" value="5">
+            <input type="number" id="bowedTickSize-num" min="2" max="12" value="5">
           </div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Show string labels</label>
+          <div class="tweak-control"><input type="checkbox" id="showStringLabels" checked></div>
+        </div>
+      </div>
+
+      <div id="tweaks-piano" class="tweaks-content">
+        <div class="tweak-item">
+          <label class="tweak-label">White key width</label>
           <div class="tweak-control">
-            <input type="checkbox" id="showStringLabels" checked>
+            <input type="range" id="pianoWhiteKeyW" min="20" max="44" value="28">
+            <input type="number" id="pianoWhiteKeyW-num" min="20" max="44" value="28">
           </div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Show piano note labels</label>
+          <label class="tweak-label">White key height</label>
           <div class="tweak-control">
-            <input type="checkbox" id="showPianoNoteLabels" checked>
+            <input type="range" id="pianoWhiteKeyH" min="80" max="200" value="137">
+            <input type="number" id="pianoWhiteKeyH-num" min="80" max="200" value="137">
           </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">White key radius</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoWhiteKeyRadius" min="0" max="10" value="3">
+            <input type="number" id="pianoWhiteKeyRadius-num" min="0" max="10" value="3">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key width ratio</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoBlackKeyWidthRatio" min="0.4" max="0.75" step="0.01" value="0.58">
+            <input type="number" id="pianoBlackKeyWidthRatio-num" min="0.4" max="0.75" step="0.01" value="0.58">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key height ratio</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoBlackKeyHeightRatio" min="0.5" max="0.78" step="0.01" value="0.62">
+            <input type="number" id="pianoBlackKeyHeightRatio-num" min="0.5" max="0.78" step="0.01" value="0.62">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key shift</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoBlackKeyShift" min="-0.2" max="0.4" step="0.01" value="0.22">
+            <input type="number" id="pianoBlackKeyShift-num" min="-0.2" max="0.4" step="0.01" value="0.22">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key radius</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoBlackKeyRadius" min="0" max="8" value="2">
+            <input type="number" id="pianoBlackKeyRadius-num" min="0" max="8" value="2">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Key stroke width</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoKeyStrokeWidth" min="0.5" max="3" step="0.5" value="1">
+            <input type="number" id="pianoKeyStrokeWidth-num" min="0.5" max="3" step="0.5" value="1">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Dot radius</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoDotRadius" min="4" max="14" value="7">
+            <input type="number" id="pianoDotRadius-num" min="4" max="14" value="7">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">White dot offset</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoWhiteDotOffset" min="0" max="16" value="5">
+            <input type="number" id="pianoWhiteDotOffset-num" min="0" max="16" value="5">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black dot offset</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoBlackDotOffset" min="0" max="14" value="4">
+            <input type="number" id="pianoBlackDotOffset-num" min="0" max="14" value="4">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Note label size</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoNoteLabelSize" min="8" max="16" value="11">
+            <input type="number" id="pianoNoteLabelSize-num" min="8" max="16" value="11">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Note label offset</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoNoteLabelOffset" min="2" max="16" value="6">
+            <input type="number" id="pianoNoteLabelOffset-num" min="2" max="16" value="6">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Note label gap</label>
+          <div class="tweak-control">
+            <input type="range" id="pianoNoteLabelGap" min="0" max="14" value="4">
+            <input type="number" id="pianoNoteLabelGap-num" min="0" max="14" value="4">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Note label position</label>
+          <div class="tweak-control">
+            <select id="pianoNoteLabelPosition">
+              <option value="bottom">Bottom</option>
+              <option value="top">Top</option>
+            </select>
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Show note labels</label>
+          <div class="tweak-control"><input type="checkbox" id="showPianoNoteLabels" checked></div>
         </div>
       </div>
 
       <div id="tweaks-colors" class="tweaks-content">
         <div class="tweak-item">
-          <label class="tweak-label">Chord name color</label>
-          <div class="tweak-control">
-            <input type="color" id="chordNameColor" value="#000000">
-          </div>
+          <label class="tweak-label">Chord name</label>
+          <div class="tweak-control"><input type="color" id="chordNameColor" value="#000000"></div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Dot / active key color</label>
-          <div class="tweak-control">
-            <input type="color" id="dotColor" value="#5aaa5a">
-          </div>
+          <label class="tweak-label">Dot</label>
+          <div class="tweak-control"><input type="color" id="dotColor" value="#5aaa5a"></div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">String color</label>
-          <div class="tweak-control">
-            <input type="color" id="stringColor" value="#aaaaaa">
-          </div>
+          <label class="tweak-label">Dot text</label>
+          <div class="tweak-control"><input type="color" id="dotTextColor" value="#ffffff"></div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Fret color</label>
-          <div class="tweak-control">
-            <input type="color" id="fretColor" value="#cccccc">
-          </div>
+          <label class="tweak-label">Barre</label>
+          <div class="tweak-control"><input type="color" id="barreColor" value="#5aaa5a"></div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Piano white key color</label>
-          <div class="tweak-control">
-            <input type="color" id="pianoWhiteKeyColor" value="#ffffff">
-          </div>
+          <label class="tweak-label">Active key (piano)</label>
+          <div class="tweak-control"><input type="color" id="activeKeyColor" value="#5aaa5a"></div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Nut color</label>
-          <div class="tweak-control">
-            <input type="color" id="nutColor" value="#333333">
-          </div>
+          <label class="tweak-label">String</label>
+          <div class="tweak-control"><input type="color" id="stringColor" value="#aaaaaa"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret</label>
+          <div class="tweak-control"><input type="color" id="fretColor" value="#cccccc"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Nut</label>
+          <div class="tweak-control"><input type="color" id="nutColor" value="#333333"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Indicator</label>
+          <div class="tweak-control"><input type="color" id="indicatorColor" value="#555555"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Fret label</label>
+          <div class="tweak-control"><input type="color" id="fretLabelColor" value="#555555"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">String label</label>
+          <div class="tweak-control"><input type="color" id="stringLabelColor" value="#999999"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">White key</label>
+          <div class="tweak-control"><input type="color" id="pianoWhiteKeyColor" value="#ffffff"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key</label>
+          <div class="tweak-control"><input type="color" id="pianoBlackKeyColor" value="#222222"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">White key stroke</label>
+          <div class="tweak-control"><input type="color" id="pianoWhiteKeyStrokeColor" value="#bbbbbb"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key stroke</label>
+          <div class="tweak-control"><input type="color" id="pianoBlackKeyStrokeColor" value="#222222"></div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Black key label</label>
+          <div class="tweak-control"><input type="color" id="pianoBlackKeyLabelColor" value="#555555"></div>
         </div>
       </div>
 
       <div id="tweaks-box" class="tweaks-content">
         <div class="tweak-item">
-          <label class="tweak-label">Background color</label>
+          <label class="tweak-label">Background</label>
           <div class="tweak-control">
             <input type="text" id="backgroundColor" placeholder="transparent" value="transparent">
           </div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Border color</label>
-          <div class="tweak-control">
-            <input type="color" id="borderColor" value="#000000">
-          </div>
+          <div class="tweak-control"><input type="color" id="borderColor" value="#000000"></div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Border width</label>
@@ -545,9 +782,7 @@
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Shadow color</label>
-          <div class="tweak-control">
-            <input type="color" id="shadowColor" value="#000000">
-          </div>
+          <div class="tweak-control"><input type="color" id="shadowColor" value="#000000"></div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Shadow X</label>
@@ -571,16 +806,28 @@
           </div>
         </div>
         <div class="tweak-item">
-          <label class="tweak-label">Glow color</label>
+          <label class="tweak-label">Shadow opacity</label>
           <div class="tweak-control">
-            <input type="color" id="glowColor" value="#5aaa5a">
+            <input type="range" id="shadowOpacity" min="0" max="1" step="0.05" value="0.25">
+            <input type="number" id="shadowOpacity-num" min="0" max="1" step="0.05" value="0.25">
           </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Glow color</label>
+          <div class="tweak-control"><input type="color" id="glowColor" value="#5aaa5a"></div>
         </div>
         <div class="tweak-item">
           <label class="tweak-label">Glow blur</label>
           <div class="tweak-control">
             <input type="range" id="glowBlur" min="0" max="10" step="0.5" value="2.5">
             <input type="number" id="glowBlur-num" min="0" max="10" step="0.5" value="2.5">
+          </div>
+        </div>
+        <div class="tweak-item">
+          <label class="tweak-label">Glow opacity</label>
+          <div class="tweak-control">
+            <input type="range" id="glowOpacity" min="0" max="1" step="0.05" value="0.8">
+            <input type="number" id="glowOpacity-num" min="0" max="1" step="0.05" value="0.8">
           </div>
         </div>
       </div>

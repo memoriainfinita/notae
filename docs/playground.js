@@ -78,63 +78,88 @@
     };
   }
 
+  function v(id) { return document.getElementById(id).value; }
+  function vf(id) { return parseFloat(v(id)); }
+  function vi(id) { return parseInt(v(id)); }
+  function vb(id) { return document.getElementById(id).checked; }
+
   // Build StyleOptions from tweaks
   function getStyleOptions() {
     const opts = {};
 
     // General
-    const chordNameSize = parseFloat(document.getElementById('chordNameSize').value);
-    const orientation = document.getElementById('orientation').value;
-    const numFrets = parseInt(document.getElementById('numFrets').value);
-    const showFingerNumbers = document.getElementById('showFingerNumbers').checked;
-    const showDegrees = document.getElementById('showDegrees').checked;
-    const leftHanded = document.getElementById('leftHanded').checked;
+    if (vf('chordNameSize') !== 17) opts.chordNameSize = vf('chordNameSize');
+    if (v('orientation') !== 'vertical') opts.orientation = v('orientation');
+    if (vi('chordNameY') !== 30) opts.chordNameY = vi('chordNameY');
+    if (vi('chordNameGap') !== 11) opts.chordNameGap = vi('chordNameGap');
+    if (vi('chordNameGapH') !== 32) opts.chordNameGapH = vi('chordNameGapH');
+    if (vi('chordNameGapP') !== 17) opts.chordNameGapP = vi('chordNameGapP');
+    if (!vb('showFingerNumbers')) opts.showFingerNumbers = false;
+    if (vb('showDegrees')) opts.showDegrees = true;
+    if (vb('leftHanded')) opts.leftHanded = true;
 
-    if (chordNameSize !== 17) opts.chordNameSize = chordNameSize;
-    if (orientation !== 'vertical') opts.orientation = orientation;
-    if (numFrets !== 5) opts.numFrets = numFrets;
-    if (!showFingerNumbers) opts.showFingerNumbers = false;
-    if (showDegrees) opts.showDegrees = true;
-    if (leftHanded) opts.leftHanded = true;
+    // Fretboard
+    if (vi('numFrets') !== 5) opts.numFrets = vi('numFrets');
+    if (vf('stringSpacing') !== 19) opts.stringSpacing = vf('stringSpacing');
+    if (vf('fretSpacing') !== 23) opts.fretSpacing = vf('fretSpacing');
+    if (vf('dotRadius') !== 9) opts.dotRadius = vf('dotRadius');
+    if (vf('stringWidth') !== 1) opts.stringWidth = vf('stringWidth');
+    if (vf('fretWidth') !== 1) opts.fretWidth = vf('fretWidth');
+    if (vi('nutWidth') !== 4) opts.nutWidth = vi('nutWidth');
+    if (vi('indicatorSize') !== 4) opts.indicatorSize = vi('indicatorSize');
+    if (vi('indicatorZoneSize') !== 18) opts.indicatorZoneSize = vi('indicatorZoneSize');
+    if (vi('fretLabelSize') !== 11) opts.fretLabelSize = vi('fretLabelSize');
+    if (vi('fretLabelGap') !== 20) opts.fretLabelGap = vi('fretLabelGap');
+    if (vi('fretLabelGapH') !== 8) opts.fretLabelGapH = vi('fretLabelGapH');
+    if (vi('stringLabelSize') !== 11) opts.stringLabelSize = vi('stringLabelSize');
+    if (vi('stringLabelGap') !== 4) opts.stringLabelGap = vi('stringLabelGap');
+    if (v('stringLabelMode') !== 'tuning') opts.stringLabelMode = v('stringLabelMode');
+    if (v('stringLabelPosition') !== 'bottom') opts.stringLabelPosition = v('stringLabelPosition');
+    if (vi('bowedTickSize') !== 5) opts.bowedTickSize = vi('bowedTickSize');
+    if (!vb('showStringLabels')) opts.showStringLabels = false;
 
-    // Display
-    const stringSpacing = parseFloat(document.getElementById('stringSpacing').value);
-    const fretSpacing = parseFloat(document.getElementById('fretSpacing').value);
-    const dotRadius = parseFloat(document.getElementById('dotRadius').value);
-    const stringWidth = parseFloat(document.getElementById('stringWidth').value);
-    const pianoWhiteKeyW = parseFloat(document.getElementById('pianoWhiteKeyW').value);
-    const showStringLabels = document.getElementById('showStringLabels').checked;
-    const showPianoNoteLabels = document.getElementById('showPianoNoteLabels').checked;
-
-    if (stringSpacing !== 19) opts.stringSpacing = stringSpacing;
-    if (fretSpacing !== 23) opts.fretSpacing = fretSpacing;
-    if (dotRadius !== 9) opts.dotRadius = dotRadius;
-    if (stringWidth !== 1) opts.stringWidth = stringWidth;
-    if (pianoWhiteKeyW !== 28) opts.pianoWhiteKeyW = pianoWhiteKeyW;
-    if (!showStringLabels) opts.showStringLabels = false;
-    if (!showPianoNoteLabels) opts.showPianoNoteLabels = false;
+    // Piano
+    if (vf('pianoWhiteKeyW') !== 28) opts.pianoWhiteKeyW = vf('pianoWhiteKeyW');
+    if (vi('pianoWhiteKeyH') !== 137) opts.pianoWhiteKeyH = vi('pianoWhiteKeyH');
+    if (vi('pianoWhiteKeyRadius') !== 3) opts.pianoWhiteKeyRadius = vi('pianoWhiteKeyRadius');
+    if (vf('pianoBlackKeyWidthRatio') !== 0.58) opts.pianoBlackKeyWidthRatio = vf('pianoBlackKeyWidthRatio');
+    if (vf('pianoBlackKeyHeightRatio') !== 0.62) opts.pianoBlackKeyHeightRatio = vf('pianoBlackKeyHeightRatio');
+    if (vf('pianoBlackKeyShift') !== 0.22) opts.pianoBlackKeyShift = vf('pianoBlackKeyShift');
+    if (vi('pianoBlackKeyRadius') !== 2) opts.pianoBlackKeyRadius = vi('pianoBlackKeyRadius');
+    if (vf('pianoKeyStrokeWidth') !== 1) opts.pianoKeyStrokeWidth = vf('pianoKeyStrokeWidth');
+    if (vi('pianoDotRadius') !== 7) opts.pianoDotRadius = vi('pianoDotRadius');
+    if (vi('pianoWhiteDotOffset') !== 5) opts.pianoWhiteDotOffset = vi('pianoWhiteDotOffset');
+    if (vi('pianoBlackDotOffset') !== 4) opts.pianoBlackDotOffset = vi('pianoBlackDotOffset');
+    if (vi('pianoNoteLabelSize') !== 11) opts.pianoNoteLabelSize = vi('pianoNoteLabelSize');
+    if (vi('pianoNoteLabelOffset') !== 6) opts.pianoNoteLabelOffset = vi('pianoNoteLabelOffset');
+    if (vi('pianoNoteLabelGap') !== 4) opts.pianoNoteLabelGap = vi('pianoNoteLabelGap');
+    if (v('pianoNoteLabelPosition') !== 'bottom') opts.pianoNoteLabelPosition = v('pianoNoteLabelPosition');
+    if (!vb('showPianoNoteLabels')) opts.showPianoNoteLabels = false;
 
     // Colors
-    const chordNameColor = document.getElementById('chordNameColor').value;
-    const dotColor = document.getElementById('dotColor').value;
-    const stringColor = document.getElementById('stringColor').value;
-    const fretColor = document.getElementById('fretColor').value;
-    const pianoWhiteKeyColor = document.getElementById('pianoWhiteKeyColor').value;
-    const nutColor = document.getElementById('nutColor').value;
-
-    if (chordNameColor !== '#000000') opts.chordNameColor = chordNameColor;
-    if (dotColor !== '#5aaa5a') opts.dotColor = dotColor;
-    if (stringColor !== '#aaaaaa') opts.stringColor = stringColor;
-    if (fretColor !== '#cccccc') opts.fretColor = fretColor;
-    if (pianoWhiteKeyColor !== '#ffffff') opts.pianoWhiteKeyColor = pianoWhiteKeyColor;
-    if (nutColor !== '#333333') opts.nutColor = nutColor;
+    if (v('chordNameColor') !== '#000000') opts.chordNameColor = v('chordNameColor');
+    if (v('dotColor') !== '#5aaa5a') opts.dotColor = v('dotColor');
+    if (v('dotTextColor') !== '#ffffff') opts.dotTextColor = v('dotTextColor');
+    if (v('barreColor') !== '#5aaa5a') opts.barreColor = v('barreColor');
+    if (v('activeKeyColor') !== '#5aaa5a') opts.activeKeyColor = v('activeKeyColor');
+    if (v('stringColor') !== '#aaaaaa') opts.stringColor = v('stringColor');
+    if (v('fretColor') !== '#cccccc') opts.fretColor = v('fretColor');
+    if (v('nutColor') !== '#333333') opts.nutColor = v('nutColor');
+    if (v('indicatorColor') !== '#555555') opts.indicatorColor = v('indicatorColor');
+    if (v('fretLabelColor') !== '#555555') opts.fretLabelColor = v('fretLabelColor');
+    if (v('stringLabelColor') !== '#999999') opts.stringLabelColor = v('stringLabelColor');
+    if (v('pianoWhiteKeyColor') !== '#ffffff') opts.pianoWhiteKeyColor = v('pianoWhiteKeyColor');
+    if (v('pianoBlackKeyColor') !== '#222222') opts.pianoBlackKeyColor = v('pianoBlackKeyColor');
+    if (v('pianoWhiteKeyStrokeColor') !== '#bbbbbb') opts.pianoWhiteKeyStrokeColor = v('pianoWhiteKeyStrokeColor');
+    if (v('pianoBlackKeyStrokeColor') !== '#222222') opts.pianoBlackKeyStrokeColor = v('pianoBlackKeyStrokeColor');
+    if (v('pianoBlackKeyLabelColor') !== '#555555') opts.pianoBlackKeyLabelColor = v('pianoBlackKeyLabelColor');
 
     // Box
-    const backgroundColor = document.getElementById('backgroundColor').value;
-    const borderColor = document.getElementById('borderColor').value;
-    const borderWidth = parseInt(document.getElementById('borderWidth').value);
-    const borderRadius = parseInt(document.getElementById('borderRadius').value);
-    const diagramPadding = parseInt(document.getElementById('diagramPadding').value);
+    const backgroundColor = v('backgroundColor');
+    const borderColor = v('borderColor');
+    const borderWidth = vi('borderWidth');
+    const borderRadius = vi('borderRadius');
+    const diagramPadding = vi('diagramPadding');
 
     if (backgroundColor !== 'transparent') opts.backgroundColor = backgroundColor;
     if (borderWidth !== 0) {
@@ -147,21 +172,15 @@
     if (diagramPadding !== 0) opts.diagramPadding = diagramPadding;
 
     // Filter
-    const filterStyle = document.getElementById('filterStyle').value;
-    const shadowColor = document.getElementById('shadowColor').value;
-    const shadowX = parseFloat(document.getElementById('shadowX').value);
-    const shadowY = parseFloat(document.getElementById('shadowY').value);
-    const shadowBlur = parseFloat(document.getElementById('shadowBlur').value);
-    const glowColor = document.getElementById('glowColor').value;
-    const glowBlur = parseFloat(document.getElementById('glowBlur').value);
-
-    if (filterStyle !== 'clean') opts.filterStyle = filterStyle;
-    if (shadowColor !== '#000000') opts.shadowColor = shadowColor;
-    if (shadowX !== 2) opts.shadowX = shadowX;
-    if (shadowY !== 3) opts.shadowY = shadowY;
-    if (shadowBlur !== 2) opts.shadowBlur = shadowBlur;
-    if (glowColor !== '#5aaa5a') opts.glowColor = glowColor;
-    if (glowBlur !== 2.5) opts.glowBlur = glowBlur;
+    if (v('filterStyle') !== 'clean') opts.filterStyle = v('filterStyle');
+    if (v('shadowColor') !== '#000000') opts.shadowColor = v('shadowColor');
+    if (vf('shadowX') !== 2) opts.shadowX = vf('shadowX');
+    if (vf('shadowY') !== 3) opts.shadowY = vf('shadowY');
+    if (vf('shadowBlur') !== 2) opts.shadowBlur = vf('shadowBlur');
+    if (vf('shadowOpacity') !== 0.25) opts.shadowOpacity = vf('shadowOpacity');
+    if (v('glowColor') !== '#5aaa5a') opts.glowColor = v('glowColor');
+    if (vf('glowBlur') !== 2.5) opts.glowBlur = vf('glowBlur');
+    if (vf('glowOpacity') !== 0.8) opts.glowOpacity = vf('glowOpacity');
 
     // Merge theme overrides
     return Object.assign(opts, themeStyle());
@@ -294,9 +313,22 @@
   }
 
   [
-    'chordNameSize', 'numFrets', 'stringSpacing', 'fretSpacing', 'dotRadius',
-    'stringWidth', 'pianoWhiteKeyW', 'borderWidth', 'borderRadius', 'diagramPadding',
-    'shadowX', 'shadowY', 'shadowBlur', 'glowBlur'
+    // General
+    'chordNameSize', 'chordNameY', 'chordNameGap', 'chordNameGapH', 'chordNameGapP',
+    // Fretboard
+    'numFrets', 'stringSpacing', 'fretSpacing', 'dotRadius', 'stringWidth', 'fretWidth',
+    'nutWidth', 'indicatorSize', 'indicatorZoneSize',
+    'fretLabelSize', 'fretLabelGap', 'fretLabelGapH',
+    'stringLabelSize', 'stringLabelGap', 'bowedTickSize',
+    // Piano
+    'pianoWhiteKeyW', 'pianoWhiteKeyH', 'pianoWhiteKeyRadius',
+    'pianoBlackKeyWidthRatio', 'pianoBlackKeyHeightRatio', 'pianoBlackKeyShift', 'pianoBlackKeyRadius',
+    'pianoKeyStrokeWidth', 'pianoDotRadius', 'pianoWhiteDotOffset', 'pianoBlackDotOffset',
+    'pianoNoteLabelSize', 'pianoNoteLabelOffset', 'pianoNoteLabelGap',
+    // Box
+    'borderWidth', 'borderRadius', 'diagramPadding',
+    // Filter
+    'shadowX', 'shadowY', 'shadowBlur', 'shadowOpacity', 'glowBlur', 'glowOpacity',
   ].forEach(syncInputs);
 
   // Event listeners
@@ -337,9 +369,19 @@
 
   // All other input changes trigger re-render
   [
+    // Checkboxes
     'showFingerNumbers', 'showDegrees', 'leftHanded', 'showStringLabels', 'showPianoNoteLabels',
-    'orientation', 'filterStyle', 'chordNameColor', 'dotColor', 'stringColor', 'fretColor',
-    'pianoWhiteKeyColor', 'nutColor', 'borderColor', 'shadowColor', 'glowColor', 'backgroundColor'
+    // Selects
+    'orientation', 'filterStyle', 'stringLabelMode', 'stringLabelPosition',
+    'pianoNoteLabelPosition',
+    // Colors
+    'chordNameColor', 'dotColor', 'dotTextColor', 'barreColor', 'activeKeyColor',
+    'stringColor', 'fretColor', 'nutColor', 'indicatorColor', 'fretLabelColor', 'stringLabelColor',
+    'pianoWhiteKeyColor', 'pianoBlackKeyColor', 'pianoWhiteKeyStrokeColor',
+    'pianoBlackKeyStrokeColor', 'pianoBlackKeyLabelColor',
+    'borderColor', 'shadowColor', 'glowColor',
+    // Text inputs
+    'backgroundColor',
   ].forEach(function (id) {
     const el = document.getElementById(id);
     if (el) {
