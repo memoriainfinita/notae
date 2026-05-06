@@ -47,6 +47,22 @@
     return key in BOWED_TUNINGS;
   }
 
+  // Custom tuning parser: "E2 A2 D3 G3 B3 E4" -> semitone offsets from A4=0
+  const NOTE_CLASSES = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  function noteToSemitone(name) {
+    const m = name.match(/^([A-G])(#|b)?(\d+)$/i);
+    if (!m) return null;
+    const base = NOTE_CLASSES[m[1].toUpperCase()];
+    const acc = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0;
+    const midi = base + acc + (parseInt(m[3]) + 1) * 12;
+    return midi - 69;
+  }
+  function parseCustomTuning(str) {
+    const notes = str.trim().split(/\s+/);
+    const semitones = notes.map(noteToSemitone);
+    return semitones.every(function (s) { return s !== null; }) ? semitones : null;
+  }
+
   // UMT piano range helper
   const BLACK_SEMI = new Set([1, 3, 6, 8, 10]);
   function isBlack(note) {
@@ -241,7 +257,18 @@
       } else if (renderer === 'bowed' || isBowedTuning(tuningKey)) {
         // Bowed: use bowed tuning selected in the dropdown (or violin if renderer forced)
         const bowedKey = isBowedTuning(tuningKey) ? tuningKey : 'violin';
-        const { tuning, labels } = BOWED_TUNINGS[bowedKey];
+        let tuning, labels;
+        if (tuningKey === 'custom') {
+          tuning = parseCustomTuning(customTuningInput.value);
+          if (!tuning || tuning.length < 2) {
+            showError('Enter a valid custom tuning, e.g. G3 D4 A4 E5');
+            return;
+          }
+          labels = tuning.map(function (_, i) { return customTuningInput.value.trim().split(/\s+/)[i].replace(/\d+$/, ''); });
+        } else {
+          tuning = BOWED_TUNINGS[bowedKey].tuning;
+          labels = BOWED_TUNINGS[bowedKey].labels;
+        }
         function fretsToStrings(frets) {
           return frets.map(function (f) { return f === -1 ? null : f; });
         }
@@ -264,7 +291,16 @@
         }
       } else {
         // Fretboard
-        const tuning = getFretboardTuning(tuningKey);
+        let tuning;
+        if (tuningKey === 'custom') {
+          tuning = parseCustomTuning(customTuningInput.value);
+          if (!tuning || tuning.length < 2) {
+            showError('Enter a valid custom tuning, e.g. E2 A2 D3 G3 B3 E4');
+            return;
+          }
+        } else {
+          tuning = getFretboardTuning(tuningKey);
+        }
         const banjoOffset = tuningKey === 'banjo' ? [5, 0, 0, 0, 0] : null;
         const numStrings = tuning.length;
         if (isScale) {
@@ -336,6 +372,8 @@
     render(this.value);
   });
 
+  const customTuningInput = document.getElementById('custom-tuning-input');
+
   const FRETBOARD_OPTIONS = [
     { value: 'guitar', label: 'Guitar (standard)' },
     { value: 'dropD',  label: 'Guitar (drop D)' },
@@ -343,11 +381,13 @@
     { value: 'ukulele', label: 'Ukulele' },
     { value: 'bass',   label: 'Bass' },
     { value: 'banjo',  label: 'Banjo (open G)' },
+    { value: 'custom', label: 'Custom...' },
   ];
   const BOWED_OPTIONS = [
     { value: 'violin', label: 'Violin' },
     { value: 'viola',  label: 'Viola' },
     { value: 'cello',  label: 'Cello' },
+    { value: 'custom', label: 'Custom...' },
   ];
 
   function updateTuningOptions(renderer) {
@@ -355,7 +395,9 @@
     tuningSelect.innerHTML = opts.map(function (o) {
       return '<option value="' + o.value + '">' + o.label + '</option>';
     }).join('');
-    tuningSelect.style.display = renderer === 'piano' ? 'none' : '';
+    const hide = renderer === 'piano';
+    tuningSelect.style.display = hide ? 'none' : '';
+    customTuningInput.style.display = 'none';
   }
 
   rendererSelect.addEventListener('change', function () {
@@ -364,6 +406,11 @@
   });
 
   tuningSelect.addEventListener('change', function () {
+    customTuningInput.style.display = this.value === 'custom' ? '' : 'none';
+    render(symbolInput.value);
+  });
+
+  customTuningInput.addEventListener('input', function () {
     render(symbolInput.value);
   });
 
