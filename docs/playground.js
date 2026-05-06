@@ -391,6 +391,14 @@
     }
   });
 
+  // Example chips
+  document.querySelectorAll('.example-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      symbolInput.value = this.dataset.symbol;
+      render(this.dataset.symbol);
+    });
+  });
+
   // Tweaks tabs
   document.querySelectorAll('.tweaks-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
