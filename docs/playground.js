@@ -123,7 +123,7 @@
 
   function updatePositionLabel() {
     const pos = parseInt(chordPositionEl.value);
-    chordPositionLabel.textContent = pos === 1 ? 'Open (fret 1)' : 'Around fret ' + pos;
+    chordPositionLabel.textContent = pos === 1 ? 'open' : 'fr. ' + pos;
   }
 
   function voicingAtPosition(voicings, minFret) {
