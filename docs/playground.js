@@ -291,7 +291,7 @@
 
       clearError();
     } catch (e) {
-      showError('Could not parse "' + symbol.trim() + '". Try: Cmaj7, D dorian, Am7, G blues...');
+      showError('Could not parse "' + symbol.trim() + '". Try: Cmaj7, Am7, G · C major, D dorian, F# blues, Bb harmonic minor');
     }
   }
 

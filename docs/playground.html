@@ -6,34 +6,10 @@
   <title>notae -Playground</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .playground-header {
-      padding: 12px 24px;
-      border-bottom: 1px solid var(--border-color, #e0e0e0);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .playground-header a {
-      color: #666;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    .playground-header a:hover {
-      color: #000;
-    }
-
-    [data-theme="dark"] .playground-header a {
-      color: #aaa;
-    }
-
-    [data-theme="dark"] .playground-header a:hover {
-      color: #e0e0e0;
-    }
-
-    .playground-header-right {
-      margin-left: auto;
+    .playground-tagline {
+      font-size: 13px;
+      color: var(--text-muted, #888);
+      margin: 0;
     }
 
     .playground-container {
@@ -321,21 +297,25 @@
 </head>
 <body>
 
-<div class="playground-header">
-  <a href="index.html">← Back to notae</a>
-  <div class="playground-header-right">
-    <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◑</button>
-  </div>
-</div>
+<header>
+  <nav>
+    <a href="index.html" class="logo">notae</a>
+    <div class="nav-links">
+      <a href="index.html">← Landing</a>
+      <a href="https://github.com/memoriainfinita/notae" target="_blank" rel="noopener">GitHub</a>
+      <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◑</button>
+    </div>
+  </nav>
+</header>
 
 <div class="playground-container">
   <div class="controls-section">
     <div class="input-group">
-      <label>Chord or scale symbol</label>
+      <label>Symbol <span class="playground-tagline">— chord: Cmaj7 · Am7 · G · F#m11 &nbsp;|&nbsp; scale: C major · D dorian · F# blues · Bb harmonic minor</span></label>
       <input
         type="text"
         id="symbol-input"
-        placeholder="Cmaj7, D dorian, F# blues, Am pentatonic..."
+        placeholder="Cmaj7, C major, D dorian, F# blues..."
         autocomplete="off"
       >
     </div>
