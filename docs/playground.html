@@ -14,19 +14,23 @@
     }
     .example-chip {
       font-size: 11px;
-      padding: 2px 8px;
-      border: 1px solid var(--border-color, #ddd);
-      border-radius: 12px;
-      cursor: pointer;
+      padding: 0;
+      border: none;
       background: none;
-      color: var(--text-muted, #666);
+      cursor: pointer;
+      color: var(--text-muted, #999);
       font-family: 'Courier New', monospace;
-      transition: background 0.15s, color 0.15s;
+      transition: color 0.12s;
     }
     .example-chip:hover {
-      background: var(--accent, #5aaa5a);
-      color: #fff;
-      border-color: var(--accent, #5aaa5a);
+      color: #5aaa5a;
+    }
+    .example-chips {
+      gap: 0;
+    }
+    .example-chip + .example-chip::before {
+      content: ' · ';
+      color: var(--text-muted, #bbb);
     }
 
     .string-tuner {
