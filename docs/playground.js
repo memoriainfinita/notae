@@ -22,6 +22,9 @@
   const codeEl = document.getElementById('code');
   const errorEl = document.getElementById('error');
   const copyCodeBtn = document.getElementById('copy-code');
+  const positionGroup = document.getElementById('position-group');
+  const chordPositionEl = document.getElementById('chord-position');
+  const chordPositionLabel = document.getElementById('chord-position-label');
 
   // Tuning map (UMT keys or local arrays; semitones from A4=0)
   const BOWED_TUNINGS = {
@@ -116,6 +119,19 @@
     const notes = str.trim().split(/\s+/).slice(0, MAX_STRINGS);
     const semitones = notes.map(noteToSemitone);
     return semitones.every(function (s) { return s !== null; }) ? semitones : null;
+  }
+
+  function updatePositionLabel() {
+    const pos = parseInt(chordPositionEl.value);
+    chordPositionLabel.textContent = pos === 1 ? 'Open (fret 1)' : 'Around fret ' + pos;
+  }
+
+  function voicingAtPosition(voicings, minFret) {
+    if (minFret <= 1) return voicings[0];
+    for (var i = 0; i < voicings.length; i++) {
+      if (voicings[i].baseFret >= minFret) return voicings[i];
+    }
+    return voicings[voicings.length - 1];
   }
 
   // UMT piano range helper
@@ -303,6 +319,9 @@
       const opts = Object.assign({}, styleOpts, themeStyle());
       const codeOpts = styleOpts;
 
+      const minFret = parseInt(chordPositionEl.value);
+      positionGroup.style.display = (renderer === 'fretboard' && !isScale) ? '' : 'none';
+
       if (renderer === 'piano') {
         const notes = parsed.getNotes();
         const keys = notes.map(function (n) { return n.name; });
@@ -323,7 +342,6 @@
         if (isScale) {
           const full = UMT.getFretboardScale(parsed, tuning);
           const chordData = { name: symbol.trim(), strings: fretsToStrings(full.frets), tuning: labels, root: rootName };
-          opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
           codeEl.textContent = fmtCode('renderBowed', chordData, codeOpts);
         } else {
@@ -336,7 +354,7 @@
             showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
             return;
           }
-          const v = voicings[0];
+          const v = voicingAtPosition(voicings, minFret);
           const chordData = { name: symbol.trim(), strings: fretsToStrings(v.frets), tuning: labels, root: rootName, position: v.baseFret > 1 ? v.baseFret : undefined };
           diagramEl.innerHTML = Notae.renderBowed(chordData, opts);
           codeEl.textContent = fmtCode('renderBowed', chordData, codeOpts);
@@ -355,7 +373,6 @@
           const scaleData = Object.assign({ name: symbol.trim() }, full);
           scaleData.frets = scaleData.frets.slice(0, numStrings);
           if (banjoOffset) scaleData.stringOffset = banjoOffset;
-          opts.numFrets = 12;
           diagramEl.innerHTML = Notae.renderFretboard(scaleData, opts);
           codeEl.textContent = fmtCode('renderFretboard', scaleData, codeOpts);
         } else {
@@ -368,7 +385,7 @@
             showError('No chord shapes found for this tuning. Try a scale instead: C major, D dorian, F# blues...');
             return;
           }
-          const chordData = Object.assign({ name: symbol.trim() }, voicings[0]);
+          const chordData = Object.assign({ name: symbol.trim() }, voicingAtPosition(voicings, minFret));
           chordData.frets = chordData.frets.slice(0, numStrings);
           if (banjoOffset) chordData.stringOffset = banjoOffset;
           diagramEl.innerHTML = Notae.renderFretboard(chordData, opts);
@@ -469,6 +486,11 @@
 
   rendererSelect.addEventListener('change', function () {
     updateTuningOptions(this.value);
+    render(symbolInput.value);
+  });
+
+  chordPositionEl.addEventListener('input', function () {
+    updatePositionLabel();
     render(symbolInput.value);
   });
 
