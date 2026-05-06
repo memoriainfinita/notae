@@ -80,8 +80,9 @@
     .string-tuner {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
     }
     .string-pin {
       display: flex;
@@ -495,7 +496,6 @@
           </div>
         </div>
         <input type="text" id="custom-tuning-input" placeholder="e.g. G3 D4 A4 E5  (max 12 strings)" autocomplete="off" style="display:none;margin-top:4px;">
-        <div id="string-tuner" class="string-tuner"></div>
         <div id="custom-tuning-presets" class="example-chips" style="display:none;margin-top:4px;">
           <button class="example-chip" data-tuning="D3">Monochord (1)</button>
           <button class="example-chip" data-tuning="G3 D4">Cigar box (2)</button>
@@ -1002,6 +1002,7 @@
     <div class="diagram-wrap">
       <div id="diagram" role="img" aria-label="Diagram output"></div>
       <div id="error" class="error-msg" hidden role="alert"></div>
+      <div id="string-tuner" class="string-tuner"></div>
     </div>
     <div class="code-wrap">
       <div class="code-header">
