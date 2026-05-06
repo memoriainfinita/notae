@@ -5,6 +5,6 @@ dist/*.d.ts
 dist/*.cjs
 *.js.map
 docs/project-archived.md
-docs/superpowers/
 docs/dist/
 demo/
+archive/
