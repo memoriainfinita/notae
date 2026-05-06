@@ -179,8 +179,9 @@
 
     .input-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
     }
 
     .tweaks-panel {
@@ -466,27 +467,16 @@
 
 <div class="playground-container">
   <div class="controls-section">
-    <div class="input-group">
-      <label>Chord or scale</label>
-      <input
-        type="text"
-        id="symbol-input"
-        placeholder="Cmaj7, C major, D dorian, F# blues..."
-        autocomplete="off"
-      >
-      <div class="example-chips">
-        <button class="example-chip" data-symbol="Cmaj7">Cmaj7</button>
-        <button class="example-chip" data-symbol="Am7">Am7</button>
-        <button class="example-chip" data-symbol="G">G</button>
-        <button class="example-chip" data-symbol="F#m11">F#m11</button>
-        <button class="example-chip" data-symbol="C major">C major</button>
-        <button class="example-chip" data-symbol="D dorian">D dorian</button>
-        <button class="example-chip" data-symbol="F# blues">F# blues</button>
-        <button class="example-chip" data-symbol="Bb harmonic minor">Bb harmonic minor</button>
-      </div>
-    </div>
-
     <div class="input-row">
+      <div class="input-group">
+        <label>Chord or scale</label>
+        <input
+          type="text"
+          id="symbol-input"
+          placeholder="Cmaj7, C major, D dorian, F# blues..."
+          autocomplete="off"
+        >
+      </div>
       <div class="input-group">
         <label>Renderer</label>
         <select id="renderer-select">
@@ -517,6 +507,16 @@
           <button class="example-chip" data-tuning="F#1 B1 E2 A2 D3 G3 B3 E4">8-string (8)</button>
         </div>
       </div>
+    </div>
+    <div class="example-chips" style="margin-top:2px">
+      <button class="example-chip" data-symbol="Cmaj7">Cmaj7</button>
+      <button class="example-chip" data-symbol="Am7">Am7</button>
+      <button class="example-chip" data-symbol="G">G</button>
+      <button class="example-chip" data-symbol="F#m11">F#m11</button>
+      <button class="example-chip" data-symbol="C major">C major</button>
+      <button class="example-chip" data-symbol="D dorian">D dorian</button>
+      <button class="example-chip" data-symbol="F# blues">F# blues</button>
+      <button class="example-chip" data-symbol="Bb harmonic minor">Bb harmonic minor</button>
     </div>
 
     <div class="tweaks-panel">
