@@ -47,6 +47,58 @@
     return key in BOWED_TUNINGS;
   }
 
+  // Semitone <-> note name helpers (A4 = 0)
+  const NOTE_NAMES_SHARP = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  function semitoneToNote(semi) {
+    const midi = semi + 69;
+    return NOTE_NAMES_SHARP[((midi % 12) + 12) % 12] + (Math.floor(midi / 12) - 1);
+  }
+
+  // Current active tuning state (semitone offsets)
+  let currentTuning = null;
+
+  const stringTunerEl = document.getElementById('string-tuner');
+
+  function buildStringTuner(semitones) {
+    currentTuning = semitones.slice();
+    stringTunerEl.innerHTML = '';
+    semitones.forEach(function (_, i) {
+      const pin = document.createElement('div');
+      pin.className = 'string-pin';
+
+      const up = document.createElement('button');
+      up.className = 'string-pin-btn';
+      up.textContent = '▲';
+      up.addEventListener('click', function () {
+        currentTuning[i] += 1;
+        updatePin(noteEl, i);
+        render(symbolInput.value);
+      });
+
+      const noteEl = document.createElement('span');
+      noteEl.className = 'string-pin-note';
+      noteEl.textContent = semitoneToNote(semitones[i]);
+
+      const down = document.createElement('button');
+      down.className = 'string-pin-btn';
+      down.textContent = '▼';
+      down.addEventListener('click', function () {
+        currentTuning[i] -= 1;
+        updatePin(noteEl, i);
+        render(symbolInput.value);
+      });
+
+      pin.appendChild(up);
+      pin.appendChild(noteEl);
+      pin.appendChild(down);
+      stringTunerEl.appendChild(pin);
+    });
+  }
+
+  function updatePin(noteEl, i) {
+    noteEl.textContent = semitoneToNote(currentTuning[i]);
+  }
+
   // Custom tuning parser: "E2 A2 D3 G3 B3 E4" -> semitone offsets from A4=0
   const NOTE_CLASSES = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
   function noteToSemitone(name) {
@@ -256,20 +308,12 @@
         diagramEl.innerHTML = Notae.renderPiano(chordData, opts);
         codeEl.textContent = fmtCode('renderPiano', chordData, codeOpts);
       } else if (renderer === 'bowed' || isBowedTuning(tuningKey)) {
-        // Bowed: use bowed tuning selected in the dropdown (or violin if renderer forced)
-        const bowedKey = isBowedTuning(tuningKey) ? tuningKey : 'violin';
-        let tuning, labels;
-        if (tuningKey === 'custom') {
-          tuning = parseCustomTuning(customTuningInput.value);
-          if (!tuning || tuning.length < 1) {
-            showError('Enter a valid custom tuning, e.g. G3 D4 A4 E5');
-            return;
-          }
-          labels = tuning.map(function (_, i) { return customTuningInput.value.trim().split(/\s+/)[i].replace(/\d+$/, ''); });
-        } else {
-          tuning = BOWED_TUNINGS[bowedKey].tuning;
-          labels = BOWED_TUNINGS[bowedKey].labels;
+        if (!currentTuning || currentTuning.length < 1) {
+          showError('Enter a valid custom tuning, e.g. G3 D4 A4 E5');
+          return;
         }
+        const tuning = currentTuning;
+        const labels = currentTuning.map(semitoneToNote).map(function (n) { return n.replace(/\d+$/, ''); });
         function fretsToStrings(frets) {
           return frets.map(function (f) { return f === -1 ? null : f; });
         }
@@ -292,16 +336,11 @@
         }
       } else {
         // Fretboard
-        let tuning;
-        if (tuningKey === 'custom') {
-          tuning = parseCustomTuning(customTuningInput.value);
-          if (!tuning || tuning.length < 1) {
-            showError('Enter a valid custom tuning, e.g. E2 A2 D3 G3 B3 E4');
-            return;
-          }
-        } else {
-          tuning = getFretboardTuning(tuningKey);
+        if (!currentTuning || currentTuning.length < 1) {
+          showError('Enter a valid custom tuning, e.g. E2 A2 D3 G3 B3 E4');
+          return;
         }
+        const tuning = currentTuning;
         const banjoOffset = tuningKey === 'banjo' ? [5, 0, 0, 0, 0] : null;
         const numStrings = tuning.length;
         if (isScale) {
@@ -392,6 +431,13 @@
     { value: 'custom', label: 'Custom...' },
   ];
 
+  function tuningFromKey(key, renderer) {
+    if (isBowedTuning(key)) return BOWED_TUNINGS[key].tuning.slice();
+    if (key === 'custom') return currentTuning || getFretboardTuning('guitar').slice();
+    if (renderer === 'bowed') return BOWED_TUNINGS['violin'].tuning.slice();
+    return Array.from(getFretboardTuning(key));
+  }
+
   function updateTuningOptions(renderer) {
     const opts = renderer === 'bowed' ? BOWED_OPTIONS : FRETBOARD_OPTIONS;
     tuningSelect.innerHTML = opts.map(function (o) {
@@ -399,8 +445,10 @@
     }).join('');
     const hide = renderer === 'piano';
     tuningSelect.style.display = hide ? 'none' : '';
+    stringTunerEl.style.display = hide ? 'none' : '';
     customTuningInput.style.display = 'none';
     customTuningPresets.style.display = 'none';
+    if (!hide) buildStringTuner(tuningFromKey(opts[0].value, renderer));
   }
 
   rendererSelect.addEventListener('change', function () {
@@ -412,10 +460,13 @@
     const isCustom = this.value === 'custom';
     customTuningInput.style.display = isCustom ? '' : 'none';
     customTuningPresets.style.display = isCustom ? '' : 'none';
+    if (!isCustom) buildStringTuner(tuningFromKey(this.value, rendererSelect.value));
     render(symbolInput.value);
   });
 
   customTuningInput.addEventListener('input', function () {
+    const parsed = parseCustomTuning(this.value);
+    if (parsed) buildStringTuner(parsed);
     render(symbolInput.value);
   });
 
