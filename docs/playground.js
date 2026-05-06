@@ -260,7 +260,7 @@
         let tuning, labels;
         if (tuningKey === 'custom') {
           tuning = parseCustomTuning(customTuningInput.value);
-          if (!tuning || tuning.length < 2) {
+          if (!tuning || tuning.length < 1) {
             showError('Enter a valid custom tuning, e.g. G3 D4 A4 E5');
             return;
           }
@@ -294,7 +294,7 @@
         let tuning;
         if (tuningKey === 'custom') {
           tuning = parseCustomTuning(customTuningInput.value);
-          if (!tuning || tuning.length < 2) {
+          if (!tuning || tuning.length < 1) {
             showError('Enter a valid custom tuning, e.g. E2 A2 D3 G3 B3 E4');
             return;
           }
@@ -373,6 +373,7 @@
   });
 
   const customTuningInput = document.getElementById('custom-tuning-input');
+  const customTuningPresets = document.getElementById('custom-tuning-presets');
 
   const FRETBOARD_OPTIONS = [
     { value: 'guitar', label: 'Guitar (standard)' },
@@ -398,6 +399,7 @@
     const hide = renderer === 'piano';
     tuningSelect.style.display = hide ? 'none' : '';
     customTuningInput.style.display = 'none';
+    customTuningPresets.style.display = 'none';
   }
 
   rendererSelect.addEventListener('change', function () {
@@ -406,7 +408,9 @@
   });
 
   tuningSelect.addEventListener('change', function () {
-    customTuningInput.style.display = this.value === 'custom' ? '' : 'none';
+    const isCustom = this.value === 'custom';
+    customTuningInput.style.display = isCustom ? '' : 'none';
+    customTuningPresets.style.display = isCustom ? '' : 'none';
     render(symbolInput.value);
   });
 
@@ -438,11 +442,19 @@
     }
   });
 
-  // Example chips
-  document.querySelectorAll('.example-chip').forEach(function (chip) {
+  // Example chips (chord/scale)
+  document.querySelectorAll('.example-chip[data-symbol]').forEach(function (chip) {
     chip.addEventListener('click', function () {
       symbolInput.value = this.dataset.symbol;
       render(this.dataset.symbol);
+    });
+  });
+
+  // Custom tuning preset chips
+  document.querySelectorAll('.example-chip[data-tuning]').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      customTuningInput.value = this.dataset.tuning;
+      render(symbolInput.value);
     });
   });
 
