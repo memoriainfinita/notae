@@ -30,6 +30,7 @@
     openG: 'GUITAR_OPEN_G',
     ukulele: 'UKULELE_STANDARD',
     bass: 'BASS_STANDARD',
+    banjo: 'BANJO_OPEN_G',
   };
 
   function getFretboardTuning(key) {
