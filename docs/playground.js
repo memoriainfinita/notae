@@ -109,8 +109,10 @@
     const midi = base + acc + (parseInt(m[3]) + 1) * 12;
     return midi - 69;
   }
+  var MAX_STRINGS = 8;
+
   function parseCustomTuning(str) {
-    const notes = str.trim().split(/\s+/);
+    const notes = str.trim().split(/\s+/).slice(0, MAX_STRINGS);
     const semitones = notes.map(noteToSemitone);
     return semitones.every(function (s) { return s !== null; }) ? semitones : null;
   }
