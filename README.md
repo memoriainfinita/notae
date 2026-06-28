@@ -323,3 +323,7 @@ npm test   # 63 unit tests via vitest (fretboard, piano, bowed)
 ## License
 
 GPL-3.0. See `LICENSE`.
+
+## Credits
+
+Developed by [@memoriainfinita](https://github.com/memoriainfinita) with the assistance of Claude (Anthropic): Opus 4.8, Sonnet 4.6 and Haiku 4.5.
