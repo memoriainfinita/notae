@@ -8,5 +8,6 @@ docs/project-archived.md
 docs/dist/
 demo/
 archive/
+.archive/
 .playwright-mcp/
 *.lnk
