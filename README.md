@@ -9,6 +9,8 @@ Zero runtime dependencies. 23 kb compiled bundle.
 
 **[Live demo](https://memoriainfinita.github.io/notae/)** · **[Playground](https://memoriainfinita.github.io/notae/playground.html)**
 
+![Diagrams rendered by notae: barre and scale shapes on fretboards, banjo, bass and 7-string, chords and scales on piano, and positions on bowed strings](docs/notae-demo.png)
+
 ---
 
 ## What it does
