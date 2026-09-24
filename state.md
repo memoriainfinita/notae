@@ -1,3 +1,8 @@
+---
+created: 2026-05-01
+last_updated: 2026-09-25
+---
+
 # Notation Lib — State
 
 ## System
@@ -8,6 +13,7 @@
 - **Build:** `node build.js` (watch) / `node build.js --once` (one-shot)
 - **Package name:** `notae`
 - **UMT repo:** `github.com/memoriainfinita/UMT`
+- **Publicado:** repo público `memoriainfinita/notae`, GPL-3.0. GitHub Pages desde `/docs` en `master`: https://memoriainfinita.github.io/notae/
 
 ---
 
@@ -77,6 +83,26 @@ Ver sección Defaults validados.
 ---
 
 ## History
+
+### 2026-09-25 — Publicación al día
+
+- LICENSE GPL-3.0 (2026-06-27), sección Credits (2026-06-28), `.archive/` ignorado (2026-08-27), captura de la galería en el README (2026-09-21)
+- Historial reescrito: una ruta local absoluta de versiones antiguas de este archivo sustituida por el nombre de la carpeta
+
+### 2026-06-16 — Auditoría de limpieza (post sesión LLM problemática)
+
+- Revisión solicitada tras sesión previa de un LLM que añadió slop / cosas a medio implementar
+- Verificado contra estado real, no contra state.md:
+  - Tests: 63/63 pasan (`npm test`, vitest) — fretboard, piano, bowed
+  - `tsc --noEmit`: limpio, 0 errores
+  - `build:lib`: OK, `dist/notae.js` 22.8kb
+  - Grep slop en `src/` (TODO/FIXME/console.log/debugger/@ts-ignore): ninguno
+  - Grep slop en `docs/`: ninguno (solo `placeholder=` legítimos de inputs)
+  - API pública (`index.ts`): solo 3 renderers + tipos + `DEFAULT_STYLE`; utils internos no expuestos
+- Borrado: `src/NOTATION LIB - ok - Acceso directo.lnk` (acceso directo de Windows colado en src/, basura)
+- `.gitignore`: añadidos `.playwright-mcp/` y `*.lnk`
+- Conclusión: código limpio, sin slop real. Lo único sucio era basura untracked
+- Resuelta inconsistencia banjo: UMT @master SÍ exporta `BANJO_OPEN_G` (verificado en CDN). Playground tiene banjo funcional (`playground.js:42,369,457`). La entrada 05-06 "Auditoría post mala sesión" quedó obsoleta (afirmaba que UMT no lo tenía); su TODO de añadir `BANJO_OPEN_G` a UMT ya está hecho. Commit `d5bec43` (banjo chip → 5-string bass) es un cambio correcto, no slop
 
 ### 2026-05-01 — POC completo
 - Tres renderers: `renderGuitar`, `renderUkulele`, `renderPiano`
@@ -225,6 +251,23 @@ Ver sección Defaults validados.
 - Repo público creado: `github.com/memoriainfinita/notae`, push inicial hecho
 - Pendiente: activar GitHub Pages en Settings (source: docs/)
 
+### 2026-05-06 — Playground completo: tweaks, tuning editor, custom tuning
+
+- Playground reestructurado: 6 tabs (General, Fretboard, Piano, Colors, Box, Filter) — toda la API StyleOptions expuesta
+- `demo/` desvinculado del repo (local only), `docs/superpowers/` movido a `archive/`
+- Banjo habilitado en playground: `BANJO_OPEN_G` disponible en UMT CDN, `stringOffset:[5,0,0,0,0]` añadido en playground
+- Bowed renderer en playground via tunings locales (violin/viola/cello); UMT no tiene tunings de cuerdas frotadas
+- Custom tuning: text input + string pins (▲▼ por cuerda) centrados bajo el diagrama; límite 12 strings, voicings bloqueados >8
+- Presets custom: 8 ejemplos 1–8 cuerdas
+- Chord position slider: inline junto al tuning select, selecciona voicing por posición en el mástil
+- `numFrets` ya no sobreescribe escalas — slider funciona para ambos
+- Example chips: texto plano clickable, disparan `input` event (fix chips no renderizaban)
+- Colores: grid 3 columnas; sliders: thumb verde `#5aaa5a`
+- Header playground: logo `notae` + "Playground", footer idéntico al index
+- Logo: `var(--accent)` siempre, `:visited` con valor literal (CSS vars no resuelven en :visited)
+- Input row: 3 columnas iguales (chord | renderer | tuning), chips dentro del input column
+- TODO añadido: múltiples voicings en la misma posición
+
 ### 2026-05-06 — Auditoría post mala sesión, CDN, state.md
 
 - CDN URL corregida de `@main` a `@master` — jsDelivr no encontraba el repo, todo fallaba en cascada
@@ -238,8 +281,6 @@ Ver sección Defaults validados.
 - README: StyleOptions completado con las mismas 5 propiedades; eliminado import ESM interno
 - `build:lib`: quitado `--sourcemap` (el .map era ignorado por git)
 - GitHub Pages activado y funcionando: `https://memoriainfinita.github.io/notae/`
-- Banjo no añadido al demo interactivo — UMT no tiene preset BANJO_OPEN_G
-- TODO pendiente: añadir BANJO_OPEN_G a UMT para habilitar banjo en landing/playground
 
 ### 2026-05-05 — CDN fix, gitignore cleanup
 
@@ -365,3 +406,8 @@ Ver sección Defaults validados.
 - [ ] renderWind — descartado por ahora. bretpimentel.com referencia difícil de superar.
 - [ ] Armónica — layout horizontal de agujeros, soplar/aspirar
 - [ ] SVGuitar (npm) — revisar como referencia/competidor
+- [ ] Playground: múltiples voicings en la misma posición — `getFretboardVoicings` puede devolver varios acordes con el mismo `baseFret`. Decidir cómo exponerlos: flechas prev/next, grid de miniaturas, o selector numérico. Actualmente se muestra solo el primero que coincide con la posición.
+- [ ] Fret layout variants — variantes visuales del grid de trastes (minor, no cambio de API):
+  - Fan frets (multiscale): cada traste es una línea diagonal, ángulo variable por cuerda
+  - True temperament frets: trastes en zigzag por cuerda para entonación pura
+  - Microtonal frets: trastes adicionales entre los cromáticos estándar (EDO 24, 31, 53…)
