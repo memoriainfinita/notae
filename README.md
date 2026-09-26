@@ -80,6 +80,8 @@ npm run dev         # watch mode for the demo
 
 Any fretted instrument: guitar, bass, ukulele, banjo, mandolin.
 
+![Fretboard examples: barre chord with finger numbers, per-dot colors, horizontal scale position, high position with baseFret, banjo drone string, 4-string bass and 7-string guitar](docs/notae-fretboard.png)
+
 ```typescript
 renderFretboard(chord: FretboardChord, style?: StyleOptions): string
 ```
@@ -141,6 +143,8 @@ renderFretboard({
 
 ### Piano
 
+![Piano examples: chord with finger numbers, a scale over two octaves with note labels, and per-key colors with degrees](docs/notae-piano.png)
+
 ```typescript
 renderPiano(chord: PianoChord, style?: StyleOptions): string
 ```
@@ -187,6 +191,8 @@ renderPiano({
 ### Bowed strings
 
 Violin, viola, cello — slot-based (semitones from open string).
+
+![Bowed strings examples: G major scale on violin, a position chord in horizontal layout, and cello in first position](docs/notae-bowed.png)
 
 ```typescript
 renderBowed(chord: BowedChord, style?: StyleOptions): string
