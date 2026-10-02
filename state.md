@@ -1,6 +1,6 @@
 ---
 created: 2026-05-01
-last_updated: 2026-09-25
+last_updated: 2026-10-02
 ---
 
 # Notation Lib — State
@@ -58,6 +58,7 @@ Ver sección Defaults validados.
 - [tuning-api] `chord.tuning` es musical (no visual) — sirve para labels Y cálculo de notas. Confirmed 2026-05.
 - [consistent-sizes] Padding siempre reserva espacio para fret label (vertical: padLeft asimétrico; horizontal: fretLabelH siempre). Confirmed 2026-05.
 - [scale-frets] `frets: (number|number[])[]` — array para múltiples notas por cuerda (escalas). Confirmed 2026-05.
+- [data-note] Cada tecla del piano lleva `data-note` (sostenidos + octava): el host engancha clicks por atributo, nunca por el orden de pintado (blancas y luego negras). Confirmed 2026-10.
 - [horizontal-strings] En orientación horizontal, string 0 (low) va abajo para diestros. Confirmed 2026-05.
 - [chord-name-centered] En vertical con padding asimétrico, chord name se centra sobre el GRID (`padLeft + gridW/2`), no sobre totalW. Confirmed 2026-05.
 - [filter-piano] Filters apply only to dots group (not keys). Chord name and note labels also inside filter group. Keys always unfiltered. Confirmed 2026-05.
@@ -318,7 +319,7 @@ Ver sección Defaults validados.
 - `stringLabelGap` aplicado consistentemente en fretboard H y bowed H (reemplaza hardcoded 8 y 4)
 - `bowed` horizontal `padRight` normalizado 12→16
 - POC limpio: `.input-row`, `.poc-input`, `.poc-select`, `.poc-error`, `.poc-empty`, `.tweak-select`
-- Vitest setup: 63 tests en `tests/unit/` — fretboard (29), piano (19), bowed (15)
+- Vitest setup: 68 tests en `tests/unit/` — fretboard (32), piano (21), bowed (15)
 - Audit confirmado: ningún valor visual hardcodeado sin exponer queda en los renderers
 
 ### 2026-05-05 — GitHub Pages landing page + README + shadowColor

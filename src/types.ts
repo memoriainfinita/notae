@@ -79,6 +79,10 @@ export type StyleOptions = {
   pianoNoteLabelPosition?: 'top' | 'bottom'
   /** Show scale degrees (R, 3, b7…) instead of finger numbers. Requires `chord.root`. */
   showDegrees?: boolean
+  /** Fretboard: show the note name (C, F#…) on each dot. `showDegrees` wins when both are set. */
+  showNoteNames?: boolean
+  /** Spell note names with flats (Bb) instead of sharps (A#). Used by `showNoteNames`. */
+  preferFlats?: boolean
   showFingerNumbers?: boolean
   showStringLabels?: boolean
   /** `'tuning'` shows the open-string note from `chord.tuning`; `'notes'` shows the fretted note. */
@@ -166,6 +170,8 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   showPianoNoteLabels: true,
   pianoNoteLabelPosition: 'bottom',
   showDegrees: false,
+  showNoteNames: false,
+  preferFlats: false,
   showFingerNumbers: true,
   showStringLabels: true,
   stringLabelMode: 'tuning',

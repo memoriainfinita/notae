@@ -241,6 +241,26 @@ describe('renderFretboard — style options', () => {
     expect(texts).toContain('R') // root degree
   })
 
+  it('showNoteNames labels each dot with its note', () => {
+    const chord: FretboardChord = { name: 'F', frets: [1, 3, 3, 2, 1, 1], tuning: ['E','A','D','G','B','E'] }
+    const texts = textContents(renderFretboard(chord, { showNoteNames: true, showFingerNumbers: false, showStringLabels: false }))
+    expect(texts).toEqual(expect.arrayContaining(['F', 'C', 'A']))
+  })
+
+  it('showNoteNames spells with flats when preferFlats is set', () => {
+    const chord: FretboardChord = { name: 'Bb', frets: [null, 1, 3, 3, 3, 1], tuning: ['E','A','D','G','B','E'] }
+    const sharp = textContents(renderFretboard(chord, { showNoteNames: true, showStringLabels: false }))
+    const flat = textContents(renderFretboard(chord, { showNoteNames: true, preferFlats: true, showStringLabels: false }))
+    expect(sharp).toContain('A#')
+    expect(flat).toContain('Bb')
+    expect(flat).not.toContain('A#')
+  })
+
+  it('showDegrees wins over showNoteNames', () => {
+    const texts = textContents(renderFretboard(GUITAR, { showDegrees: true, showNoteNames: true }))
+    expect(texts).toContain('R')
+  })
+
   it('filterStyle shadow adds filter element', () => {
     const svg = renderFretboard(GUITAR, { filterStyle: 'shadow' })
     expect(svg).toContain('<filter')

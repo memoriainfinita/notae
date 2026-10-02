@@ -103,9 +103,10 @@ export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
     const black = IS_BLACK[semi]
     const active = activeSet.has(abs)
     const x = padLeft + keyX(abs)
+    const dataNote = `data-note="${NOTE_NAMES[semi]}${Math.floor(abs / 12)}"`
 
     if (!black) {
-      whites += `<rect x="${x}" y="${padTop}" width="${wW}" height="${wH}" rx="${s.pianoWhiteKeyRadius}" fill="${s.pianoWhiteKeyColor}" stroke="${s.pianoWhiteKeyStrokeColor}" stroke-width="${s.pianoKeyStrokeWidth}"/>`
+      whites += `<rect ${dataNote} x="${x}" y="${padTop}" width="${wW}" height="${wH}" rx="${s.pianoWhiteKeyRadius}" fill="${s.pianoWhiteKeyColor}" stroke="${s.pianoWhiteKeyStrokeColor}" stroke-width="${s.pianoKeyStrokeWidth}"/>`
       if (active) {
         const idx = chord.keys.findIndex(k => parseNote(k) === abs)
         const finger = chord.fingers?.[idx] ?? 0
@@ -121,7 +122,7 @@ export function renderPiano(chord: PianoChord, style?: StyleOptions): string {
         }
       }
     } else {
-      blacks += `<rect x="${x}" y="${padTop}" width="${bW}" height="${bH}" rx="${s.pianoBlackKeyRadius}" fill="${s.pianoBlackKeyColor}" stroke="${s.pianoBlackKeyStrokeColor}" stroke-width="${s.pianoKeyStrokeWidth}"/>`
+      blacks += `<rect ${dataNote} x="${x}" y="${padTop}" width="${bW}" height="${bH}" rx="${s.pianoBlackKeyRadius}" fill="${s.pianoBlackKeyColor}" stroke="${s.pianoBlackKeyStrokeColor}" stroke-width="${s.pianoKeyStrokeWidth}"/>`
       if (active) {
         const idx = chord.keys.findIndex(k => parseNote(k) === abs)
         const finger = chord.fingers?.[idx] ?? 0

@@ -55,6 +55,9 @@ function dotLabel(
   if (s.showDegrees && chord.root && tuning[stringIdx]) {
     return degreeLabel(chord.root, noteAtFret(tuning[stringIdx], fret))
   }
+  if (s.showNoteNames && tuning[stringIdx]) {
+    return noteAtFret(tuning[stringIdx], fret, s.preferFlats)
+  }
   return ''
 }
 

@@ -160,3 +160,17 @@ describe('renderPiano — style options', () => {
     expect(svg).toContain('#ff0000')
   })
 })
+
+describe('data-note', () => {
+  it('every key carries its note name, in range order', () => {
+    const svg = renderPiano({ name: '', keys: [], range: { from: 'C4', to: 'B4' } })
+    const notes = [...svg.matchAll(/data-note="([^"]+)"/g)].map(m => m[1])
+    expect(notes).toHaveLength(12)
+    expect(notes).toEqual(expect.arrayContaining(['C4', 'C#4', 'E4', 'A#4', 'B4']))
+  })
+
+  it('black keys are tagged too, even though they render after the white keys', () => {
+    const svg = renderPiano({ name: '', keys: [], range: { from: 'C4', to: 'B4' } })
+    expect(svg).toMatch(/<rect data-note="F#4"[^>]*width="[^"]+" height="[^"]+"/)
+  })
+})

@@ -1,4 +1,5 @@
 export const CHROMATIC = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+export const CHROMATIC_FLAT = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
 
 interface FilterOptions {
   glowColor?: string
@@ -37,9 +38,9 @@ export function semitone(note: string): number {
   return NOTE_MAP[note] ?? 0
 }
 
-export function noteAtFret(openNote: string, fret: number): string {
+export function noteAtFret(openNote: string, fret: number, preferFlats = false): string {
   if (fret < 0) return ''
-  return CHROMATIC[(semitone(openNote) + fret) % 12]
+  return (preferFlats ? CHROMATIC_FLAT : CHROMATIC)[(semitone(openNote) + fret) % 12]
 }
 
 export function degreeLabel(rootNote: string, note: string): string {

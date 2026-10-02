@@ -186,6 +186,8 @@ renderPiano({
 | `range?` | `{ from: string, to: string }` | Visible range of the keyboard |
 | `colors?` | `(string \| null)[]` | Per-key color override |
 
+Every key `<rect>` carries `data-note` (e.g. `data-note="C#4"`, sharp spelling), so a host can attach click handlers without depending on render order.
+
 ---
 
 ### Bowed strings
@@ -260,6 +262,8 @@ renderFretboard(chord, {
   leftHanded: false,
   showFingerNumbers: true,
   showDegrees: false,         // requires chord.root
+  showNoteNames: false,       // fretboard: note name on each dot (showDegrees wins)
+  preferFlats: false,         // spell note names with flats (Bb, not A#)
   showStringLabels: true,
   stringLabelMode: 'tuning',  // 'tuning' | 'notes'
 
@@ -323,7 +327,7 @@ UMT generates the note data; notae renders the diagram.
 ## Tests
 
 ```bash
-npm test   # 63 unit tests via vitest (fretboard, piano, bowed)
+npm test   # 68 unit tests via vitest (fretboard, piano, bowed)
 ```
 
 ---
