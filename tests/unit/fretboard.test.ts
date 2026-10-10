@@ -271,3 +271,10 @@ describe('renderFretboard — style options', () => {
     expect(svg).not.toContain('<filter')
   })
 })
+
+describe('semitone with any accidentals', () => {
+  it('folds to a pitch class', async () => {
+    const { semitone } = await import('../../src/utils')
+    expect([semitone('E#'), semitone('Cb'), semitone('F##'), semitone('Bbb'), semitone('Db')]).toEqual([5, 11, 7, 9, 1])
+  })
+})

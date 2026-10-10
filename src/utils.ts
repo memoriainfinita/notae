@@ -34,8 +34,24 @@ export const NOTE_MAP: Record<string, number> = {
 
 export const DEGREE_LABELS = ['R','b2','2','b3','3','4','b5','5','b6','6','b7','7']
 
+const LETTER_SEMITONE: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+
+/**
+ * Semitones above the C of the letter's own octave, accidentals included and not folded:
+ * "B#" → 12, "Cb" → -1, "F##" → 7. Any number of accidentals. Null when it is not a note name.
+ */
+export function letterSemitone(name: string): number | null {
+  const m = name.match(/^([A-Ga-g])([#b]*)$/)
+  if (!m) return null
+  let n = LETTER_SEMITONE[m[1].toUpperCase()]
+  for (const acc of m[2]) n += acc === '#' ? 1 : -1
+  return n
+}
+
+/** Pitch class 0–11 of a note name without octave ("E#" → 5, "Cb" → 11); 0 when it is not one. */
 export function semitone(note: string): number {
-  return NOTE_MAP[note] ?? 0
+  const n = letterSemitone(note)
+  return n === null ? 0 : ((n % 12) + 12) % 12
 }
 
 export function noteAtFret(openNote: string, fret: number, preferFlats = false): string {

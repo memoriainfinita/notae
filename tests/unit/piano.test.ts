@@ -174,3 +174,16 @@ describe('data-note', () => {
     expect(svg).toMatch(/<rect data-note="F#4"[^>]*width="[^"]+" height="[^"]+"/)
   })
 })
+
+describe('note names with any accidentals', () => {
+  // same key lit; the label under it keeps the name given (E#, not F)
+  const draw = (key: string) => renderPiano({ name: '', keys: [key], range: { from: 'C3', to: 'B5' } }).replace(/<text[^>]*>[^<]*<\/text>/g, '')
+
+  it('lights the same key as the plain name; the octave belongs to the letter', () => {
+    expect(draw('E#4')).toBe(draw('F4'))
+    expect(draw('B#3')).toBe(draw('C4'))
+    expect(draw('Cb4')).toBe(draw('B3'))
+    expect(draw('F##4')).toBe(draw('G4'))
+    expect(draw('Dbb4')).toBe(draw('C4'))
+  })
+})

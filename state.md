@@ -1,6 +1,6 @@
 ---
 created: 2026-05-01
-last_updated: 2026-10-02
+last_updated: 2026-10-10
 ---
 
 # Notation Lib — State
@@ -49,6 +49,7 @@ Ver sección Defaults validados.
 
 - [string-numbering] En barres: `startString/endString` 1-indexed desde low E. Confirmed 2026-05.
 - [piano-scaling] Todo en fracciones de wW/wH, sin Math.round. `pianoBlackKeyShift` es fracción de wW. Confirmed 2026-05.
+- [note-names] Nombres de nota con cualquier número de alteraciones (`E#4`, `Cb4`, `F##4`), interpretados por `letterSemitone` en `utils.ts`; la octava es la de la letra (Cb4 = el Si bajo C4, B#3 = C4). La etiqueta conserva el nombre recibido. Confirmed 2026-10.
 - [barre-clip] El renderer recorta barres si cuerdas exteriores son mudas (-1). No es responsabilidad del caller. Confirmed 2026-05.
 - [svg-text-center] Usar `dy="0.35em"` para centrar texto en círculos SVG. Confirmed 2026-05.
 - [nut-zindex] El nut se dibuja DESPUÉS de las cuerdas (SVG paint order). Confirmed 2026-05.

@@ -1,5 +1,5 @@
 import { PianoChord, StyleOptions, DEFAULT_STYLE } from './types'
-import { degreeLabel, buildFilter } from './utils'
+import { degreeLabel, buildFilter, letterSemitone } from './utils'
 
 // X position of each semitone in white-key-width units from the left of the octave.
 // All values are pure fractions — no pixel rounding — so positions scale correctly with wW.
@@ -20,18 +20,14 @@ const SEMITONE_POS = [
 const IS_BLACK = [false, true, false, true, false, false, true, false, true, false, true, false]
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-const FLAT_MAP: Record<string, string> = {
-  Db: 'C#', Eb: 'D#', Fb: 'E', Gb: 'F#', Ab: 'G#', Bb: 'A#', Cb: 'B',
-}
 
+/** Absolute semitone (C0 = 0) of a name with octave. Any accidentals; the octave belongs to
+ *  the letter, so Cb4 is the B below C4 and B#3 is C4. */
 function parseNote(str: string): number | null {
-  const m = str.match(/^([A-Ga-g][#b]?)(\d+)$/)
+  const m = str.match(/^([A-Ga-g][#b]*)(\d+)$/)
   if (!m) return null
-  let name = m[1].charAt(0).toUpperCase() + m[1].slice(1)
-  name = FLAT_MAP[name] ?? name
-  const semi = NOTE_NAMES.indexOf(name)
-  if (semi === -1) return null
-  return parseInt(m[2]) * 12 + semi
+  const semi = letterSemitone(m[1])
+  return semi === null ? null : parseInt(m[2]) * 12 + semi
 }
 
 /**
