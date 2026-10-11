@@ -299,7 +299,7 @@ UMT generates the note data; notae renders the diagram.
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/memoriainfinita/notae@master/dist/notae.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@v0.3.0/dist/umt.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/memoriainfinita/UMT@v0.5.0/dist/umt.js"></script>
 <script>
   // Chord → piano
   const chord = UMT.parseChordSymbol('Cmaj9');

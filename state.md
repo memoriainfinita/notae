@@ -12,7 +12,7 @@ last_updated: 2026-10-10
 - **Demo:** `demo/index.html` + `demo/demo.ts` — build con `npm run dev`, abrir localmente después del build
 - **Build:** `node build.js` (watch) / `node build.js --once` (one-shot)
 - **Package name:** `notae`
-- **UMT repo:** `github.com/memoriainfinita/UMT`, fijado a `v0.3.0` en docs y README (CDN `UMT@v0.3.0`). Subir de versión a mano
+- **UMT repo:** `github.com/memoriainfinita/UMT`, fijado a `v0.5.0` en docs y README (CDN `UMT@v0.5.0`). Subir de versión a mano
 - **Publicado:** repo público `memoriainfinita/notae`, GPL-3.0. GitHub Pages desde `/docs` en `master`: https://memoriainfinita.github.io/notae/
 
 ---
