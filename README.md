@@ -67,9 +67,9 @@ Notae.renderBowed({
 
 **Build from source**
 ```bash
-npm install
-npm run build:lib   # src/index.ts → dist/notae.js (IIFE, global Notae)
-npm run dev         # watch mode for the demo
+pnpm install
+pnpm run build:lib   # src/index.ts → dist/notae.js (IIFE, global Notae)
+pnpm run dev         # watch mode for the demo
 ```
 
 ---
@@ -327,7 +327,7 @@ UMT generates the note data; notae renders the diagram.
 ## Tests
 
 ```bash
-npm test   # 70 unit tests via vitest (fretboard, piano, bowed)
+pnpm test   # 70 unit tests via vitest (fretboard, piano, bowed)
 ```
 
 ---

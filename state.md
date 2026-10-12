@@ -9,10 +9,11 @@ last_updated: 2026-10-12
 
 - **Stack:** TypeScript vanilla, esbuild, zero runtime deps
 - **Fuentes:** `src/index.ts` (entrada pública), `src/fretboard.ts`, `src/piano.ts`, `src/bowed.ts`, `src/types.ts`, `src/utils.ts`
-- **Tests:** vitest, `npm test`; 70 tests en `tests/unit/` (fretboard, piano, bowed)
-- **Build:** `npm run build:lib` → `dist/notae.js` (IIFE, global `Notae`, 23 kb), versionado. `npm run dev` (watch) / `npm run build` (una vez) compilan la demo local
+- **Tests:** vitest, `pnpm test`; 70 tests en `tests/unit/` (fretboard, piano, bowed)
+- **Build:** `pnpm run build:lib` → `dist/notae.js` (IIFE, global `Notae`, 23 kb), versionado. `pnpm run dev` (watch) / `pnpm run build` (una vez) compilan la demo local
 - **Demo local:** `demo/` (`index.html` + `demo.ts`, `sandbox.html` + `sandbox.ts`), sin versionar
 - **Web:** `docs/` (`index.html`, `playground.html`) en GitHub Pages desde `/docs` en `master`: https://memoriainfinita.github.io/notae/. Carga notae por CDN desde `@master` (sin tags) y UMT fijado
+- **Package manager:** pnpm 11 (`packageManager` en `package.json`; `pnpm-workspace.yaml` aprueba el script de instalación de esbuild), no npm, por los ataques a paquetes de npm de 2026
 - **Package name:** `notae`
 - **UMT repo:** `github.com/memoriainfinita/UMT`, fijado a `v0.5.0` en docs y README (CDN `UMT@v0.5.0`). Subir de versión a mano
 - **Publicado:** repo público `memoriainfinita/notae`, GPL-3.0
