@@ -327,7 +327,7 @@ UMT generates the note data; notae renders the diagram.
 ## Tests
 
 ```bash
-npm test   # 68 unit tests via vitest (fretboard, piano, bowed)
+npm test   # 70 unit tests via vitest (fretboard, piano, bowed)
 ```
 
 ---
