@@ -278,3 +278,41 @@ describe('semitone with any accidentals', () => {
     expect([semitone('E#'), semitone('Cb'), semitone('F##'), semitone('Bbb'), semitone('Db')]).toEqual([5, 11, 7, 9, 1])
   })
 })
+
+describe('renderFretboard — per-dot colors and labels', () => {
+  const OPEN_SCALE: FretboardChord = {
+    name: '',
+    frets: [[0, 2, 3], [0, 2, 3], [0, 2], [0, 2], [0, 1, 3], [0, 2, 3]],
+    tuning: ['E', 'A', 'D', 'G', 'B', 'E'],
+  }
+
+  it('dotColors colours each dot and wins over colors', () => {
+    const svg = renderFretboard({ ...SCALE, colors: ['#111111', null, null, null, null, null], dotColors: [['#ff0000', null]] })
+    expect(svg).toContain('fill="#ff0000"')
+    expect(svg).toContain('fill="#111111"')   // the second dot of string 0 falls back to colors
+  })
+
+  it('dotLabels win over degrees; an empty one shows no text', () => {
+    const svg = renderFretboard({ ...SCALE, dotLabels: [['1', ''], ['4', null, null]] }, { showDegrees: true, showStringLabels: false })
+    const texts = textContents(svg)
+    expect(texts).toContain('1')
+    expect(texts).toContain('4')
+    const roots = (t: string[]) => t.filter(x => x === 'R').length
+    // string 0 fret 5 is A, the root: its label is the caller's
+    expect(roots(texts)).toBe(roots(textContents(renderFretboard(SCALE, { showDegrees: true, showStringLabels: false }))) - 1)
+    expect(texts).toContain('b5')             // string 1 fret 6 falls back to the degree
+  })
+
+  it('without showOpenNotes a 0 among several frets is not drawn', () => {
+    const svg = renderFretboard(OPEN_SCALE, { showStringLabels: false })
+    expect(svg.match(/fill="none"/g)).toBeNull()
+  })
+
+  it('showOpenNotes draws a ring per open scale note, in the dot colour', () => {
+    const svg = renderFretboard({ ...OPEN_SCALE, dotColors: [['#00ff00']] }, { showOpenNotes: true, showStringLabels: false })
+    expect(svg.match(/fill="none"/g)).toHaveLength(6)
+    expect(svg).toContain('stroke="#00ff00"')
+    const h = renderFretboard(OPEN_SCALE, { showOpenNotes: true, orientation: 'horizontal', showStringLabels: false })
+    expect(h.match(/fill="none"/g)).toHaveLength(6)
+  })
+})

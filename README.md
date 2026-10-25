@@ -137,7 +137,9 @@ renderFretboard({
 | `baseFret?` | `number` | First fret shown — triggers fret label |
 | `stringOffset?` | `number[]` | Fret where each string starts (banjo drone) |
 | `root?` | `string` | Root note — enables `showDegrees` |
-| `colors?` | `(string \| null)[]` | Per-dot color override |
+| `colors?` | `(string \| null)[]` | Per-string dot color override |
+| `dotColors?` | `(string \| null)[][]` | Per-dot color, parallel to each string's frets; wins over `colors` |
+| `dotLabels?` | `(string \| null)[][]` | Per-dot text, parallel to each string's frets; wins over degrees, names and fingers (`''` = none) |
 
 ---
 
@@ -261,6 +263,7 @@ renderFretboard(chord, {
   orientation: 'vertical',    // 'vertical' | 'horizontal'
   leftHanded: false,
   showFingerNumbers: true,
+  showOpenNotes: false,       // fretboard: a 0 among a string's frets drawn as the open ring
   showDegrees: false,         // requires chord.root
   showNoteNames: false,       // fretboard: note name on each dot (showDegrees wins)
   preferFlats: false,         // spell note names with flats (Bb, not A#)

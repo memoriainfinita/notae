@@ -1,6 +1,6 @@
 ---
 created: 2026-05-01
-last_updated: 2026-10-12
+last_updated: 2026-10-25
 ---
 
 # Notation Lib — State
@@ -9,7 +9,7 @@ last_updated: 2026-10-12
 
 - **Stack:** TypeScript vanilla, esbuild, zero runtime deps
 - **Fuentes:** `src/index.ts` (entrada pública), `src/fretboard.ts`, `src/piano.ts`, `src/bowed.ts`, `src/types.ts`, `src/utils.ts`
-- **Tests:** vitest, `pnpm test`; 70 tests en `tests/unit/` (fretboard, piano, bowed)
+- **Tests:** vitest, `pnpm test`; 74 tests en `tests/unit/` (fretboard, piano, bowed)
 - **Build:** `pnpm run build:lib` → `dist/notae.js` (IIFE, global `Notae`, 23 kb), versionado. `pnpm run dev` (watch) / `pnpm run build` (una vez) compilan la demo local
 - **Demo local:** `demo/` (`index.html` + `demo.ts`, `sandbox.html` + `sandbox.ts`), sin versionar
 - **Web:** `docs/` (`index.html`, `playground.html`) en GitHub Pages desde `/docs` en `master`: https://memoriainfinita.github.io/notae/. Carga notae por CDN desde `@master` (sin tags) y UMT fijado
@@ -27,6 +27,8 @@ last_updated: 2026-10-12
 FretboardChord {
   name, frets: (number|number[])[], fingers?,
   colors?: (string|null)[],   // per-string dot color override
+  dotColors?: (string|null)[][],  // per-dot color, wins over colors
+  dotLabels?: (string|null)[][],  // per-dot text, wins over degrees/names/fingers
   baseFret?, barres?, tuning?, root?,
   stringOffset?: number[]     // fret where each string starts (banjo drone)
 }
@@ -67,6 +69,7 @@ Ver sección Defaults validados.
 - [tuning-api] `chord.tuning` es musical (no visual) — sirve para labels Y cálculo de notas. Confirmed 2026-05.
 - [consistent-sizes] Padding siempre reserva espacio para fret label (vertical: padLeft asimétrico; horizontal: fretLabelH siempre). Confirmed 2026-05.
 - [scale-frets] `frets: (number|number[])[]` — array para múltiples notas por cuerda (escalas). Confirmed 2026-05.
+- [scale-dots] `dotColors` / `dotLabels` van en paralelo a cada array de trastes; el host pone sus propios grados (notae solo sabe intervalos desde `root`). Un `0` dentro de un array solo se dibuja con `showOpenNotes`, como el anillo de cuerda al aire. Confirmed 2026-10.
 - [data-note] Cada tecla del piano lleva `data-note` (sostenidos + octava): el host engancha clicks por atributo, nunca por el orden de pintado (blancas y luego negras). Confirmed 2026-10.
 - [horizontal-strings] En orientación horizontal, string 0 (low) va abajo para diestros. Confirmed 2026-05.
 - [chord-name-centered] En vertical con padding asimétrico, chord name se centra sobre el GRID (`padLeft + gridW/2`), no sobre totalW. Confirmed 2026-05.

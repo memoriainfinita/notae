@@ -45,6 +45,22 @@ export function renderFretboard(chord: FretboardChord, style?: StyleOptions): st
 
 // ── Shared helpers ──────────────────────────────────────────────────────────
 
+function dotFill(s: Required<StyleOptions>, chord: FretboardChord, stringIdx: number, dotIdx: number): string {
+  return chord.dotColors?.[stringIdx]?.[dotIdx] ?? chord.colors?.[stringIdx] ?? s.dotColor
+}
+
+/** The caller's own text for a dot, or null to fall back to degrees, names or fingers. */
+function ownLabel(chord: FretboardChord, stringIdx: number, dotIdx: number): string | null {
+  return chord.dotLabels?.[stringIdx]?.[dotIdx] ?? null
+}
+
+/** A scale note on an open string: a `0` among several frets, drawn only with `showOpenNotes`. */
+function openNoteFill(s: Required<StyleOptions>, chord: FretboardChord, fretArrays: number[][], stringIdx: number): string | null {
+  if (!s.showOpenNotes || fretArrays[stringIdx].length < 2 || (chord.stringOffset?.[stringIdx] ?? 0) > 0) return null
+  const k = fretArrays[stringIdx].indexOf(0)
+  return k < 0 ? null : dotFill(s, chord, stringIdx, k)
+}
+
 function dotLabel(
   s: Required<StyleOptions>,
   chord: FretboardChord,
@@ -113,6 +129,11 @@ function renderVertical(
   const strOffsets = chord.stringOffset ?? []
   for (let i = 0; i < numStrings; i++) {
     const sf = singleFret(i)
+    const openFill = openNoteFill(s, chord, fretArrays, i)
+    if (openFill) {
+      inner += `<circle cx="${stringX(i)}" cy="${padTop + indicatorH / 2}" r="${s.indicatorSize}" fill="none" stroke="${openFill}" stroke-width="${s.indicatorStrokeWidth}"/>`
+      continue
+    }
     if (sf === null) continue
     if ((strOffsets[i] ?? 0) > 0) continue  // peg marker drawn with string line
     const x = stringX(i)
@@ -217,23 +238,23 @@ function renderVertical(
   // Dots
   for (let i = 0; i < numStrings; i++) {
     const off = strOffsets[i] ?? 0
-    for (const fret of fretArrays[i]) {
-      if (fret <= 0) continue
-      if (off > 0 && fret === off) continue  // open at peg — no dot needed
+    fretArrays[i].forEach((fret, k) => {
+      if (fret <= 0) return
+      if (off > 0 && fret === off) return  // open at peg — no dot needed
       const relativeFret = fret - baseFret + 1
-      if (relativeFret < 1 || relativeFret > numFrets) continue
+      if (relativeFret < 1 || relativeFret > numFrets) return
       const cx = stringX(i)
       const cy = fretY(relativeFret - 1) + s.fretSpacing / 2
-      const fill = chord.colors?.[i] ?? s.dotColor
-      inner += `<circle cx="${cx}" cy="${cy}" r="${s.dotRadius}" fill="${fill}"/>`
-      const deg = dotLabel(s, chord, tuning, i, fret)
-      if (deg) {
-        inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${deg}</text>`
+      inner += `<circle cx="${cx}" cy="${cy}" r="${s.dotRadius}" fill="${dotFill(s, chord, i, k)}"/>`
+      const own = ownLabel(chord, i, k)
+      const deg = own ?? dotLabel(s, chord, tuning, i, fret)
+      if (deg || own !== null) {
+        if (deg) inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${deg}</text>`
       } else if (s.showFingerNumbers && chord.fingers && fretArrays[i].length === 1) {
         const finger = chord.fingers[i]
         if (finger > 0) inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${finger}</text>`
       }
-    }
+    })
   }
 
   return svgWrap(totalW, totalH, s, inner)
@@ -274,6 +295,11 @@ function renderHorizontal(
   const strOffsetsH = chord.stringOffset ?? []
   for (let i = 0; i < numStrings; i++) {
     const sf = singleFret(i)
+    const openFill = openNoteFill(s, chord, fretArrays, i)
+    if (openFill) {
+      inner += `<circle cx="${padLeft + indicatorW / 2}" cy="${stringY(i)}" r="${s.indicatorSize}" fill="none" stroke="${openFill}" stroke-width="${s.indicatorStrokeWidth}"/>`
+      continue
+    }
     if (sf === null) continue
     if ((strOffsetsH[i] ?? 0) > 0) continue
     const y = stringY(i)
@@ -376,23 +402,23 @@ function renderHorizontal(
   // Dots
   for (let i = 0; i < numStrings; i++) {
     const offH = strOffsetsH[i] ?? 0
-    for (const fret of fretArrays[i]) {
-      if (fret <= 0) continue
-      if (offH > 0 && fret === offH) continue  // open at peg — no dot needed
+    fretArrays[i].forEach((fret, k) => {
+      if (fret <= 0) return
+      if (offH > 0 && fret === offH) return  // open at peg — no dot needed
       const relativeFret = fret - baseFret + 1
-      if (relativeFret < 1 || relativeFret > numFrets) continue
+      if (relativeFret < 1 || relativeFret > numFrets) return
       const cy = stringY(i)
       const cx = fretX(relativeFret - 1) + s.fretSpacing / 2
-      const fill = chord.colors?.[i] ?? s.dotColor
-      inner += `<circle cx="${cx}" cy="${cy}" r="${s.dotRadius}" fill="${fill}"/>`
-      const deg = dotLabel(s, chord, tuning, i, fret)
-      if (deg) {
-        inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${deg}</text>`
+      inner += `<circle cx="${cx}" cy="${cy}" r="${s.dotRadius}" fill="${dotFill(s, chord, i, k)}"/>`
+      const own = ownLabel(chord, i, k)
+      const deg = own ?? dotLabel(s, chord, tuning, i, fret)
+      if (deg || own !== null) {
+        if (deg) inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${deg}</text>`
       } else if (s.showFingerNumbers && chord.fingers && fretArrays[i].length === 1) {
         const finger = chord.fingers[i]
         if (finger > 0) inner += `<text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-family="${s.fontFamily}" font-size="${s.fingerNumberSize}" fill="${s.dotTextColor}">${finger}</text>`
       }
-    }
+    })
   }
 
   return svgWrap(totalW, totalH, s, inner)

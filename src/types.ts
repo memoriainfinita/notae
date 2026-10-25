@@ -84,6 +84,11 @@ export type StyleOptions = {
   /** Spell note names with flats (Bb) instead of sharps (A#). Used by `showNoteNames`. */
   preferFlats?: boolean
   showFingerNumbers?: boolean
+  /**
+   * Fretboard: a `0` inside a string's fret array (a scale note on the open string) is drawn
+   * as the open-string ring, in the dot's color. Off: such a `0` is not drawn.
+   */
+  showOpenNotes?: boolean
   showStringLabels?: boolean
   /** `'tuning'` shows the open-string note from `chord.tuning`; `'notes'` shows the fretted note. */
   stringLabelMode?: 'tuning' | 'notes'
@@ -173,6 +178,7 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   showNoteNames: false,
   preferFlats: false,
   showFingerNumbers: true,
+  showOpenNotes: false,
   showStringLabels: true,
   stringLabelMode: 'tuning',
   stringLabelPosition: 'bottom',
@@ -222,6 +228,17 @@ export type FretboardChord = {
   fingers?: number[]
   /** Per-string dot color override, parallel to `frets`. `null` = use `dotColor` default. */
   colors?: (string | null)[]
+  /**
+   * Per-dot color, parallel to `frets` and to each string's fret array (a single fret is an
+   * array of one). Wins over `colors`; `null` or a missing entry falls back to it.
+   */
+  dotColors?: (string | null)[][]
+  /**
+   * Per-dot text, parallel to `frets` like `dotColors` (e.g. scale degrees as the caller names
+   * them). Wins over `showDegrees`, `showNoteNames` and finger numbers; `''` shows no text,
+   * `null` or a missing entry falls back to them.
+   */
+  dotLabels?: (string | null)[][]
   /** Absolute fret number of the first displayed fret (shown as a label). Default: 1. */
   baseFret?: number
   /**
