@@ -1,5 +1,6 @@
 export { renderFretboard } from './fretboard'
 export { renderPiano } from './piano'
 export { renderBowed } from './bowed'
+export { hexGrid, renderHexGrid, HEX_LAYOUTS } from './hexgrid'
 export { DEFAULT_STYLE } from './types'
-export type { FretboardChord, PianoChord, BowedChord, StyleOptions } from './types'
+export type { FretboardChord, PianoChord, BowedChord, StyleOptions, HexLayout, HexGridOptions, HexCell, HexGrid, HexKeyStyle, HexChord } from './types'

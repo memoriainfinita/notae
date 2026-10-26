@@ -1,6 +1,6 @@
 ---
 created: 2026-05-01
-last_updated: 2026-10-25
+last_updated: 2026-10-27
 ---
 
 # Notation Lib — State
@@ -8,9 +8,9 @@ last_updated: 2026-10-25
 ## System
 
 - **Stack:** TypeScript vanilla, esbuild, zero runtime deps
-- **Fuentes:** `src/index.ts` (entrada pública), `src/fretboard.ts`, `src/piano.ts`, `src/bowed.ts`, `src/types.ts`, `src/utils.ts`
-- **Tests:** vitest, `pnpm test`; 74 tests en `tests/unit/` (fretboard, piano, bowed)
-- **Build:** `pnpm run build:lib` → `dist/notae.js` (IIFE, global `Notae`, 23 kb), versionado. `pnpm run dev` (watch) / `pnpm run build` (una vez) compilan la demo local
+- **Fuentes:** `src/index.ts` (entrada pública), `src/fretboard.ts`, `src/piano.ts`, `src/bowed.ts`, `src/hexgrid.ts`, `src/types.ts`, `src/utils.ts`
+- **Tests:** vitest, `pnpm test`; 86 tests en `tests/unit/` (fretboard, piano, bowed, hexgrid)
+- **Build:** `pnpm run build:lib` → `dist/notae.js` (IIFE, global `Notae`, 26 kb), versionado. `pnpm run dev` (watch) / `pnpm run build` (una vez) compilan la demo local
 - **Demo local:** `demo/` (`index.html` + `demo.ts`, `sandbox.html` + `sandbox.ts`), sin versionar
 - **Web:** `docs/` (`index.html`, `playground.html`) en GitHub Pages desde `/docs` en `master`: https://memoriainfinita.github.io/notae/. Carga notae por CDN desde `@master` (sin tags) y UMT fijado
 - **Package manager:** pnpm 11 (`packageManager` en `package.json`; `pnpm-workspace.yaml` aprueba el script de instalación de esbuild), no npm, por los ataques a paquetes de npm de 2026
@@ -48,6 +48,21 @@ PianoChord {
 renderFretboard(chord: FretboardChord, style?: StyleOptions): string
 renderPiano(chord: PianoChord, style?: StyleOptions): string
 renderBowed(chord: BowedChord, style?: StyleOptions): string
+hexGrid(opts: HexGridOptions): HexGrid        // celdas de una rejilla isomórfica que llena width × height
+renderHexGrid(grid: HexGrid, chord?: HexChord, style?: StyleOptions): string
+HEX_LAYOUTS  // harmonic, wicki, gerhard, janko
+```
+
+### Rejilla isomórfica
+```ts
+HexLayout { right, upRight }          // semitonos un paso a la derecha y arriba-derecha, en filas
+HexGridOptions { layout: string | HexLayout, width, height, cellSize, center?, orientation?: 'rows'|'columns' }
+HexChord {
+  classes?: (HexKeyStyle|null)[]      // por clase de nota, 0 = C
+  notes?: Record<number, HexKeyStyle> // por nota MIDI, gana a classes
+  links?: number[]                    // notas MIDI unidas por línea donde son celdas vecinas
+}
+HexKeyStyle { fill?, text?, stroke?, label?, bold? }
 ```
 
 ### StyleOptions completo (todos los valores configurables por el usuario)
@@ -80,6 +95,7 @@ Ver sección Defaults validados.
 - [banjo-string-order] Drone (5ª cuerda) va en index 0 (izquierda). frets[] usa valores absolutos. frets[i]===stringOffset[i] = al aire, sin dot. Confirmed 2026-05.
 - [umt-note-to-string] `PianoChord.keys` acepta strings, no objetos Note de UMT. Conversión: `notes.map(n => n.name)`. notae es zero deps — no acoplar al tipo Note. Confirmed 2026-05.
 - [fret-label-padleft] Fret label con baseFret siempre en `padLeft` — no relativo a x1 de la línea de traste, para que quede fuera del grid aunque haya cuerdas con offset. Confirmed 2026-05.
+- [hex-layout] Un layout isomórfico son dos intervalos en filas de hexágonos con punta arriba: derecha y arriba-derecha. En columnas se gira un cuarto a la izquierda (derecha → arriba, arriba-derecha → arriba-izquierda): la tabla armónica `{7, 3}` en columnas da quinta arriba, tercera mayor arriba-derecha, menor arriba-izquierda. La celda central toca `center`; solo celdas enteras dentro del área. La teoría (qué notas, qué color) la pone el host. Confirmed 2026-10.
 - [peg-indicator] Círculo abierto centrado en el slot justo encima de donde empieza la cuerda offset: `fretY(relOff) - fretSpacing/2`. Confirmed 2026-05.
 
 ---
@@ -149,11 +165,7 @@ Ver sección Defaults validados.
 
 - [ ] renderHarmonica — layout horizontal de agujeros numerados, blow/draw, bends. Sin librerías de referencia. Retomar con caso de uso concreto.
 - [ ] renderVibraphone — alias visual de renderPiano, defaults metálicos, proporciones propias
-- [ ] renderHexGrid — renderer genérico de rejilla hexagonal isomórfica
-  - Arquitectura: renderer puro (dibuja celdas) + generadores de layout separados
-  - `HexGrid { cols, rows, cells[][], orientation: 'flat-top'|'pointy-top' }`
-  - `HexCell { col, row, note?, label?, color?, active? }`
-  - Generadores: `wickiHayden()`, `bosanquetWilson(edo)`, `harmonicTable()` → HexGrid
+- [ ] Rejilla isomórfica en EDO distintos de 12 (Bosanquet-Wilson): `hexGrid` solo conoce semitonos MIDI
 - [ ] SVGuitar (npm) — revisar como referencia/competidor
 - [ ] Playground: múltiples voicings en la misma posición — `getFretboardVoicings` puede devolver varios acordes con el mismo `baseFret`. Decidir cómo exponerlos: flechas prev/next, grid de miniaturas, o selector numérico. Actualmente se muestra solo el primero que coincide con la posición.
 - [ ] Fret layout variants — variantes visuales del grid de trastes (minor, no cambio de API):

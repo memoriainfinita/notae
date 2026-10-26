@@ -118,6 +118,20 @@ export type StyleOptions = {
   shadowBlur?: number
   shadowOpacity?: number
   shadowColor?: string
+  /** Hex grid: fill of a cell without a colour of its own. */
+  hexCellColor?: string
+  /** Hex grid: label colour of a cell without one of its own. */
+  hexTextColor?: string
+  /** Hex grid: space between neighbouring cells (px). */
+  hexGap?: number
+  /** Hex grid: label size (px). `0` = from the cell size. */
+  hexLabelSize?: number
+  /** Hex grid: width of a cell's outline, when its style gives a `stroke` (px). */
+  hexStrokeWidth?: number
+  /** Hex grid: colour of the lines joining a chord's neighbouring notes. */
+  hexLinkColor?: string
+  /** Hex grid: width of those lines (px). `0` = from the cell size. */
+  hexLinkWidth?: number
 }
 
 export const DEFAULT_STYLE: Required<StyleOptions> = {
@@ -201,6 +215,13 @@ export const DEFAULT_STYLE: Required<StyleOptions> = {
   shadowBlur: 2,
   shadowOpacity: 0.25,
   shadowColor: '#000000',
+  hexCellColor: '#e8e8e8',
+  hexTextColor: '#555555',
+  hexGap: 3,
+  hexLabelSize: 0,
+  hexStrokeWidth: 1.5,
+  hexLinkColor: '#333333',
+  hexLinkWidth: 0,
 }
 
 /**
@@ -307,4 +328,46 @@ export type PianoChord = {
   range?: { from: string; to: string }
   /** Root note name without octave (e.g. `'C'`, `'F#'`). Required for `showDegrees`. */
   root?: string
+}
+
+/**
+ * An isomorphic layout: semitones one step right and one step up-right, in rows of
+ * pointy-top hexagons. Up-left follows: `upRight - right`.
+ */
+export type HexLayout = { right: number; upRight: number }
+
+export type HexGridOptions = {
+  /** A name from `HEX_LAYOUTS` (`'harmonic'`, `'wicki'`, `'gerhard'`, `'janko'`) or two intervals. */
+  layout: string | HexLayout
+  width: number
+  height: number
+  /** Hexagon radius, centre to corner (px). */
+  cellSize: number
+  /** MIDI note of the cell at the centre. Default 60. */
+  center?: number
+  /** `'rows'` (pointy-top, default) or `'columns'` (flat-top, the layout turned a quarter left). */
+  orientation?: 'rows' | 'columns'
+}
+
+/** One cell: lattice steps from the centre (`q` right, `p` up-right), centre in px, MIDI note. */
+export type HexCell = { q: number; p: number; x: number; y: number; note: number }
+
+export type HexGrid = {
+  cells: HexCell[]
+  cellSize: number
+  orientation: 'rows' | 'columns'
+  width: number
+  height: number
+}
+
+/** How one cell is drawn. Missing fields fall back to the style. `label: ''` shows no text. */
+export type HexKeyStyle = { fill?: string; text?: string; stroke?: string; label?: string; bold?: boolean }
+
+export type HexChord = {
+  /** By pitch class, index 0 = C. */
+  classes?: (HexKeyStyle | null | undefined)[]
+  /** By MIDI note; its fields win over `classes`. */
+  notes?: Record<number, HexKeyStyle>
+  /** MIDI notes joined by a line wherever two of them are neighbouring cells. */
+  links?: number[]
 }
